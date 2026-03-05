@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MathAtlas — AMC & AIME Preparation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+:root {
+  --bg: #ffffff; --bg2: #f8f9fa; --bg3: #f1f3f5; --surface: #e9ecef;
+  --border: #dee2e6; --border2: #ced4da;
+  --text: #1a1a2e; --text2: #495057; --text3: #868e96;
+  --blue: #3b5bdb; --blue-light: #dbe4ff; --blue-mid: #748ffc; --blue-dark: #2f4ac7;
+  --green: #2f9e44; --green-light: #d3f9d8;
+  --orange: #e67700; --orange-light: #fff3bf;
+  --red: #c92a2a; --red-light: #ffe3e3;
+  --purple: #6741d9; --purple-light: #ede9fc;
+  --sidebar-w: 260px; --topbar-h: 56px;
+}
+body { font-family: 'Inter', -apple-system, sans-serif; color: var(--text); background: var(--bg); font-size: 15px; line-height: 1.6; }
+
+/* TOP BAR */
+.topbar { position: fixed; top: 0; left: 0; right: 0; height: var(--topbar-h); background: var(--bg); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px 0 0; z-index: 200; }
+.topbar-logo { width: var(--sidebar-w); padding: 0 20px; display: flex; align-items: center; gap: 10px; text-decoration: none; border-right: 1px solid var(--border); height: 100%; flex-shrink: 0; }
+.logo-icon { width: 28px; height: 28px; background: var(--blue); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: 700; font-family: 'Fira Code', monospace; flex-shrink: 0; }
+.logo-name { font-size: 1.0625rem; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
+.logo-name span { color: var(--blue); }
+.topbar-search { flex: 1; padding: 0 20px; }
+.search-box { display: flex; align-items: center; gap: 8px; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; max-width: 380px; color: var(--text3); font-size: 0.875rem; cursor: text; }
+.topbar-nav { display: flex; align-items: center; gap: 4px; }
+.topbar-link { padding: 6px 12px; border-radius: 6px; font-size: 0.875rem; color: var(--text2); text-decoration: none; transition: background .15s, color .15s; }
+.topbar-link:hover { background: var(--bg2); color: var(--text); }
+.tdiv { width: 1px; height: 20px; background: var(--border); margin: 0 8px; }
+.btn { padding: 7px 16px; border-radius: 6px; font-size: 0.875rem; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-block; transition: all .15s; border: 1px solid transparent; }
+.btn-primary { background: var(--blue); color: white; border-color: var(--blue); }
+.btn-primary:hover { background: var(--blue-dark); border-color: var(--blue-dark); }
+.btn-ghost { background: transparent; color: var(--text2); border-color: var(--border); }
+.btn-ghost:hover { background: var(--bg2); color: var(--text); }
+.btn-lg { padding: 10px 22px; font-size: 0.9375rem; }
+.btn-block { width: 100%; text-align: center; display: block; padding: 10px; }
+
+/* LAYOUT */
+.layout { display: flex; padding-top: var(--topbar-h); min-height: 100vh; }
+
+/* SIDEBAR */
+.sidebar { width: var(--sidebar-w); background: var(--bg2); border-right: 1px solid var(--border); position: fixed; top: var(--topbar-h); bottom: 0; left: 0; overflow-y: auto; padding: 16px 0; z-index: 100; }
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+.sb-header { padding: 6px 16px; font-size: 0.6875rem; font-weight: 600; color: var(--text3); letter-spacing: .08em; text-transform: uppercase; margin-top: 12px; }
+.sb-item { display: flex; align-items: center; gap: 8px; padding: 6px 16px; font-size: 0.875rem; color: var(--text2); text-decoration: none; border-left: 3px solid transparent; transition: background .12s, color .12s; }
+.sb-item:hover { background: var(--bg3); color: var(--text); }
+.sb-item.active { background: var(--blue-light); color: var(--blue); border-left-color: var(--blue); font-weight: 500; }
+.sb-icon { font-size: .875rem; width: 18px; flex-shrink: 0; text-align: center; }
+.badge { margin-left: auto; font-size: .6875rem; padding: 2px 7px; border-radius: 100px; font-weight: 500; flex-shrink: 0; }
+.b-bronze { background: #fef3c7; color: #92400e; }
+.b-silver { background: #f1f3f5; color: #495057; border: 1px solid var(--border); }
+.b-gold { background: #fef3c7; color: #b45309; }
+.b-plat { background: #e0f2fe; color: #0369a1; }
+
+/* MAIN */
+.main { margin-left: var(--sidebar-w); flex: 1; min-width: 0; }
+
+/* HERO */
+.hero { background: linear-gradient(135deg, #f0f4ff 0%, #eef2ff 50%, #f5f0ff 100%); border-bottom: 1px solid var(--border); padding: 64px 64px 56px; }
+.breadcrumb { display: flex; align-items: center; gap: 6px; font-size: .8125rem; color: var(--text3); margin-bottom: 24px; }
+.breadcrumb a { color: var(--blue); text-decoration: none; }
+.contest-tags { display: flex; gap: 8px; margin-bottom: 20px; }
+.ctag { padding: 3px 10px; border-radius: 100px; font-size: .75rem; font-weight: 600; letter-spacing: .03em; }
+.ct-8  { background: var(--green-light); color: var(--green); }
+.ct-10 { background: var(--blue-light); color: var(--blue); }
+.ct-12 { background: var(--purple-light); color: var(--purple); }
+.ct-ai { background: var(--orange-light); color: var(--orange); }
+.hero h1 { font-size: 2.25rem; font-weight: 700; line-height: 1.25; letter-spacing: -.025em; color: var(--text); max-width: 680px; margin-bottom: 16px; }
+.hero p { font-size: 1.0625rem; color: var(--text2); max-width: 600px; margin-bottom: 32px; line-height: 1.65; }
+.hero-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.hero-stats { display: flex; gap: 32px; margin-top: 40px; padding-top: 32px; border-top: 1px solid rgba(0,0,0,.08); }
+.hs-num { font-size: 1.375rem; font-weight: 700; color: var(--text); letter-spacing: -.02em; }
+.hs-num span { color: var(--blue); }
+.hs-label { font-size: .8125rem; color: var(--text3); margin-top: 1px; }
+
+/* PAGE CONTENT */
+.page-content { padding: 48px 64px; max-width: 900px; }
+.content-section { margin-bottom: 56px; }
+.sec-heading { font-size: 1.25rem; font-weight: 700; letter-spacing: -.015em; color: var(--text); margin-bottom: 8px; display: flex; align-items: center; gap: 10px; padding-bottom: 12px; border-bottom: 2px solid var(--border); }
+.sec-heading::before { content: attr(data-num); font-size: .75rem; background: var(--blue); color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+.sec-intro { color: var(--text2); margin-bottom: 20px; font-size: .9375rem; line-height: 1.7; }
+
+/* INFOBOXES */
+.infobox { border-radius: 8px; padding: 14px 18px; margin-bottom: 14px; font-size: .9rem; border-left: 4px solid; line-height: 1.6; display: flex; gap: 10px; align-items: flex-start; }
+.ib-blue   { background: var(--blue-light); border-color: var(--blue); color: #1e3a8a; }
+.ib-green  { background: var(--green-light); border-color: var(--green); color: #14532d; }
+.ib-orange { background: var(--orange-light); border-color: var(--orange); color: #7c2d12; }
+.ib-purple { background: var(--purple-light); border-color: var(--purple); color: #3b0764; }
+.ib-icon { font-size: 1rem; margin-top: 1px; flex-shrink: 0; }
+.infobox strong { font-weight: 600; }
+
+/* FEATURE CARDS */
+.feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+.fcard { border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; background: var(--bg); transition: border-color .15s, box-shadow .15s; }
+.fcard:hover { border-color: var(--blue-mid); box-shadow: 0 0 0 3px var(--blue-light); }
+.fcard-hd { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.fcard-icon { width: 32px; height: 32px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: .9375rem; flex-shrink: 0; }
+.fi-blue { background: var(--blue-light); } .fi-green { background: var(--green-light); }
+.fi-orange { background: var(--orange-light); } .fi-purple { background: var(--purple-light); }
+.fcard-title { font-size: .9375rem; font-weight: 600; color: var(--text); letter-spacing: -.01em; }
+.fcard p { font-size: .875rem; color: var(--text2); line-height: 1.6; }
+
+/* TOC */
+.toc { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; margin-bottom: 32px; }
+.toc-title { font-size: .75rem; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+.toc ul { list-style: none; }
+.toc li { margin-bottom: 5px; }
+.toc a { font-size: .875rem; color: var(--blue); text-decoration: none; display: flex; align-items: center; gap: 7px; }
+.toc a:hover { text-decoration: underline; }
+.toc a::before { content: '§'; color: var(--text3); font-size: .75rem; }
+
+/* RADAR */
+.radar-wrap { display: flex; gap: 32px; align-items: flex-start; margin-top: 16px; }
+.radar-card { border: 1px solid var(--border); border-radius: 8px; padding: 20px; background: var(--bg); flex-shrink: 0; }
+.radar-title { font-size: .75rem; font-weight: 600; color: var(--text3); letter-spacing: .07em; text-transform: uppercase; margin-bottom: 14px; }
+.radar-notes { flex: 1; display: flex; flex-direction: column; gap: 10px; padding-top: 4px; }
+.rd-row { display: flex; align-items: center; gap: 10px; font-size: .8375rem; }
+.rd-name { width: 120px; color: var(--text2); flex-shrink: 0; }
+.rd-bar { flex: 1; height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
+.rd-fill { height: 100%; border-radius: 3px; }
+.rd-pct { font-size: .75rem; color: var(--text3); width: 32px; text-align: right; font-family: 'Fira Code', monospace; }
+
+/* ── AI ANALYSIS DEMO ── */
+.prob-card { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-top: 16px; background: var(--bg); }
+.prob-hd { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 10px 16px; display: flex; align-items: center; gap: 10px; }
+.prob-num { font-size: .8125rem; font-weight: 600; color: var(--text2); }
+.prob-src { font-size: .75rem; color: var(--text3); font-family: 'Fira Code', monospace; }
+.prob-link { margin-left: auto; font-size: .75rem; color: var(--blue); text-decoration: none; font-weight: 500; }
+.prob-link:hover { text-decoration: underline; }
+.prob-body { padding: 16px; }
+.prob-stmt { font-size: .9rem; color: var(--text); line-height: 1.65; margin-bottom: 12px; padding: 12px 14px; background: var(--bg2); border-radius: 6px; border: 1px solid var(--border); }
+.prob-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+.ptag { font-size: .75rem; padding: 2px 9px; border-radius: 100px; font-weight: 500; }
+.pt-dom { background: var(--blue-light); color: var(--blue); }
+.pt-sk  { background: var(--bg3); color: var(--text2); border: 1px solid var(--border); }
+.pt-diff { background: var(--orange-light); color: var(--orange); }
+
+/* STEP INPUTS */
+.steps-lbl { font-size: .75rem; font-weight: 600; color: var(--text3); letter-spacing: .07em; text-transform: uppercase; margin-bottom: 10px; }
+.steps-list { display: flex; flex-direction: column; gap: 7px; margin-bottom: 12px; }
+.step-row { display: flex; gap: 8px; align-items: flex-start; }
+.snum { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .6875rem; font-family: 'Fira Code', monospace; font-weight: 500; flex-shrink: 0; margin-top: 7px; transition: background .2s, color .2s; }
+.sn-neutral { background: var(--bg3); color: var(--text3); border: 1px solid var(--border); }
+.sn-ok  { background: var(--green-light); color: var(--green); }
+.sn-err { background: var(--red-light); color: var(--red); }
+.sn-warn { background: var(--orange-light); color: var(--orange); }
+.sinput { flex: 1; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 7px 12px; font-size: .85rem; font-family: 'Fira Code', monospace; color: var(--text); line-height: 1.5; resize: none; outline: none; transition: border-color .15s; min-height: 36px; }
+.sinput:focus { border-color: var(--blue-mid); background: white; }
+.sinput.s-ok  { border-color: #a3cfac; background: #f8fff9; }
+.sinput.s-err { border-color: #f1aeb5; background: #fff5f5; }
+.sinput.s-warn { border-color: #ffd58a; background: #fffbf0; }
+
+.steps-controls { display: flex; gap: 8px; margin-bottom: 14px; align-items: center; }
+.btn-add-step { background: var(--bg2); border: 1px dashed var(--border2); border-radius: 6px; padding: 6px 14px; font-size: .8125rem; color: var(--text3); cursor: pointer; transition: all .15s; font-family: 'Inter', sans-serif; }
+.btn-add-step:hover { border-color: var(--blue-mid); color: var(--blue); background: var(--blue-light); }
+.btn-remove-step { background: none; border: none; color: var(--text3); cursor: pointer; padding: 4px; border-radius: 4px; font-size: .85rem; margin-top: 6px; transition: color .15s; flex-shrink: 0; }
+.btn-remove-step:hover { color: var(--red); }
+
+.answer-row { display: flex; gap: 10px; align-items: center; margin-bottom: 14px; }
+.answer-label { font-size: .8125rem; color: var(--text2); font-weight: 500; flex-shrink: 0; }
+.answer-input { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 7px 12px; font-size: .9rem; font-family: 'Fira Code', monospace; color: var(--text); outline: none; width: 120px; transition: border-color .15s; }
+.answer-input:focus { border-color: var(--blue-mid); background: white; }
+
+.submit-row { display: flex; gap: 10px; align-items: center; }
+.btn-analyze { background: var(--blue); color: white; border: 1px solid var(--blue); border-radius: 6px; padding: 9px 22px; font-size: .9rem; font-weight: 600; cursor: pointer; transition: all .15s; font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 8px; }
+.btn-analyze:hover:not(:disabled) { background: var(--blue-dark); border-color: var(--blue-dark); }
+.btn-analyze:disabled { opacity: .6; cursor: not-allowed; }
+.analyze-note { font-size: .8rem; color: var(--text3); }
+
+/* SPINNER */
+.spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.3); border-top-color: white; border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* AI FEEDBACK */
+.ai-fb { margin-top: 16px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.ai-fb-hd { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 10px 16px; display: flex; align-items: center; gap: 8px; font-size: .8125rem; font-weight: 600; color: var(--text); }
+.ai-badge { font-size: .6875rem; background: var(--blue); color: white; padding: 2px 8px; border-radius: 100px; font-weight: 600; letter-spacing: .04em; }
+.ai-ref { margin-left: auto; font-size: .75rem; font-family: 'Fira Code', monospace; color: var(--text3); background: var(--bg3); padding: 2px 8px; border-radius: 4px; }
+.fb-item { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; gap: 12px; align-items: flex-start; }
+.fb-item:last-child { border-bottom: none; }
+.fbtag { font-size: .6875rem; font-weight: 600; padding: 3px 9px; border-radius: 100px; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+.ft-err  { background: var(--red-light); color: var(--red); }
+.ft-warn { background: var(--orange-light); color: var(--orange); }
+.ft-hint { background: var(--blue-light); color: var(--blue); }
+.ft-ok   { background: var(--green-light); color: var(--green); }
+.fb-item p { font-size: .875rem; color: var(--text2); line-height: 1.6; }
+.fb-item p strong { color: var(--text); font-weight: 600; }
+
+/* LOADING STATE */
+.fb-loading { padding: 24px 16px; display: flex; align-items: center; gap: 12px; color: var(--text3); font-size: .9rem; }
+.fb-loading .spin2 { width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
+
+/* CORRECT BANNER */
+.correct-banner { padding: 16px; background: var(--green-light); display: flex; align-items: center; gap: 12px; }
+.correct-banner .cb-icon { font-size: 1.25rem; }
+.correct-banner p { font-size: .9rem; color: #14532d; line-height: 1.5; }
+.correct-banner strong { font-weight: 600; }
+
+/* SKILL TABLE */
+.skill-table { width: 100%; border-collapse: collapse; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: .875rem; margin-top: 16px; }
+.skill-table thead { background: var(--bg2); }
+.skill-table th { padding: 10px 14px; text-align: left; font-size: .75rem; font-weight: 600; color: var(--text3); letter-spacing: .05em; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+.skill-table td { padding: 10px 14px; border-bottom: 1px solid var(--bg3); color: var(--text2); }
+.skill-table tr:last-child td { border-bottom: none; }
+.skill-table tr:hover td { background: var(--bg2); }
+.sk-name { color: var(--text); font-weight: 500; }
+.pbar { width: 100px; height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; display: inline-block; }
+.pfill { height: 100%; border-radius: 3px; background: var(--blue); }
+
+/* MODE CARDS */
+.mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+.mcard { border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; background: var(--bg); }
+.mcard-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+.micon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+.mlabel { font-size: .6875rem; padding: 3px 9px; border-radius: 100px; font-weight: 600; }
+.ml-free { background: var(--green-light); color: var(--green); }
+.ml-prem { background: var(--orange-light); color: var(--orange); }
+.mcard h4 { font-size: .9375rem; font-weight: 600; color: var(--text); letter-spacing: -.01em; margin-bottom: 7px; }
+.mcard p { font-size: .85rem; color: var(--text2); line-height: 1.6; }
+.mcard ul { margin-top: 10px; padding-left: 16px; }
+.mcard li { font-size: .8375rem; color: var(--text2); margin-bottom: 4px; }
+
+/* ELO */
+.elo-card { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-top: 16px; background: var(--bg); }
+.elo-hd { padding: 14px 18px; border-bottom: 1px solid var(--border); background: var(--bg2); display: flex; justify-content: space-between; align-items: center; }
+.elo-num { font-size: 1.5rem; font-weight: 800; color: var(--text); letter-spacing: -.03em; line-height: 1; }
+.elo-delta { font-size: .8rem; color: var(--green); font-family: 'Fira Code', monospace; margin-top: 2px; }
+.elo-body { padding: 18px; }
+.rt { width: 100%; border-collapse: collapse; font-size: .8375rem; }
+.rt td { padding: 6px 8px; border-bottom: 1px solid var(--bg3); }
+.rt tr:last-child td { border-bottom: none; }
+.rt-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.rt-dot.c { background: var(--green); }
+.rt-dot.w { background: var(--red); }
+.rt-name { color: var(--text); }
+.rt-diff { color: var(--text3); font-family: 'Fira Code', monospace; font-size: .75rem; }
+.rt-val { font-family: 'Fira Code', monospace; font-size: .75rem; text-align: right; }
+.rt-val.pos { color: var(--green); }
+.rt-val.neg { color: var(--red); }
+
+/* PRICING */
+.pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+.pcard { border: 1px solid var(--border); border-radius: 10px; padding: 24px; background: var(--bg); }
+.pcard.hi { border-color: var(--blue); background: linear-gradient(135deg,#f0f4ff,#f5f0ff); }
+.ptier { font-size: .75rem; font-weight: 700; color: var(--text3); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 14px; }
+.ptier.bl { color: var(--blue); }
+.pprice { font-size: 2rem; font-weight: 800; color: var(--text); letter-spacing: -.03em; line-height: 1; margin-bottom: 4px; }
+.pperiod { font-size: .8125rem; color: var(--text3); margin-bottom: 20px; }
+.plist { list-style: none; margin-bottom: 22px; }
+.plist li { font-size: .875rem; color: var(--text2); padding: 5px 0; display: flex; align-items: flex-start; gap: 8px; }
+.chk { flex-shrink: 0; margin-top: 2px; font-size: .85rem; }
+.chk-g { color: var(--green); }
+.chk-b { color: var(--blue); }
+
+/* CALLOUT */
+.callout { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--bg2); padding: 36px 64px; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+.callout h3 { font-size: 1.125rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.callout p { font-size: .9rem; color: var(--text2); }
+
+/* FOOTER */
+footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 40px 64px 32px; }
+.ft-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; max-width: 860px; margin-bottom: 32px; }
+.ft-brand p { font-size: .85rem; color: var(--text3); margin-top: 10px; line-height: 1.65; max-width: 220px; }
+.ft-col h5 { font-size: .75rem; font-weight: 700; color: var(--text); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 12px; }
+.ft-col ul { list-style: none; }
+.ft-col li { margin-bottom: 7px; }
+.ft-col a { font-size: .8375rem; color: var(--text3); text-decoration: none; transition: color .15s; }
+.ft-col a:hover { color: var(--blue); }
+.ft-bot { border-top: 1px solid var(--border); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; }
+.ft-copy { font-size: .8125rem; color: var(--text3); }
+.ft-links { display: flex; gap: 20px; }
+.ft-links a { font-size: .8125rem; color: var(--text3); text-decoration: none; }
+.ft-links a:hover { color: var(--text2); }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a class="topbar-logo" href="javascript:void(0)">
+    <div class="logo-icon">MA</div>
+    <span class="logo-name">Math<span>Atlas</span></span>
+  </a>
+  <div class="topbar-search">
+    <div class="search-box">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Search problems, topics, modules...
+      <span style="margin-left:auto;font-size:.75rem;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1px 6px;color:var(--text3)">⌘K</span>
+    </div>
+  </div>
+  <div class="topbar-nav">
+    <a href="javascript:void(0)" class="topbar-link">Problems</a>
+    <a href="javascript:void(0)" class="topbar-link">Modules</a>
+    <a href="javascript:void(0)" class="topbar-link">Contests</a>
+    <a href="javascript:void(0)" class="topbar-link">Progress</a>
+    <div class="tdiv"></div>
+    <a href="javascript:void(0)" class="btn btn-ghost" style="margin-right:8px">Sign in</a>
+    <a href="javascript:void(0)" class="btn btn-primary">Get Started</a>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="sidebar">
+  <div>
+    <div class="sb-header">Overview</div>
+    <a class="sb-item active" href="javascript:void(0)"><span class="sb-icon">🏠</span> Introduction</a>
+    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">🎯</span> Diagnostic</a>
+    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">📊</span> My Progress</a>
+  </div>
+  <div>
+    <div class="sb-header">Algebra</div>
+    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">📘</span> Expressions &amp; Equations <span class="badge b-bronze">Intro</span></a>
+    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">📘</span> Polynomials &amp; Roots <span class="badge b-silver">Mid</span></a>
+    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">📘</span> Inequalities <span class="badge b-gold">Adv</span></a>
+    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">📘</span> Functional Equations <span class="badge b-plat">AIME</span></a>
+  </div>
+  <div>
+    <div class="sb-header">Geometry</div>
+    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">📐</span> Triangle Properties <span class="badge b-bronze">Intro</span></a>
+    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">📐</span> Circle Theorems <span class="badge b-silver">Mid</span></a>
+    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">📐</span> Coordinate Geometry <span class="badge b-silver">Mid</span></a>
+    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">📐</span> 3D Geometry <span class="badge b-gold">Adv</span></a>
+  </div>
+  <div>
+    <div class="sb-header">Counting &amp; Probability</div>
+    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">🔢</span> Combinatorics Basics <span class="badge b-bronze">Intro</span></a>
+    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">🔢</span> Inclusion-Exclusion <span class="badge b-gold">Adv</span></a>
+    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">🔢</span> Probability <span class="badge b-silver">Mid</span></a>
+    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">🔢</span> Generating Functions <span class="badge b-plat">AIME</span></a>
+  </div>
+  <div>
+    <div class="sb-header">Number Theory</div>
+    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">🔍</span> Divisibility &amp; GCD <span class="badge b-bronze">Intro</span></a>
+    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">🔍</span> Modular Arithmetic <span class="badge b-gold">Adv</span></a>
+    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">🔍</span> Diophantine Equations <span class="badge b-plat">AIME</span></a>
+  </div>
+  <div>
+    <div class="sb-header">Practice</div>
+    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">⚡</span> Adaptive Queue</a>
+    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">⏱</span> Mock Contests</a>
+    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">📓</span> Mistake Journal</a>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="hero">
+    <div class="breadcrumb">
+      <a href="javascript:void(0)">MathAtlas</a> <span>›</span> <span>Introduction</span>
+    </div>
+    <div class="contest-tags">
+      <span class="ctag ct-8">AMC 8</span>
+      <span class="ctag ct-10">AMC 10</span>
+      <span class="ctag ct-12">AMC 12</span>
+      <span class="ctag ct-ai">AIME</span>
+    </div>
+    <h1>AI-Powered Competitive<br>Mathematics Preparation</h1>
+    <p>Structured skill mapping, adaptive practice, and step-level AI reasoning analysis—designed for serious competition students. Not just answer checking.</p>
+    <div class="hero-actions">
+      <a href="javascript:void(0)" class="btn btn-primary btn-lg">Take the Free Diagnostic</a>
+      <a href="javascript:void(0)" class="btn btn-ghost btn-lg">Browse Problem Library</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="hs-num">12<span>+</span></div><div class="hs-label">Skill domains</div></div>
+      <div><div class="hs-num">5<span>k</span></div><div class="hs-label">Tagged problems</div></div>
+      <div><div class="hs-num">Step<span>-level</span></div><div class="hs-label">AI feedback</div></div>
+      <div><div class="hs-num">4</div><div class="hs-label">Contest tracks</div></div>
+    </div>
+  </div>
+
+  <div class="page-content">
+    <div class="toc">
+      <div class="toc-title">On this page</div>
+      <ul>
+        <li><a href="#s1">Diagnostic &amp; Skill Mapping</a></li>
+        <li><a href="#s2">AI Reasoning Analysis</a></li>
+        <li><a href="#s3">Learning Modes</a></li>
+        <li><a href="#s4">Skill Taxonomy</a></li>
+        <li><a href="#s5">Rating System</a></li>
+        <li><a href="#s6">Pricing</a></li>
+      </ul>
+    </div>
+
+    <div class="infobox ib-blue">
+      <span class="ib-icon">ℹ️</span>
+      <div><strong>About MathAtlas:</strong> MathAtlas does not host copyrighted AMC or AIME problem text. All problems link to official MAA sources. MathAtlas's value is the <em>intelligence layer</em>: skill tagging, adaptive selection, and step-level AI analysis.</div>
+    </div>
+    <div class="infobox ib-green" style="margin-bottom:32px">
+      <span class="ib-icon">✅</span>
+      <div><strong>New here?</strong> Start with the <a href="javascript:void(0)" style="color:var(--green);font-weight:600">diagnostic assessment</a> to generate your skill radar and receive a personalized study path.</div>
+    </div>
+
+    <!-- S1 -->
+    <div class="content-section" id="s1">
+      <h2 class="sec-heading" data-num="1">Diagnostic &amp; Skill Mapping</h2>
+      <p class="sec-intro">A structured 40-problem initial assessment evaluates your ability across all major competition domains. Results generate a visual skill radar and a sequenced study path tailored to your target contest.</p>
+      <div class="radar-wrap">
+        <div class="radar-card">
+          <div class="radar-title">Skill Radar — Sample Profile</div>
+          <svg width="210" height="210" viewBox="0 0 210 210">
+            <polygon points="105,20 185,62.5 185,147.5 105,190 25,147.5 25,62.5" fill="none" stroke="#dee2e6" stroke-width="1"/>
+            <polygon points="105,40 170,72.5 170,137.5 105,170 40,137.5 40,72.5" fill="none" stroke="#dee2e6" stroke-width="1"/>
+            <polygon points="105,60 155,82.5 155,127.5 105,150 55,127.5 55,82.5" fill="none" stroke="#dee2e6" stroke-width="1"/>
+            <polygon points="105,80 140,92.5 140,117.5 105,130 70,117.5 70,92.5" fill="none" stroke="#dee2e6" stroke-width="1"/>
+            <line x1="105" y1="105" x2="105" y2="20" stroke="#e9ecef"/><line x1="105" y1="105" x2="185" y2="62.5" stroke="#e9ecef"/>
+            <line x1="105" y1="105" x2="185" y2="147.5" stroke="#e9ecef"/><line x1="105" y1="105" x2="105" y2="190" stroke="#e9ecef"/>
+            <line x1="105" y1="105" x2="25" y2="147.5" stroke="#e9ecef"/><line x1="105" y1="105" x2="25" y2="62.5" stroke="#e9ecef"/>
+            <polygon points="105,38 174,74 172,140 105,165 42,140 38,72" fill="rgba(59,91,219,0.1)" stroke="#3b5bdb" stroke-width="1.5"/>
+            <polygon points="105,25 183,64 181,148 105,185 27,148 27,64" fill="none" stroke="#dee2e6" stroke-width="1" stroke-dasharray="4 3"/>
+            <circle cx="105" cy="38" r="3.5" fill="#3b5bdb"/><circle cx="174" cy="74" r="3.5" fill="#3b5bdb"/>
+            <circle cx="172" cy="140" r="3.5" fill="#3b5bdb"/><circle cx="105" cy="165" r="3.5" fill="#3b5bdb"/>
+            <circle cx="42" cy="140" r="3.5" fill="#3b5bdb"/><circle cx="38" cy="72" r="3.5" fill="#3b5bdb"/>
+            <text x="105" y="13" text-anchor="middle" fill="#868e96" font-size="10" font-family="Inter">Algebra</text>
+            <text x="197" y="62" text-anchor="start" fill="#868e96" font-size="10" font-family="Inter">Geometry</text>
+            <text x="197" y="153" text-anchor="start" fill="#868e96" font-size="10" font-family="Inter">Counting</text>
+            <text x="105" y="204" text-anchor="middle" fill="#868e96" font-size="10" font-family="Inter">Num. Theory</text>
+            <text x="13" y="153" text-anchor="end" fill="#868e96" font-size="10" font-family="Inter">Prob.</text>
+            <text x="13" y="62" text-anchor="end" fill="#868e96" font-size="10" font-family="Inter">Logic</text>
+          </svg>
+        </div>
+        <div class="radar-notes">
+          <div class="rd-row"><span class="rd-name">Algebra</span><div class="rd-bar"><div class="rd-fill" style="width:78%;background:#3b5bdb"></div></div><span class="rd-pct">78%</span></div>
+          <div class="rd-row"><span class="rd-name">Geometry</span><div class="rd-bar"><div class="rd-fill" style="width:61%;background:#6741d9"></div></div><span class="rd-pct">61%</span></div>
+          <div class="rd-row"><span class="rd-name">Counting</span><div class="rd-bar"><div class="rd-fill" style="width:42%;background:#e67700"></div></div><span class="rd-pct">42%</span></div>
+          <div class="rd-row"><span class="rd-name">Num. Theory</span><div class="rd-bar"><div class="rd-fill" style="width:67%;background:#2f9e44"></div></div><span class="rd-pct">67%</span></div>
+          <div class="rd-row"><span class="rd-name">Probability</span><div class="rd-bar"><div class="rd-fill" style="width:35%;background:#c92a2a"></div></div><span class="rd-pct">35%</span></div>
+          <div class="rd-row"><span class="rd-name">Logic</span><div class="rd-bar"><div class="rd-fill" style="width:55%;background:#0c8599"></div></div><span class="rd-pct">55%</span></div>
+          <div class="infobox ib-orange" style="margin-top:6px;font-size:.8375rem">
+            <span class="ib-icon">⚠️</span>
+            <div>Counting &amp; Probability are your weakest domains. Study path prioritizes these first.</div>
+          </div>
+        </div>
+      </div>
+      <div class="feature-grid" style="margin-top:16px">
+        <div class="fcard"><div class="fcard-hd"><div class="fcard-icon fi-blue">🧭</div><span class="fcard-title">Personalized Study Path</span></div><p>Generated from your diagnostic. Modules follow prerequisite ordering so you never skip a foundation.</p></div>
+        <div class="fcard"><div class="fcard-hd"><div class="fcard-icon fi-green">🔄</div><span class="fcard-title">Continuous Recalibration</span></div><p>Profile updates after every session. Ratings adjust dynamically—no need for manual re-testing.</p></div>
+        <div class="fcard"><div class="fcard-hd"><div class="fcard-icon fi-purple">🎯</div><span class="fcard-title">Contest-Scoped Targeting</span></div><p>AMC 8, 10/12, and AIME tracks follow distinct sequences. Study path adjusts to your target contest.</p></div>
+        <div class="fcard"><div class="fcard-hd"><div class="fcard-icon fi-orange">📌</div><span class="fcard-title">Skill Subclassification</span></div><p>Problems tagged by subskill—Vieta's, Power of a Point, PIE—enabling precise weak-spot targeting.</p></div>
+      </div>
+    </div>
+
+    <!-- S2: LIVE AI ANALYSIS -->
+    <div class="content-section" id="s2">
+      <h2 class="sec-heading" data-num="2">AI Reasoning Analysis</h2>
+      <p class="sec-intro">Submit your solution step-by-step. Gemini reads your full reasoning chain, identifies the first logical divergence, and classifies the error type. Try it live below — type your own steps or use the pre-filled example.</p>
+
+      <div class="infobox ib-blue">
+        <span class="ib-icon">💡</span>
+        <div><strong>How it works:</strong> Enter each solution step in a separate field, type your final answer, then click <strong>Analyze Reasoning</strong>. Gemini will identify your first error and classify it—not just say "wrong."</div>
+      </div>
+
+      <div class="prob-card">
+        <div class="prob-hd">
+          <span class="prob-num">Live Demo</span>
+          <span class="prob-src">AMC 10A 2023 · #14</span>
+          <a href="https://artofproblemsolving.com/wiki/index.php/2023_AMC_10A_Problems" target="_blank" class="prob-link">View on AoPS →</a>
+        </div>
+        <div class="prob-body">
+          <div class="prob-stmt">How many ways are there to place 3 indistinguishable red chips and 3 indistinguishable blue chips in the squares of a 3×3 grid such that no two chips of the same color are directly adjacent to each other (sharing a side)?</div>
+          <div class="prob-tags">
+            <span class="ptag pt-dom">Counting</span>
+            <span class="ptag pt-sk">Inclusion-Exclusion</span>
+            <span class="ptag pt-sk">Complementary Counting</span>
+            <span class="ptag pt-diff">AMC 10 · Difficulty 1750</span>
+          </div>
+
+          <div class="steps-lbl">Your Solution Steps</div>
+          <div class="steps-list" id="stepsList">
+            <div class="step-row">
+              <div class="snum sn-neutral">1</div>
+              <textarea class="sinput" rows="1" placeholder="Enter step 1...">Total ways to place 6 chips in 9 squares = C(9,6) = 84</textarea>
+              <button class="btn-remove-step" onclick="removeStep(this)" title="Remove step">✕</button>
+            </div>
+            <div class="step-row">
+              <div class="snum sn-neutral">2</div>
+              <textarea class="sinput" rows="1" placeholder="Enter step 2...">Choose 3 squares for red from 9: C(9,3) = 84 arrangements</textarea>
+              <button class="btn-remove-step" onclick="removeStep(this)" title="Remove step">✕</button>
+            </div>
+            <div class="step-row">
+              <div class="snum sn-neutral">3</div>
+              <textarea class="sinput" rows="1" placeholder="Enter step 3...">Subtract adjacent red pairs: 12 pairs × C(7,3) = 420 invalid</textarea>
+              <button class="btn-remove-step" onclick="removeStep(this)" title="Remove step">✕</button>
+            </div>
+            <div class="step-row">
+              <div class="snum sn-neutral">4</div>
+              <textarea class="sinput" rows="1" placeholder="Enter step 4...">Answer: 84 − 420 = impossible, something went wrong</textarea>
+              <button class="btn-remove-step" onclick="removeStep(this)" title="Remove step">✕</button>
+            </div>
+          </div>
+
+          <div class="steps-controls">
+            <button class="btn-add-step" onclick="addStep()">+ Add step</button>
+            <span style="font-size:.8rem;color:var(--text3)">or press Enter in last step</span>
+          </div>
+
+          <div class="answer-row">
+            <span class="answer-label">Final answer:</span>
+            <input class="answer-input" id="answerInput" type="text" placeholder="e.g. 18" />
+            <span style="font-size:.8rem;color:var(--text3)">leave blank to skip answer check</span>
+          </div>
+
+          <div class="submit-row">
+            <button class="btn-analyze" id="analyzeBtn" onclick="analyzeSteps()">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg>
+              Analyze Reasoning
+            </button>
+            <span class="analyze-note" id="analyzeNote">Powered by Gemini 2.0 Flash</span>
+          </div>
+
+          <!-- Feedback area -->
+          <div id="feedbackArea"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S3 -->
+    <div class="content-section" id="s3">
+      <h2 class="sec-heading" data-num="3">Learning Modes</h2>
+      <p class="sec-intro">Four practice modes serve different stages of preparation—from structured concept introduction to full contest simulation under pressure.</p>
+      <div class="mode-grid">
+        <div class="mcard"><div class="mcard-top"><div class="micon fi-blue">📚</div><span class="mlabel ml-free">Free</span></div><h4>Structured Curriculum</h4><p>Guided module sequence with lessons and checkpoint problems. Prerequisite ordering enforced.</p><ul><li>Worked concept explanations</li><li>Checkpoint problems per module</li><li>AMC 8 / 10 / 12 / AIME tracks</li></ul></div>
+        <div class="mcard"><div class="mcard-top"><div class="micon fi-green">⚡</div><span class="mlabel ml-free">Free</span></div><h4>Adaptive Practice</h4><p>Infinite problem queue selecting each question based on your demonstrated weaknesses. Difficulty scales automatically.</p><ul><li>Weakness-targeted selection</li><li>Dynamic difficulty scaling</li><li>Unlimited problems</li></ul></div>
+        <div class="mcard"><div class="mcard-top"><div class="micon fi-orange">⏱</div><span class="mlabel ml-prem">Premium</span></div><h4>Contest Simulation</h4><p>Full-length timed mock exams in official format with post-test AI analysis.</p><ul><li>Official contest format &amp; timing</li><li>Post-test AI analysis report</li><li>Historical comparison tracking</li></ul></div>
+        <div class="mcard"><div class="mcard-top"><div class="micon fi-purple">📓</div><span class="mlabel ml-prem">Premium</span></div><h4>Mistake Journal &amp; Analytics</h4><p>All errors logged by type, domain, and timing. AI weekly summaries surface highest-leverage areas.</p><ul><li>Error type frequency breakdown</li><li>Timing patterns per domain</li><li>AI weekly review summaries</li></ul></div>
+      </div>
+    </div>
+
+    <!-- S4 -->
+    <div class="content-section" id="s4">
+      <h2 class="sec-heading" data-num="4">Skill Taxonomy</h2>
+      <p class="sec-intro">Every problem is tagged by domain, subskill, contest level, and internal difficulty rating—enabling MathAtlas to select problems targeting your exact weak points.</p>
+      <table class="skill-table">
+        <thead><tr><th>Domain</th><th>Skill</th><th>Sub-topics</th><th>Level</th><th>Your mastery</th></tr></thead>
+        <tbody>
+          <tr><td>Algebra</td><td class="sk-name">Polynomials &amp; Roots</td><td>Vieta's, factor theorem, rational roots</td><td><span class="badge b-silver">AMC 10/12</span></td><td><div class="pbar"><div class="pfill" style="width:78%"></div></div></td></tr>
+          <tr><td>Algebra</td><td class="sk-name">Inequalities</td><td>AM-GM, Cauchy-Schwarz, substitution</td><td><span class="badge b-gold">AIME</span></td><td><div class="pbar"><div class="pfill" style="width:54%"></div></div></td></tr>
+          <tr><td>Geometry</td><td class="sk-name">Circle Theorems</td><td>Power of a point, radical axis, inversion</td><td><span class="badge b-silver">AMC 10/12</span></td><td><div class="pbar"><div class="pfill" style="width:61%"></div></div></td></tr>
+          <tr><td>Counting</td><td class="sk-name">Inclusion-Exclusion</td><td>PIE, Möbius inversion, derangements</td><td><span class="badge b-gold">AIME</span></td><td><div class="pbar"><div class="pfill" style="width:42%;background:#e67700"></div></div></td></tr>
+          <tr><td>Number Theory</td><td class="sk-name">Modular Arithmetic</td><td>Fermat's little theorem, CRT, quadratic residues</td><td><span class="badge b-gold">AIME</span></td><td><div class="pbar"><div class="pfill" style="width:67%"></div></div></td></tr>
+          <tr><td>Probability</td><td class="sk-name">Conditional Probability</td><td>Bayes' theorem, expected value, geometric prob.</td><td><span class="badge b-silver">AMC 10/12</span></td><td><div class="pbar"><div class="pfill" style="width:35%;background:#c92a2a"></div></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- S5 -->
+    <div class="content-section" id="s5">
+      <h2 class="sec-heading" data-num="5">Rating System</h2>
+      <p class="sec-intro">An Elo-style internal rating updates after every problem. Solving a harder problem earns more points; missing an easier one costs more.</p>
+      <div class="infobox ib-purple">
+        <span class="ib-icon">📈</span>
+        <div><strong>Rating ranges:</strong> AMC 8 (800–1200) · AMC 10/12 (1200–1900) · AIME qualifier (~1900+).</div>
+      </div>
+      <div class="elo-card">
+        <div class="elo-hd">
+          <div><div class="elo-num">1,847</div><div class="elo-delta">▲ +63 this week</div></div>
+          <div style="text-align:right"><div style="font-size:.75rem;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;font-weight:600">Track</div><div style="font-size:.875rem;color:var(--text);font-weight:500;margin-top:2px">AMC 10 → AIME</div></div>
+        </div>
+        <div class="elo-body">
+          <svg width="100%" height="60" viewBox="0 0 500 60" preserveAspectRatio="none">
+            <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3b5bdb" stop-opacity="0.2"/><stop offset="100%" stop-color="#3b5bdb" stop-opacity="0"/></linearGradient></defs>
+            <path d="M0,50 C30,48 50,54 80,44 C110,34 130,42 160,36 C190,30 210,40 240,32 C270,24 290,30 320,22 C350,14 380,20 410,14 C440,8 470,11 500,6 L500,60 L0,60 Z" fill="url(#sg)"/>
+            <path d="M0,50 C30,48 50,54 80,44 C110,34 130,42 160,36 C190,30 210,40 240,32 C270,24 290,30 320,22 C350,14 380,20 410,14 C440,8 470,11 500,6" fill="none" stroke="#3b5bdb" stroke-width="2"/>
+            <circle cx="500" cy="6" r="4" fill="#3b5bdb"/>
+          </svg>
+          <table class="rt" style="margin-top:12px">
+            <tr><td style="width:14px"><span class="rt-dot c"></span></td><td class="rt-name">2022 AMC 10B · Problem 18</td><td class="rt-diff">Diff 1680</td><td class="rt-val pos">+18</td></tr>
+            <tr><td><span class="rt-dot w"></span></td><td class="rt-name">2021 AMC 10A · Problem 21</td><td class="rt-diff">Diff 1890</td><td class="rt-val neg">−11</td></tr>
+            <tr><td><span class="rt-dot c"></span></td><td class="rt-name">2023 AMC 10B · Problem 15</td><td class="rt-diff">Diff 1750</td><td class="rt-val pos">+14</td></tr>
+            <tr><td><span class="rt-dot c"></span></td><td class="rt-name">2020 AMC 10A · Problem 19</td><td class="rt-diff">Diff 1800</td><td class="rt-val pos">+22</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- S6 -->
+    <div class="content-section" id="s6">
+      <h2 class="sec-heading" data-num="6">Pricing</h2>
+      <p class="sec-intro">Every student gets full access to practice and answer checking at no cost. Premium unlocks unlimited AI analysis and deep analytics.</p>
+      <div class="pricing-grid">
+        <div class="pcard">
+          <div class="ptier">Free</div>
+          <div class="pprice">$0</div>
+          <div class="pperiod">forever</div>
+          <ul class="plist">
+            <li><span class="chk chk-g">✓</span> Unlimited answer checking</li>
+            <li><span class="chk chk-g">✓</span> Full problem library access</li>
+            <li><span class="chk chk-g">✓</span> Diagnostic &amp; skill radar</li>
+            <li><span class="chk chk-g">✓</span> 5 AI reasoning reviews / day</li>
+            <li><span class="chk chk-g">✓</span> Rating system &amp; history</li>
+            <li><span class="chk chk-g">✓</span> Structured curriculum access</li>
+          </ul>
+          <a href="javascript:void(0)" class="btn btn-ghost btn-block">Start for free</a>
+        </div>
+        <div class="pcard hi">
+          <div class="ptier bl">Premium</div>
+          <div class="pprice">$12</div>
+          <div class="pperiod">per month · billed annually</div>
+          <ul class="plist">
+            <li><span class="chk chk-b">✓</span> Everything in Free</li>
+            <li><span class="chk chk-b">✓</span> Unlimited AI reasoning reviews</li>
+            <li><span class="chk chk-b">✓</span> Deep error taxonomy &amp; classification</li>
+            <li><span class="chk chk-b">✓</span> Full contest simulation suite</li>
+            <li><span class="chk chk-b">✓</span> Advanced timing analytics</li>
+            <li><span class="chk chk-b">✓</span> Mistake journal with AI summaries</li>
+          </ul>
+          <a href="javascript:void(0)" class="btn btn-primary btn-block">Start Premium</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div>
+      <h3>Ready to start?</h3>
+      <p>Take the diagnostic and receive your full skill radar in 15 minutes. Free, always.</p>
+    </div>
+    <div style="display:flex;gap:10px">
+      <a href="javascript:void(0)" class="btn btn-ghost">Browse Problems</a>
+      <a href="javascript:void(0)" class="btn btn-primary">Take Diagnostic →</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="ft-grid">
+      <div class="ft-brand">
+        <div style="display:flex;align-items:center;gap:8px"><div class="logo-icon">MA</div><span style="font-weight:700;font-size:1rem">Math<span style="color:var(--blue)">Atlas</span></span></div>
+        <p>AI-powered preparation for AMC 8, AMC 10, AMC 12, and AIME. Built for students who take mathematics seriously.</p>
+      </div>
+      <div class="ft-col"><h5>Platform</h5><ul><li><a href="javascript:void(0)">Diagnostic</a></li><li><a href="javascript:void(0)">Problem Library</a></li><li><a href="javascript:void(0)">Contest Simulation</a></li><li><a href="javascript:void(0)">Analytics</a></li></ul></div>
+      <div class="ft-col"><h5>Contests</h5><ul><li><a href="javascript:void(0)">AMC 8 Track</a></li><li><a href="javascript:void(0)">AMC 10 Track</a></li><li><a href="javascript:void(0)">AMC 12 Track</a></li><li><a href="javascript:void(0)">AIME Track</a></li><li><a href="javascript:void(0)">Official MAA Site →</a></li></ul></div>
+      <div class="ft-col"><h5>Company</h5><ul><li><a href="javascript:void(0)">About</a></li><li><a href="javascript:void(0)">Blog</a></li><li><a href="javascript:void(0)">Pricing</a></li><li><a href="javascript:void(0)">Privacy Policy</a></li><li><a href="javascript:void(0)">Terms of Service</a></li></ul></div>
+    </div>
+    <div class="ft-bot">
+      <span class="ft-copy">© 2025 MathAtlas. All rights reserved.</span>
+      <div class="ft-links"><a href="javascript:void(0)">Privacy</a><a href="javascript:void(0)">Terms</a><a href="javascript:void(0)">Contact</a></div>
+    </div>
+  </footer>
+</main>
+</div>
+
+<script>
+// ── STEP MANAGEMENT ──
+function getSteps() {
+  return document.querySelectorAll('#stepsList .step-row');
+}
+
+function renumberSteps() {
+  getSteps().forEach((row, i) => {
+    row.querySelector('.snum').textContent = i + 1;
+  });
+}
+
+function addStep() {
+  const list = document.getElementById('stepsList');
+  const count = getSteps().length + 1;
+  const row = document.createElement('div');
+  row.className = 'step-row';
+  row.innerHTML = `
+    <div class="snum sn-neutral">${count}</div>
+    <textarea class="sinput" rows="1" placeholder="Enter step ${count}..."></textarea>
+    <button class="btn-remove-step" onclick="removeStep(this)" title="Remove step">✕</button>
+  `;
+  list.appendChild(row);
+  row.querySelector('textarea').focus();
+}
+
+function removeStep(btn) {
+  const row = btn.closest('.step-row');
+  if (getSteps().length <= 1) return;
+  row.remove();
+  renumberSteps();
+}
+
+// Auto-resize textareas
+document.addEventListener('input', e => {
+  if (e.target.classList.contains('sinput')) {
+    e.target.style.height = 'auto';
+    e.target.style.height = e.target.scrollHeight + 'px';
+  }
+});
+
+// ── AI ANALYSIS ──
+async function analyzeSteps() {
+  const btn = document.getElementById('analyzeBtn');
+  const noteEl = document.getElementById('analyzeNote');
+  const feedbackArea = document.getElementById('feedbackArea');
+
+  const steps = Array.from(getSteps()).map(row =>
+    row.querySelector('textarea').value.trim()
+  ).filter(Boolean);
+
+  if (steps.length === 0) {
+    alert('Please enter at least one solution step.');
+    return;
+  }
+
+  const problem = document.querySelector('.prob-stmt').textContent.trim();
+
+  // Loading state
+  btn.disabled = true;
+  btn.innerHTML = `<div class="spinner"></div> Analyzing...`;
+  noteEl.textContent = 'Gemini is reading your reasoning...';
+
+  feedbackArea.innerHTML = `
+    <div class="ai-fb">
+      <div class="ai-fb-hd"><span class="ai-badge">AI</span> Reasoning Analysis</div>
+      <div class="fb-loading"><div class="spin2"></div> Reading your solution steps...</div>
+    </div>`;
+
+  // Reset step styles
+  getSteps().forEach(row => {
+    const num = row.querySelector('.snum');
+    const input = row.querySelector('textarea');
+    num.className = 'snum sn-neutral';
+    input.className = 'sinput';
+  });
+
+  try {
+    const response = await fetch('/api/gemini', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ problem, steps })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    renderFeedback(data, steps);
+
+  } catch (err) {
+    feedbackArea.innerHTML = `
+      <div class="ai-fb">
+        <div class="ai-fb-hd"><span class="ai-badge">AI</span> Error</div>
+        <div class="fb-item"><span class="fbtag ft-err">Error</span>
+        <p>Could not connect to the analysis server. Make sure you have deployed to Vercel with your API key set. <strong>Error:</strong> ${err.message}</p></div>
+      </div>`;
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg> Analyze Reasoning`;
+    noteEl.textContent = 'Powered by Gemini 2.0 Flash';
+  }
+}
+
+function renderFeedback(data, steps) {
+  const feedbackArea = document.getElementById('feedbackArea');
+  const rows = Array.from(getSteps());
+
+  // Apply step highlighting
+  if (data.stepFeedback && Array.isArray(data.stepFeedback)) {
+    data.stepFeedback.forEach(sf => {
+      const row = rows[sf.step - 1];
+      if (!row) return;
+      const num = row.querySelector('.snum');
+      const input = row.querySelector('textarea');
+      if (sf.status === 'ok') {
+        num.className = 'snum sn-ok';
+        input.className = 'sinput s-ok';
+      } else if (sf.status === 'error') {
+        num.className = 'snum sn-err';
+        input.className = 'sinput s-err';
+      } else if (sf.status === 'warning') {
+        num.className = 'snum sn-warn';
+        input.className = 'sinput s-warn';
+      }
+    });
+  }
+
+  // All correct?
+  if (data.errorType === 'Correct' || data.firstErrorStep === null) {
+    feedbackArea.innerHTML = `
+      <div class="ai-fb">
+        <div class="ai-fb-hd"><span class="ai-badge">AI</span> Reasoning Analysis</div>
+        <div class="correct-banner">
+          <span class="cb-icon">✅</span>
+          <p><strong>All steps look correct.</strong> ${data.mainFeedback || 'Your reasoning is sound. Double-check arithmetic and make sure your answer matches.'}</p>
+        </div>
+      </div>`;
+    return;
+  }
+
+  const errorStep = data.firstErrorStep ? `First error: Step ${data.firstErrorStep}` : '';
+  const errorCode = data.errorCode ? ` <span style="font-family:'Fira Code',monospace;font-size:.75rem;background:var(--red-light);color:var(--red);border-radius:4px;padding:1px 7px">${data.errorCode}</span>` : '';
+
+  let items = '';
+
+  if (data.errorType && data.errorType !== 'Correct') {
+    items += `
+      <div class="fb-item">
+        <span class="fbtag ft-err">${data.errorType}${errorCode}</span>
+        <p>${data.mainFeedback || ''}</p>
+      </div>`;
+  }
+
+  // Per-step comments
+  if (data.stepFeedback) {
+    data.stepFeedback.forEach(sf => {
+      if (sf.comment && sf.status !== 'ok') {
+        const tagClass = sf.status === 'error' ? 'ft-err' : 'ft-warn';
+        items += `
+          <div class="fb-item">
+            <span class="fbtag ${tagClass}">Step ${sf.step}</span>
+            <p>${sf.comment}</p>
+          </div>`;
+      }
+    });
+  }
+
+  if (data.hint) {
+    const moduleNote = data.moduleLink
+      ? ` Review the <a href="javascript:void(0)" style="color:var(--blue)">${data.moduleLink} module</a>.`
+      : '';
+    items += `
+      <div class="fb-item">
+        <span class="fbtag ft-hint">Hint</span>
+        <p>${data.hint}${moduleNote}</p>
+      </div>`;
+  }
+
+  feedbackArea.innerHTML = `
+    <div class="ai-fb">
+      <div class="ai-fb-hd">
+        <span class="ai-badge">AI</span> Reasoning Analysis
+        <span class="ai-ref">${errorStep}</span>
+      </div>
+      ${items}
+    </div>`;
+}
+</script>
+</body>
+</html>
