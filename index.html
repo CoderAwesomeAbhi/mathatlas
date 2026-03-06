@@ -7,364 +7,453 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-:root {
-  --bg: #ffffff; --bg2: #f8f9fa; --bg3: #f1f3f5; --surface: #e9ecef;
-  --border: #dee2e6; --border2: #ced4da;
-  --text: #1a1a2e; --text2: #495057; --text3: #868e96;
-  --blue: #3b5bdb; --blue-light: #dbe4ff; --blue-mid: #748ffc; --blue-dark: #2f4ac7;
-  --green: #2f9e44; --green-light: #d3f9d8;
-  --orange: #e67700; --orange-light: #fff3bf;
-  --red: #c92a2a; --red-light: #ffe3e3;
-  --purple: #6741d9; --purple-light: #ede9fc;
-  --sidebar-w: 260px; --topbar-h: 56px;
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --bg:#fff;--bg2:#f8f9fa;--bg3:#f1f3f5;--border:#dee2e6;--border2:#ced4da;
+  --text:#1a1a2e;--text2:#495057;--text3:#868e96;
+  --blue:#3b5bdb;--blue-l:#dbe4ff;--blue-d:#2f4ac7;--blue-m:#748ffc;
+  --green:#2f9e44;--green-l:#d3f9d8;
+  --orange:#e67700;--orange-l:#fff3bf;
+  --red:#c92a2a;--red-l:#ffe3e3;
+  --purple:#6741d9;--purple-l:#ede9fc;
+  --sw:260px;--th:56px;
 }
-body { font-family: 'Inter', -apple-system, sans-serif; color: var(--text); background: var(--bg); font-size: 15px; line-height: 1.6; }
+body{font-family:'Inter',-apple-system,sans-serif;color:var(--text);background:var(--bg);font-size:15px;line-height:1.6;overflow-x:hidden}
 
-/* TOP BAR */
-.topbar { position: fixed; top: 0; left: 0; right: 0; height: var(--topbar-h); background: var(--bg); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px 0 0; z-index: 200; }
-.topbar-logo { width: var(--sidebar-w); padding: 0 20px; display: flex; align-items: center; gap: 10px; text-decoration: none; border-right: 1px solid var(--border); height: 100%; flex-shrink: 0; }
-.logo-icon { width: 28px; height: 28px; background: var(--blue); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: 700; font-family: 'Fira Code', monospace; flex-shrink: 0; }
-.logo-name { font-size: 1.0625rem; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
-.logo-name span { color: var(--blue); }
-.topbar-search { flex: 1; padding: 0 20px; }
-.search-box { display: flex; align-items: center; gap: 8px; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; max-width: 380px; color: var(--text3); font-size: 0.875rem; cursor: text; }
-.topbar-nav { display: flex; align-items: center; gap: 4px; }
-.topbar-link { padding: 6px 12px; border-radius: 6px; font-size: 0.875rem; color: var(--text2); text-decoration: none; transition: background .15s, color .15s; }
-.topbar-link:hover { background: var(--bg2); color: var(--text); }
-.tdiv { width: 1px; height: 20px; background: var(--border); margin: 0 8px; }
-.btn { padding: 7px 16px; border-radius: 6px; font-size: 0.875rem; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-block; transition: all .15s; border: 1px solid transparent; }
-.btn-primary { background: var(--blue); color: white; border-color: var(--blue); }
-.btn-primary:hover { background: var(--blue-dark); border-color: var(--blue-dark); }
-.btn-ghost { background: transparent; color: var(--text2); border-color: var(--border); }
-.btn-ghost:hover { background: var(--bg2); color: var(--text); }
-.btn-lg { padding: 10px 22px; font-size: 0.9375rem; }
-.btn-block { width: 100%; text-align: center; display: block; padding: 10px; }
+/* TOPBAR */
+.topbar{position:fixed;top:0;left:0;right:0;height:var(--th);background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px 0 0;z-index:200}
+.t-logo{width:var(--sw);padding:0 20px;display:flex;align-items:center;gap:10px;text-decoration:none;border-right:1px solid var(--border);height:100%;flex-shrink:0;cursor:pointer}
+.logo-icon{width:28px;height:28px;background:var(--blue);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;font-family:'Fira Code',monospace;flex-shrink:0}
+.logo-name{font-size:1.0625rem;font-weight:700;color:var(--text);letter-spacing:-.02em}
+.logo-name span{color:var(--blue)}
+.t-search{flex:1;padding:0 20px}
+.search-box{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:6px 12px;max-width:380px;color:var(--text3);font-size:.875rem;cursor:text}
+.t-nav{display:flex;align-items:center;gap:4px}
+.t-link{padding:6px 12px;border-radius:6px;font-size:.875rem;color:var(--text2);text-decoration:none;transition:background .15s,color .15s;cursor:pointer;background:none;border:none;font-family:'Inter',sans-serif}
+.t-link:hover,.t-link.active{background:var(--bg2);color:var(--text)}
+.t-link.active{font-weight:500}
+.tdiv{width:1px;height:20px;background:var(--border);margin:0 8px}
+.btn{padding:7px 16px;border-radius:6px;font-size:.875rem;font-weight:500;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:all .15s;border:1px solid transparent;font-family:'Inter',sans-serif}
+.btn-primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn-primary:hover{background:var(--blue-d);border-color:var(--blue-d)}
+.btn-ghost{background:transparent;color:var(--text2);border-color:var(--border)}
+.btn-ghost:hover{background:var(--bg2);color:var(--text)}
+.btn-sm{padding:5px 12px;font-size:.8125rem}
+.btn-lg{padding:10px 22px;font-size:.9375rem}
+.btn-block{width:100%;justify-content:center;padding:10px}
 
 /* LAYOUT */
-.layout { display: flex; padding-top: var(--topbar-h); min-height: 100vh; }
+.layout{display:flex;padding-top:var(--th);min-height:100vh}
 
 /* SIDEBAR */
-.sidebar { width: var(--sidebar-w); background: var(--bg2); border-right: 1px solid var(--border); position: fixed; top: var(--topbar-h); bottom: 0; left: 0; overflow-y: auto; padding: 16px 0; z-index: 100; }
-.sidebar::-webkit-scrollbar { width: 4px; }
-.sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-.sb-header { padding: 6px 16px; font-size: 0.6875rem; font-weight: 600; color: var(--text3); letter-spacing: .08em; text-transform: uppercase; margin-top: 12px; }
-.sb-item { display: flex; align-items: center; gap: 8px; padding: 6px 16px; font-size: 0.875rem; color: var(--text2); text-decoration: none; border-left: 3px solid transparent; transition: background .12s, color .12s; }
-.sb-item:hover { background: var(--bg3); color: var(--text); }
-.sb-item.active { background: var(--blue-light); color: var(--blue); border-left-color: var(--blue); font-weight: 500; }
-.sb-icon { font-size: .875rem; width: 18px; flex-shrink: 0; text-align: center; }
-.badge { margin-left: auto; font-size: .6875rem; padding: 2px 7px; border-radius: 100px; font-weight: 500; flex-shrink: 0; }
-.b-bronze { background: #fef3c7; color: #92400e; }
-.b-silver { background: #f1f3f5; color: #495057; border: 1px solid var(--border); }
-.b-gold { background: #fef3c7; color: #b45309; }
-.b-plat { background: #e0f2fe; color: #0369a1; }
+.sidebar{width:var(--sw);background:var(--bg2);border-right:1px solid var(--border);position:fixed;top:var(--th);bottom:0;left:0;overflow-y:auto;padding:16px 0;z-index:100}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.sb-hdr{padding:6px 16px;font-size:.6875rem;font-weight:600;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-top:12px}
+.sb-item{display:flex;align-items:center;gap:8px;padding:6px 16px;font-size:.875rem;color:var(--text2);text-decoration:none;border-left:3px solid transparent;transition:background .12s,color .12s;cursor:pointer;background:none;border-right:none;border-top:none;border-bottom:none;width:100%;font-family:'Inter',sans-serif}
+.sb-item:hover{background:var(--bg3);color:var(--text)}
+.sb-item.active{background:var(--blue-l);color:var(--blue);border-left-color:var(--blue);font-weight:500}
+.sb-icon{font-size:.875rem;width:18px;flex-shrink:0;text-align:center}
+.badge{margin-left:auto;font-size:.6875rem;padding:2px 7px;border-radius:100px;font-weight:500;flex-shrink:0}
+.b-bronze{background:#fef3c7;color:#92400e}
+.b-silver{background:#f1f3f5;color:#495057;border:1px solid var(--border)}
+.b-gold{background:#fef3c7;color:#b45309}
+.b-plat{background:#e0f2fe;color:#0369a1}
 
 /* MAIN */
-.main { margin-left: var(--sidebar-w); flex: 1; min-width: 0; }
+.main{margin-left:var(--sw);flex:1;min-width:0}
 
-/* HERO */
-.hero { background: linear-gradient(135deg, #f0f4ff 0%, #eef2ff 50%, #f5f0ff 100%); border-bottom: 1px solid var(--border); padding: 64px 64px 56px; }
-.breadcrumb { display: flex; align-items: center; gap: 6px; font-size: .8125rem; color: var(--text3); margin-bottom: 24px; }
-.breadcrumb a { color: var(--blue); text-decoration: none; }
-.contest-tags { display: flex; gap: 8px; margin-bottom: 20px; }
-.ctag { padding: 3px 10px; border-radius: 100px; font-size: .75rem; font-weight: 600; letter-spacing: .03em; }
-.ct-8  { background: var(--green-light); color: var(--green); }
-.ct-10 { background: var(--blue-light); color: var(--blue); }
-.ct-12 { background: var(--purple-light); color: var(--purple); }
-.ct-ai { background: var(--orange-light); color: var(--orange); }
-.hero h1 { font-size: 2.25rem; font-weight: 700; line-height: 1.25; letter-spacing: -.025em; color: var(--text); max-width: 680px; margin-bottom: 16px; }
-.hero p { font-size: 1.0625rem; color: var(--text2); max-width: 600px; margin-bottom: 32px; line-height: 1.65; }
-.hero-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-.hero-stats { display: flex; gap: 32px; margin-top: 40px; padding-top: 32px; border-top: 1px solid rgba(0,0,0,.08); }
-.hs-num { font-size: 1.375rem; font-weight: 700; color: var(--text); letter-spacing: -.02em; }
-.hs-num span { color: var(--blue); }
-.hs-label { font-size: .8125rem; color: var(--text3); margin-top: 1px; }
+/* VIEWS */
+.view{display:none}
+.view.active{display:block}
 
-/* PAGE CONTENT */
-.page-content { padding: 48px 64px; max-width: 900px; }
-.content-section { margin-bottom: 56px; }
-.sec-heading { font-size: 1.25rem; font-weight: 700; letter-spacing: -.015em; color: var(--text); margin-bottom: 8px; display: flex; align-items: center; gap: 10px; padding-bottom: 12px; border-bottom: 2px solid var(--border); }
-.sec-heading::before { content: attr(data-num); font-size: .75rem; background: var(--blue); color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
-.sec-intro { color: var(--text2); margin-bottom: 20px; font-size: .9375rem; line-height: 1.7; }
+/* INFOBOX */
+.infobox{border-radius:8px;padding:14px 18px;margin-bottom:14px;font-size:.9rem;border-left:4px solid;line-height:1.6;display:flex;gap:10px;align-items:flex-start}
+.ib-blue{background:var(--blue-l);border-color:var(--blue);color:#1e3a8a}
+.ib-green{background:var(--green-l);border-color:var(--green);color:#14532d}
+.ib-orange{background:var(--orange-l);border-color:var(--orange);color:#7c2d12}
+.ib-purple{background:var(--purple-l);border-color:var(--purple);color:#3b0764}
+.ib-icon{font-size:1rem;margin-top:1px;flex-shrink:0}
+.infobox strong{font-weight:600}
+.infobox a{color:inherit;font-weight:600}
 
-/* INFOBOXES */
-.infobox { border-radius: 8px; padding: 14px 18px; margin-bottom: 14px; font-size: .9rem; border-left: 4px solid; line-height: 1.6; display: flex; gap: 10px; align-items: flex-start; }
-.ib-blue   { background: var(--blue-light); border-color: var(--blue); color: #1e3a8a; }
-.ib-green  { background: var(--green-light); border-color: var(--green); color: #14532d; }
-.ib-orange { background: var(--orange-light); border-color: var(--orange); color: #7c2d12; }
-.ib-purple { background: var(--purple-light); border-color: var(--purple); color: #3b0764; }
-.ib-icon { font-size: 1rem; margin-top: 1px; flex-shrink: 0; }
-.infobox strong { font-weight: 600; }
+/* ═══════════════════════════════════
+   HOME VIEW
+═══════════════════════════════════ */
+.hero{background:linear-gradient(135deg,#f0f4ff,#eef2ff 50%,#f5f0ff);border-bottom:1px solid var(--border);padding:64px 64px 56px}
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:.8125rem;color:var(--text3);margin-bottom:24px}
+.breadcrumb a{color:var(--blue);text-decoration:none;cursor:pointer}
+.contest-tags{display:flex;gap:8px;margin-bottom:20px}
+.ctag{padding:3px 10px;border-radius:100px;font-size:.75rem;font-weight:600}
+.ct-8{background:var(--green-l);color:var(--green)}
+.ct-10{background:var(--blue-l);color:var(--blue)}
+.ct-12{background:var(--purple-l);color:var(--purple)}
+.ct-ai{background:var(--orange-l);color:var(--orange)}
+.hero h1{font-size:2.25rem;font-weight:700;line-height:1.25;letter-spacing:-.025em;max-width:680px;margin-bottom:16px}
+.hero p{font-size:1.0625rem;color:var(--text2);max-width:600px;margin-bottom:32px;line-height:1.65}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+.hero-stats{display:flex;gap:32px;margin-top:40px;padding-top:32px;border-top:1px solid rgba(0,0,0,.08);flex-wrap:wrap}
+.hs-num{font-size:1.375rem;font-weight:700;letter-spacing:-.02em}
+.hs-num span{color:var(--blue)}
+.hs-label{font-size:.8125rem;color:var(--text3);margin-top:1px}
+.page-content{padding:48px 64px;max-width:900px}
+.content-section{margin-bottom:56px}
+.sec-heading{font-size:1.25rem;font-weight:700;letter-spacing:-.015em;margin-bottom:8px;display:flex;align-items:center;gap:10px;padding-bottom:12px;border-bottom:2px solid var(--border)}
+.sec-heading::before{content:attr(data-num);font-size:.75rem;background:var(--blue);color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+.sec-intro{color:var(--text2);margin-bottom:20px;font-size:.9375rem;line-height:1.7}
+.toc{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:18px 20px;margin-bottom:32px}
+.toc-title{font-size:.75rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.toc ul{list-style:none}
+.toc li{margin-bottom:5px}
+.toc a{font-size:.875rem;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:7px;cursor:pointer}
+.toc a:hover{text-decoration:underline}
+.toc a::before{content:'§';color:var(--text3);font-size:.75rem}
+.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.fcard{border:1px solid var(--border);border-radius:8px;padding:18px 20px;background:var(--bg);transition:border-color .15s,box-shadow .15s;cursor:pointer}
+.fcard:hover{border-color:var(--blue-m);box-shadow:0 0 0 3px var(--blue-l)}
+.fcard-hd{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.fcard-icon{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.9375rem;flex-shrink:0}
+.fi-blue{background:var(--blue-l)} .fi-green{background:var(--green-l)} .fi-orange{background:var(--orange-l)} .fi-purple{background:var(--purple-l)}
+.fcard-title{font-size:.9375rem;font-weight:600;letter-spacing:-.01em}
+.fcard p{font-size:.875rem;color:var(--text2);line-height:1.6}
+.radar-wrap{display:flex;gap:32px;align-items:flex-start;margin-top:16px;flex-wrap:wrap}
+.radar-card{border:1px solid var(--border);border-radius:8px;padding:20px;background:var(--bg);flex-shrink:0}
+.radar-title-sm{font-size:.75rem;font-weight:600;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:14px}
+.radar-notes{flex:1;display:flex;flex-direction:column;gap:10px;padding-top:4px;min-width:200px}
+.rd-row{display:flex;align-items:center;gap:10px;font-size:.8375rem}
+.rd-name{width:120px;color:var(--text2);flex-shrink:0}
+.rd-bar{flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.rd-fill{height:100%;border-radius:3px}
+.rd-pct{font-size:.75rem;color:var(--text3);width:32px;text-align:right;font-family:'Fira Code',monospace}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.mcard{border:1px solid var(--border);border-radius:8px;padding:18px 20px;background:var(--bg);cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.mcard:hover{border-color:var(--blue-m);box-shadow:0 0 0 3px var(--blue-l)}
+.mcard-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.micon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.mlabel{font-size:.6875rem;padding:3px 9px;border-radius:100px;font-weight:600}
+.ml-free{background:var(--green-l);color:var(--green)}
+.ml-prem{background:var(--orange-l);color:var(--orange)}
+.mcard h4{font-size:.9375rem;font-weight:600;letter-spacing:-.01em;margin-bottom:7px}
+.mcard p{font-size:.85rem;color:var(--text2);line-height:1.6}
+.mcard ul{margin-top:10px;padding-left:16px}
+.mcard li{font-size:.8375rem;color:var(--text2);margin-bottom:4px}
+.skill-table{width:100%;border-collapse:collapse;border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:.875rem;margin-top:16px}
+.skill-table thead{background:var(--bg2)}
+.skill-table th{padding:10px 14px;text-align:left;font-size:.75rem;font-weight:600;color:var(--text3);letter-spacing:.05em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.skill-table td{padding:10px 14px;border-bottom:1px solid var(--bg3);color:var(--text2)}
+.skill-table tr:last-child td{border-bottom:none}
+.skill-table tr:hover td{background:var(--bg2)}
+.sk-name{color:var(--text);font-weight:500}
+.pbar{width:100px;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle}
+.pfill{height:100%;border-radius:3px;background:var(--blue)}
+.pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.pcard{border:1px solid var(--border);border-radius:10px;padding:24px;background:var(--bg)}
+.pcard.hi{border-color:var(--blue);background:linear-gradient(135deg,#f0f4ff,#f5f0ff)}
+.ptier{font-size:.75rem;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}
+.ptier.bl{color:var(--blue)}
+.pprice{font-size:2rem;font-weight:800;letter-spacing:-.03em;line-height:1;margin-bottom:4px}
+.pperiod{font-size:.8125rem;color:var(--text3);margin-bottom:20px}
+.plist{list-style:none;margin-bottom:22px}
+.plist li{font-size:.875rem;color:var(--text2);padding:5px 0;display:flex;align-items:flex-start;gap:8px}
+.chk{flex-shrink:0;margin-top:2px;font-size:.85rem}
+.chk-g{color:var(--green)} .chk-b{color:var(--blue)}
+.callout{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg2);padding:36px 64px;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap}
+.callout h3{font-size:1.125rem;font-weight:700;margin-bottom:4px}
+.callout p{font-size:.9rem;color:var(--text2)}
 
-/* FEATURE CARDS */
-.feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
-.fcard { border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; background: var(--bg); transition: border-color .15s, box-shadow .15s; }
-.fcard:hover { border-color: var(--blue-mid); box-shadow: 0 0 0 3px var(--blue-light); }
-.fcard-hd { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-.fcard-icon { width: 32px; height: 32px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: .9375rem; flex-shrink: 0; }
-.fi-blue { background: var(--blue-light); } .fi-green { background: var(--green-light); }
-.fi-orange { background: var(--orange-light); } .fi-purple { background: var(--purple-light); }
-.fcard-title { font-size: .9375rem; font-weight: 600; color: var(--text); letter-spacing: -.01em; }
-.fcard p { font-size: .875rem; color: var(--text2); line-height: 1.6; }
+/* ═══════════════════════════════════
+   PROBLEMS VIEW
+═══════════════════════════════════ */
+.view-header{padding:32px 48px 24px;border-bottom:1px solid var(--border);background:var(--bg2)}
+.view-header h1{font-size:1.5rem;font-weight:700;letter-spacing:-.02em;margin-bottom:6px}
+.view-header p{font-size:.9375rem;color:var(--text2)}
+.view-body{padding:32px 48px}
+.filter-bar{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;align-items:center}
+.filter-select{padding:6px 12px;border:1px solid var(--border);border-radius:6px;font-size:.875rem;color:var(--text2);background:var(--bg);font-family:'Inter',sans-serif;cursor:pointer;outline:none}
+.filter-select:focus{border-color:var(--blue-m)}
+.filter-label{font-size:.8125rem;color:var(--text3);font-weight:500}
+.problems-grid{display:flex;flex-direction:column;gap:10px}
+.prob-card{border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--bg);transition:box-shadow .15s}
+.prob-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.prob-card-hd{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:10px}
+.prob-id{font-family:'Fira Code',monospace;font-size:.75rem;color:var(--text3)}
+.prob-title{font-size:.875rem;font-weight:600;color:var(--text);flex:1}
+.prob-body{padding:14px 16px}
+.prob-stmt{font-size:.875rem;color:var(--text2);line-height:1.65;margin-bottom:12px;font-style:italic}
+.prob-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.ptag{font-size:.75rem;padding:2px 9px;border-radius:100px;font-weight:500}
+.pt-dom{background:var(--blue-l);color:var(--blue)}
+.pt-sk{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
+.pt-diff{background:var(--orange-l);color:var(--orange)}
+.prob-actions{display:flex;gap:8px;align-items:center}
+.solve-btn{background:var(--blue);color:#fff;border:1px solid var(--blue);border-radius:6px;padding:6px 16px;font-size:.8125rem;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.solve-btn:hover{background:var(--blue-d)}
+.hint-btn{background:transparent;color:var(--text3);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:.8125rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.hint-btn:hover{border-color:var(--blue-m);color:var(--blue)}
+.official-link{font-size:.8125rem;color:var(--blue);text-decoration:none;margin-left:auto}
+.official-link:hover{text-decoration:underline}
 
-/* TOC */
-.toc { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; margin-bottom: 32px; }
-.toc-title { font-size: .75rem; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
-.toc ul { list-style: none; }
-.toc li { margin-bottom: 5px; }
-.toc a { font-size: .875rem; color: var(--blue); text-decoration: none; display: flex; align-items: center; gap: 7px; }
-.toc a:hover { text-decoration: underline; }
-.toc a::before { content: '§'; color: var(--text3); font-size: .75rem; }
+/* SOLVE MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:500;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg);border-radius:12px;width:100%;max-width:720px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.modal-hd{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:1}
+.modal-hd h3{font-size:1rem;font-weight:700}
+.modal-close{background:none;border:none;font-size:1.25rem;cursor:pointer;color:var(--text3);padding:4px 8px;border-radius:4px}
+.modal-close:hover{color:var(--text);background:var(--bg2)}
+.modal-body{padding:24px}
+.steps-lbl{font-size:.75rem;font-weight:600;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:10px}
+.steps-list{display:flex;flex-direction:column;gap:7px;margin-bottom:12px}
+.step-row{display:flex;gap:8px;align-items:flex-start}
+.snum{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.6875rem;font-family:'Fira Code',monospace;font-weight:500;flex-shrink:0;margin-top:7px;transition:background .2s,color .2s}
+.sn-neutral{background:var(--bg3);color:var(--text3);border:1px solid var(--border)}
+.sn-ok{background:var(--green-l);color:var(--green)}
+.sn-err{background:var(--red-l);color:var(--red)}
+.sn-warn{background:var(--orange-l);color:var(--orange)}
+.sinput{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:.85rem;font-family:'Fira Code',monospace;color:var(--text);line-height:1.5;resize:none;outline:none;transition:border-color .15s;min-height:36px}
+.sinput:focus{border-color:var(--blue-m);background:#fff}
+.sinput.s-ok{border-color:#a3cfac;background:#f8fff9}
+.sinput.s-err{border-color:#f1aeb5;background:#fff5f5}
+.sinput.s-warn{border-color:#ffd58a;background:#fffbf0}
+.btn-add-step{background:var(--bg2);border:1px dashed var(--border2);border-radius:6px;padding:6px 14px;font-size:.8125rem;color:var(--text3);cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif}
+.btn-add-step:hover{border-color:var(--blue-m);color:var(--blue);background:var(--blue-l)}
+.btn-rm{background:none;border:none;color:var(--text3);cursor:pointer;padding:4px;border-radius:4px;font-size:.85rem;margin-top:6px;transition:color .15s;flex-shrink:0}
+.btn-rm:hover{color:var(--red)}
+.answer-row{display:flex;gap:10px;align-items:center;margin:14px 0}
+.answer-label{font-size:.8125rem;color:var(--text2);font-weight:500;flex-shrink:0}
+.answer-input{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:.9rem;font-family:'Fira Code',monospace;color:var(--text);outline:none;width:120px;transition:border-color .15s}
+.answer-input:focus{border-color:var(--blue-m);background:#fff}
+.btn-analyze{background:var(--blue);color:#fff;border:1px solid var(--blue);border-radius:6px;padding:9px 22px;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:8px}
+.btn-analyze:hover:not(:disabled){background:var(--blue-d)}
+.btn-analyze:disabled{opacity:.6;cursor:not-allowed}
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+.spin2{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ai-fb{margin-top:16px;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.ai-fb-hd{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:8px;font-size:.8125rem;font-weight:600}
+.ai-badge{font-size:.6875rem;background:var(--blue);color:#fff;padding:2px 8px;border-radius:100px;font-weight:600;letter-spacing:.04em}
+.ai-ref{margin-left:auto;font-size:.75rem;font-family:'Fira Code',monospace;color:var(--text3);background:var(--bg3);padding:2px 8px;border-radius:4px}
+.fb-item{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start}
+.fb-item:last-child{border-bottom:none}
+.fbtag{font-size:.6875rem;font-weight:600;padding:3px 9px;border-radius:100px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.ft-err{background:var(--red-l);color:var(--red)}
+.ft-warn{background:var(--orange-l);color:var(--orange)}
+.ft-hint{background:var(--blue-l);color:var(--blue)}
+.ft-ok{background:var(--green-l);color:var(--green)}
+.fb-item p{font-size:.875rem;color:var(--text2);line-height:1.6}
+.fb-item p strong{color:var(--text);font-weight:600}
+.fb-item a{color:var(--blue)}
+.fb-loading{padding:24px 16px;display:flex;align-items:center;gap:12px;color:var(--text3);font-size:.9rem}
+.correct-banner{padding:16px;background:var(--green-l);display:flex;align-items:center;gap:12px}
+.correct-banner p{font-size:.9rem;color:#14532d;line-height:1.5}
+.correct-banner strong{font-weight:600}
 
-/* RADAR */
-.radar-wrap { display: flex; gap: 32px; align-items: flex-start; margin-top: 16px; }
-.radar-card { border: 1px solid var(--border); border-radius: 8px; padding: 20px; background: var(--bg); flex-shrink: 0; }
-.radar-title { font-size: .75rem; font-weight: 600; color: var(--text3); letter-spacing: .07em; text-transform: uppercase; margin-bottom: 14px; }
-.radar-notes { flex: 1; display: flex; flex-direction: column; gap: 10px; padding-top: 4px; }
-.rd-row { display: flex; align-items: center; gap: 10px; font-size: .8375rem; }
-.rd-name { width: 120px; color: var(--text2); flex-shrink: 0; }
-.rd-bar { flex: 1; height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
-.rd-fill { height: 100%; border-radius: 3px; }
-.rd-pct { font-size: .75rem; color: var(--text3); width: 32px; text-align: right; font-family: 'Fira Code', monospace; }
+/* ═══════════════════════════════════
+   MODULES VIEW
+═══════════════════════════════════ */
+.modules-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.module-card{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--bg);cursor:pointer;transition:box-shadow .15s,border-color .15s}
+.module-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);border-color:var(--blue-m)}
+.module-card-hd{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.module-card-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.module-card h3{font-size:.9375rem;font-weight:600}
+.module-card-body{padding:16px 20px}
+.module-lessons{list-style:none;display:flex;flex-direction:column;gap:4px}
+.module-lesson{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:6px;font-size:.875rem;color:var(--text2);cursor:pointer;transition:background .12s}
+.module-lesson:hover{background:var(--bg2)}
+.lesson-icon{font-size:.75rem;width:16px;flex-shrink:0;text-align:center}
+.lesson-name{flex:1}
+.lesson-badge{font-size:.6875rem;padding:1px 6px;border-radius:100px;font-weight:500}
+.lesson-complete{color:var(--green)}
+.module-progress{margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.mp-bar{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-bottom:6px}
+.mp-fill{height:100%;border-radius:2px;background:var(--blue)}
+.mp-label{font-size:.75rem;color:var(--text3)}
 
-/* ── AI ANALYSIS DEMO ── */
-.prob-card { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-top: 16px; background: var(--bg); }
-.prob-hd { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 10px 16px; display: flex; align-items: center; gap: 10px; }
-.prob-num { font-size: .8125rem; font-weight: 600; color: var(--text2); }
-.prob-src { font-size: .75rem; color: var(--text3); font-family: 'Fira Code', monospace; }
-.prob-link { margin-left: auto; font-size: .75rem; color: var(--blue); text-decoration: none; font-weight: 500; }
-.prob-link:hover { text-decoration: underline; }
-.prob-body { padding: 16px; }
-.prob-stmt { font-size: .9rem; color: var(--text); line-height: 1.65; margin-bottom: 12px; padding: 12px 14px; background: var(--bg2); border-radius: 6px; border: 1px solid var(--border); }
-.prob-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
-.ptag { font-size: .75rem; padding: 2px 9px; border-radius: 100px; font-weight: 500; }
-.pt-dom { background: var(--blue-light); color: var(--blue); }
-.pt-sk  { background: var(--bg3); color: var(--text2); border: 1px solid var(--border); }
-.pt-diff { background: var(--orange-light); color: var(--orange); }
+/* ═══════════════════════════════════
+   PROGRESS VIEW
+═══════════════════════════════════ */
+.progress-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:8px}
+.stat-card{border:1px solid var(--border);border-radius:10px;padding:20px;background:var(--bg)}
+.stat-card-label{font-size:.75rem;font-weight:600;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:10px}
+.stat-card-num{font-size:2rem;font-weight:800;letter-spacing:-.03em;line-height:1;color:var(--text)}
+.stat-card-sub{font-size:.8125rem;color:var(--text3);margin-top:4px}
+.stat-card-sub.pos{color:var(--green)}
+.stat-card-sub.neg{color:var(--red)}
+.elo-card{border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--bg);grid-column:span 2}
+.elo-hd{padding:14px 18px;border-bottom:1px solid var(--border);background:var(--bg2);display:flex;justify-content:space-between;align-items:center}
+.elo-num{font-size:1.5rem;font-weight:800;letter-spacing:-.03em;line-height:1}
+.elo-delta{font-size:.8rem;color:var(--green);font-family:'Fira Code',monospace;margin-top:2px}
+.elo-body{padding:18px}
+.rt{width:100%;border-collapse:collapse;font-size:.8375rem}
+.rt td{padding:7px 8px;border-bottom:1px solid var(--bg3)}
+.rt tr:last-child td{border-bottom:none}
+.rt-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.rt-dot.c{background:var(--green)} .rt-dot.w{background:var(--red)}
+.rt-name{color:var(--text)}
+.rt-diff{color:var(--text3);font-family:'Fira Code',monospace;font-size:.75rem}
+.rt-val{font-family:'Fira Code',monospace;font-size:.75rem;text-align:right}
+.rt-val.pos{color:var(--green)} .rt-val.neg{color:var(--red)}
+.domain-breakdown{grid-column:span 2;border:1px solid var(--border);border-radius:10px;padding:20px;background:var(--bg)}
+.db-title{font-size:.875rem;font-weight:600;margin-bottom:16px}
+.db-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;font-size:.875rem}
+.db-name{width:140px;color:var(--text2);flex-shrink:0}
+.db-bar{flex:1;height:8px;background:var(--bg3);border-radius:4px;overflow:hidden}
+.db-fill{height:100%;border-radius:4px}
+.db-pct{font-size:.75rem;font-family:'Fira Code',monospace;color:var(--text3);width:36px;text-align:right}
+.mistake-journal{grid-column:span 2;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--bg)}
+.mj-hd{padding:14px 18px;border-bottom:1px solid var(--border);background:var(--bg2);font-size:.875rem;font-weight:600}
+.mj-item{padding:12px 18px;border-bottom:1px solid var(--bg3);display:flex;align-items:center;gap:12px;font-size:.875rem}
+.mj-item:last-child{border-bottom:none}
+.mj-type{font-size:.6875rem;font-weight:600;padding:2px 8px;border-radius:100px;flex-shrink:0}
+.mj-prob{flex:1;color:var(--text)}
+.mj-date{font-size:.75rem;color:var(--text3)}
 
-/* STEP INPUTS */
-.steps-lbl { font-size: .75rem; font-weight: 600; color: var(--text3); letter-spacing: .07em; text-transform: uppercase; margin-bottom: 10px; }
-.steps-list { display: flex; flex-direction: column; gap: 7px; margin-bottom: 12px; }
-.step-row { display: flex; gap: 8px; align-items: flex-start; }
-.snum { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .6875rem; font-family: 'Fira Code', monospace; font-weight: 500; flex-shrink: 0; margin-top: 7px; transition: background .2s, color .2s; }
-.sn-neutral { background: var(--bg3); color: var(--text3); border: 1px solid var(--border); }
-.sn-ok  { background: var(--green-light); color: var(--green); }
-.sn-err { background: var(--red-light); color: var(--red); }
-.sn-warn { background: var(--orange-light); color: var(--orange); }
-.sinput { flex: 1; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 7px 12px; font-size: .85rem; font-family: 'Fira Code', monospace; color: var(--text); line-height: 1.5; resize: none; outline: none; transition: border-color .15s; min-height: 36px; }
-.sinput:focus { border-color: var(--blue-mid); background: white; }
-.sinput.s-ok  { border-color: #a3cfac; background: #f8fff9; }
-.sinput.s-err { border-color: #f1aeb5; background: #fff5f5; }
-.sinput.s-warn { border-color: #ffd58a; background: #fffbf0; }
+/* ═══════════════════════════════════
+   DIAGNOSTIC VIEW
+═══════════════════════════════════ */
+.diag-intro{max-width:680px;margin-bottom:32px}
+.diag-intro h2{font-size:1.5rem;font-weight:700;letter-spacing:-.02em;margin-bottom:12px}
+.diag-intro p{font-size:.9375rem;color:var(--text2);line-height:1.7;margin-bottom:16px}
+.diag-domains{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:32px}
+.dd-card{border:1px solid var(--border);border-radius:8px;padding:16px;background:var(--bg);text-align:center}
+.dd-icon{font-size:1.5rem;margin-bottom:8px}
+.dd-name{font-size:.875rem;font-weight:600;color:var(--text)}
+.dd-count{font-size:.75rem;color:var(--text3);margin-top:3px}
+.diag-start-btn{background:var(--blue);color:#fff;border:none;border-radius:8px;padding:14px 32px;font-size:1rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;display:inline-flex;align-items:center;gap:10px}
+.diag-start-btn:hover{background:var(--blue-d)}
 
-.steps-controls { display: flex; gap: 8px; margin-bottom: 14px; align-items: center; }
-.btn-add-step { background: var(--bg2); border: 1px dashed var(--border2); border-radius: 6px; padding: 6px 14px; font-size: .8125rem; color: var(--text3); cursor: pointer; transition: all .15s; font-family: 'Inter', sans-serif; }
-.btn-add-step:hover { border-color: var(--blue-mid); color: var(--blue); background: var(--blue-light); }
-.btn-remove-step { background: none; border: none; color: var(--text3); cursor: pointer; padding: 4px; border-radius: 4px; font-size: .85rem; margin-top: 6px; transition: color .15s; flex-shrink: 0; }
-.btn-remove-step:hover { color: var(--red); }
-
-.answer-row { display: flex; gap: 10px; align-items: center; margin-bottom: 14px; }
-.answer-label { font-size: .8125rem; color: var(--text2); font-weight: 500; flex-shrink: 0; }
-.answer-input { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 7px 12px; font-size: .9rem; font-family: 'Fira Code', monospace; color: var(--text); outline: none; width: 120px; transition: border-color .15s; }
-.answer-input:focus { border-color: var(--blue-mid); background: white; }
-
-.submit-row { display: flex; gap: 10px; align-items: center; }
-.btn-analyze { background: var(--blue); color: white; border: 1px solid var(--blue); border-radius: 6px; padding: 9px 22px; font-size: .9rem; font-weight: 600; cursor: pointer; transition: all .15s; font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 8px; }
-.btn-analyze:hover:not(:disabled) { background: var(--blue-dark); border-color: var(--blue-dark); }
-.btn-analyze:disabled { opacity: .6; cursor: not-allowed; }
-.analyze-note { font-size: .8rem; color: var(--text3); }
-
-/* SPINNER */
-.spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.3); border-top-color: white; border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* AI FEEDBACK */
-.ai-fb { margin-top: 16px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-.ai-fb-hd { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 10px 16px; display: flex; align-items: center; gap: 8px; font-size: .8125rem; font-weight: 600; color: var(--text); }
-.ai-badge { font-size: .6875rem; background: var(--blue); color: white; padding: 2px 8px; border-radius: 100px; font-weight: 600; letter-spacing: .04em; }
-.ai-ref { margin-left: auto; font-size: .75rem; font-family: 'Fira Code', monospace; color: var(--text3); background: var(--bg3); padding: 2px 8px; border-radius: 4px; }
-.fb-item { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; gap: 12px; align-items: flex-start; }
-.fb-item:last-child { border-bottom: none; }
-.fbtag { font-size: .6875rem; font-weight: 600; padding: 3px 9px; border-radius: 100px; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
-.ft-err  { background: var(--red-light); color: var(--red); }
-.ft-warn { background: var(--orange-light); color: var(--orange); }
-.ft-hint { background: var(--blue-light); color: var(--blue); }
-.ft-ok   { background: var(--green-light); color: var(--green); }
-.fb-item p { font-size: .875rem; color: var(--text2); line-height: 1.6; }
-.fb-item p strong { color: var(--text); font-weight: 600; }
-
-/* LOADING STATE */
-.fb-loading { padding: 24px 16px; display: flex; align-items: center; gap: 12px; color: var(--text3); font-size: .9rem; }
-.fb-loading .spin2 { width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
-
-/* CORRECT BANNER */
-.correct-banner { padding: 16px; background: var(--green-light); display: flex; align-items: center; gap: 12px; }
-.correct-banner .cb-icon { font-size: 1.25rem; }
-.correct-banner p { font-size: .9rem; color: #14532d; line-height: 1.5; }
-.correct-banner strong { font-weight: 600; }
-
-/* SKILL TABLE */
-.skill-table { width: 100%; border-collapse: collapse; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: .875rem; margin-top: 16px; }
-.skill-table thead { background: var(--bg2); }
-.skill-table th { padding: 10px 14px; text-align: left; font-size: .75rem; font-weight: 600; color: var(--text3); letter-spacing: .05em; text-transform: uppercase; border-bottom: 1px solid var(--border); }
-.skill-table td { padding: 10px 14px; border-bottom: 1px solid var(--bg3); color: var(--text2); }
-.skill-table tr:last-child td { border-bottom: none; }
-.skill-table tr:hover td { background: var(--bg2); }
-.sk-name { color: var(--text); font-weight: 500; }
-.pbar { width: 100px; height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; display: inline-block; }
-.pfill { height: 100%; border-radius: 3px; background: var(--blue); }
-
-/* MODE CARDS */
-.mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
-.mcard { border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; background: var(--bg); }
-.mcard-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
-.micon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
-.mlabel { font-size: .6875rem; padding: 3px 9px; border-radius: 100px; font-weight: 600; }
-.ml-free { background: var(--green-light); color: var(--green); }
-.ml-prem { background: var(--orange-light); color: var(--orange); }
-.mcard h4 { font-size: .9375rem; font-weight: 600; color: var(--text); letter-spacing: -.01em; margin-bottom: 7px; }
-.mcard p { font-size: .85rem; color: var(--text2); line-height: 1.6; }
-.mcard ul { margin-top: 10px; padding-left: 16px; }
-.mcard li { font-size: .8375rem; color: var(--text2); margin-bottom: 4px; }
-
-/* ELO */
-.elo-card { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-top: 16px; background: var(--bg); }
-.elo-hd { padding: 14px 18px; border-bottom: 1px solid var(--border); background: var(--bg2); display: flex; justify-content: space-between; align-items: center; }
-.elo-num { font-size: 1.5rem; font-weight: 800; color: var(--text); letter-spacing: -.03em; line-height: 1; }
-.elo-delta { font-size: .8rem; color: var(--green); font-family: 'Fira Code', monospace; margin-top: 2px; }
-.elo-body { padding: 18px; }
-.rt { width: 100%; border-collapse: collapse; font-size: .8375rem; }
-.rt td { padding: 6px 8px; border-bottom: 1px solid var(--bg3); }
-.rt tr:last-child td { border-bottom: none; }
-.rt-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-.rt-dot.c { background: var(--green); }
-.rt-dot.w { background: var(--red); }
-.rt-name { color: var(--text); }
-.rt-diff { color: var(--text3); font-family: 'Fira Code', monospace; font-size: .75rem; }
-.rt-val { font-family: 'Fira Code', monospace; font-size: .75rem; text-align: right; }
-.rt-val.pos { color: var(--green); }
-.rt-val.neg { color: var(--red); }
-
-/* PRICING */
-.pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
-.pcard { border: 1px solid var(--border); border-radius: 10px; padding: 24px; background: var(--bg); }
-.pcard.hi { border-color: var(--blue); background: linear-gradient(135deg,#f0f4ff,#f5f0ff); }
-.ptier { font-size: .75rem; font-weight: 700; color: var(--text3); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 14px; }
-.ptier.bl { color: var(--blue); }
-.pprice { font-size: 2rem; font-weight: 800; color: var(--text); letter-spacing: -.03em; line-height: 1; margin-bottom: 4px; }
-.pperiod { font-size: .8125rem; color: var(--text3); margin-bottom: 20px; }
-.plist { list-style: none; margin-bottom: 22px; }
-.plist li { font-size: .875rem; color: var(--text2); padding: 5px 0; display: flex; align-items: flex-start; gap: 8px; }
-.chk { flex-shrink: 0; margin-top: 2px; font-size: .85rem; }
-.chk-g { color: var(--green); }
-.chk-b { color: var(--blue); }
-
-/* CALLOUT */
-.callout { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--bg2); padding: 36px 64px; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
-.callout h3 { font-size: 1.125rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-.callout p { font-size: .9rem; color: var(--text2); }
+/* QUIZ */
+.quiz-area{display:none;max-width:680px}
+.quiz-area.active{display:block}
+.quiz-progress-bar{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-bottom:24px}
+.quiz-progress-fill{height:100%;background:var(--blue);border-radius:2px;transition:width .4s ease}
+.quiz-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.quiz-num{font-size:.8125rem;color:var(--text3);font-weight:500}
+.quiz-domain{font-size:.75rem;padding:3px 10px;border-radius:100px;font-weight:600}
+.quiz-question{font-size:1.0625rem;line-height:1.65;color:var(--text);margin-bottom:24px;padding:20px;background:var(--bg2);border:1px solid var(--border);border-radius:8px}
+.quiz-choices{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.quiz-choice{padding:12px 16px;border:1px solid var(--border);border-radius:8px;font-size:.9375rem;cursor:pointer;transition:all .15s;background:var(--bg);text-align:left;font-family:'Inter',sans-serif;color:var(--text)}
+.quiz-choice:hover{border-color:var(--blue-m);background:var(--blue-l)}
+.quiz-choice.selected{border-color:var(--blue);background:var(--blue-l);color:var(--blue);font-weight:500}
+.quiz-choice.correct{border-color:var(--green);background:var(--green-l);color:var(--green)}
+.quiz-choice.wrong{border-color:var(--red);background:var(--red-l);color:var(--red)}
+.quiz-next-btn{background:var(--blue);color:#fff;border:none;border-radius:6px;padding:10px 24px;font-size:.9rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;display:none}
+.quiz-next-btn.show{display:inline-block}
+.quiz-next-btn:hover{background:var(--blue-d)}
+.quiz-results{display:none;max-width:680px}
+.quiz-results.active{display:block}
+.results-header{text-align:center;padding:32px;background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:12px;margin-bottom:28px}
+.results-header h2{font-size:1.75rem;font-weight:700;margin-bottom:8px}
+.results-header p{color:var(--text2);font-size:1rem}
+.results-score{font-size:3rem;font-weight:800;color:var(--blue);letter-spacing:-.03em;margin:16px 0 4px}
+.results-domains{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:28px}
+.rd-card{border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center;background:var(--bg)}
+.rd-card-name{font-size:.75rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.rd-card-score{font-size:1.5rem;font-weight:800;letter-spacing:-.02em}
 
 /* FOOTER */
-footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 40px 64px 32px; }
-.ft-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; max-width: 860px; margin-bottom: 32px; }
-.ft-brand p { font-size: .85rem; color: var(--text3); margin-top: 10px; line-height: 1.65; max-width: 220px; }
-.ft-col h5 { font-size: .75rem; font-weight: 700; color: var(--text); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 12px; }
-.ft-col ul { list-style: none; }
-.ft-col li { margin-bottom: 7px; }
-.ft-col a { font-size: .8375rem; color: var(--text3); text-decoration: none; transition: color .15s; }
-.ft-col a:hover { color: var(--blue); }
-.ft-bot { border-top: 1px solid var(--border); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; }
-.ft-copy { font-size: .8125rem; color: var(--text3); }
-.ft-links { display: flex; gap: 20px; }
-.ft-links a { font-size: .8125rem; color: var(--text3); text-decoration: none; }
-.ft-links a:hover { color: var(--text2); }
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:40px 64px 32px}
+.ft-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px;max-width:860px;margin-bottom:32px}
+.ft-brand p{font-size:.85rem;color:var(--text3);margin-top:10px;line-height:1.65;max-width:220px}
+.ft-col h5{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px}
+.ft-col ul{list-style:none}
+.ft-col li{margin-bottom:7px}
+.ft-col a{font-size:.8375rem;color:var(--text3);text-decoration:none;transition:color .15s;cursor:pointer}
+.ft-col a:hover{color:var(--blue)}
+.ft-bot{border-top:1px solid var(--border);padding-top:20px;display:flex;justify-content:space-between;align-items:center}
+.ft-copy{font-size:.8125rem;color:var(--text3)}
+.ft-links{display:flex;gap:20px}
+.ft-links a{font-size:.8125rem;color:var(--text3);text-decoration:none}
 </style>
 </head>
 <body>
 
+<!-- TOPBAR -->
 <nav class="topbar">
-  <a class="topbar-logo" href="javascript:void(0)">
+  <div class="t-logo" onclick="showView('home')">
     <div class="logo-icon">MA</div>
     <span class="logo-name">Math<span>Atlas</span></span>
-  </a>
-  <div class="topbar-search">
+  </div>
+  <div class="t-search">
     <div class="search-box">
       <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       Search problems, topics, modules...
       <span style="margin-left:auto;font-size:.75rem;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1px 6px;color:var(--text3)">⌘K</span>
     </div>
   </div>
-  <div class="topbar-nav">
-    <a href="javascript:void(0)" class="topbar-link">Problems</a>
-    <a href="javascript:void(0)" class="topbar-link">Modules</a>
-    <a href="javascript:void(0)" class="topbar-link">Contests</a>
-    <a href="javascript:void(0)" class="topbar-link">Progress</a>
+  <div class="t-nav">
+    <button class="t-link" id="nav-problems" onclick="showView('problems')">Problems</button>
+    <button class="t-link" id="nav-modules" onclick="showView('modules')">Modules</button>
+    <button class="t-link" id="nav-diagnostic" onclick="showView('diagnostic')">Diagnostic</button>
+    <button class="t-link" id="nav-progress" onclick="showView('progress')">Progress</button>
     <div class="tdiv"></div>
-    <a href="javascript:void(0)" class="btn btn-ghost" style="margin-right:8px">Sign in</a>
-    <a href="javascript:void(0)" class="btn btn-primary">Get Started</a>
+    <button class="btn btn-ghost" style="margin-right:8px">Sign in</button>
+    <button class="btn btn-primary" onclick="showView('diagnostic')">Get Started</button>
   </div>
 </nav>
 
 <div class="layout">
+<!-- SIDEBAR -->
 <aside class="sidebar">
   <div>
-    <div class="sb-header">Overview</div>
-    <a class="sb-item active" href="javascript:void(0)"><span class="sb-icon">🏠</span> Introduction</a>
-    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">🎯</span> Diagnostic</a>
-    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">📊</span> My Progress</a>
+    <div class="sb-hdr">Overview</div>
+    <button class="sb-item active" id="sb-home" onclick="showView('home')"><span class="sb-icon">🏠</span> Introduction</button>
+    <button class="sb-item" id="sb-diagnostic" onclick="showView('diagnostic')"><span class="sb-icon">🎯</span> Diagnostic</button>
+    <button class="sb-item" id="sb-progress" onclick="showView('progress')"><span class="sb-icon">📊</span> My Progress</button>
   </div>
   <div>
-    <div class="sb-header">Algebra</div>
-    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">📘</span> Expressions &amp; Equations <span class="badge b-bronze">Intro</span></a>
-    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">📘</span> Polynomials &amp; Roots <span class="badge b-silver">Mid</span></a>
-    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">📘</span> Inequalities <span class="badge b-gold">Adv</span></a>
-    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">📘</span> Functional Equations <span class="badge b-plat">AIME</span></a>
+    <div class="sb-hdr">Algebra</div>
+    <button class="sb-item" onclick="showModule('algebra-basics')"><span class="sb-icon">📘</span> Expressions &amp; Equations <span class="badge b-bronze">Intro</span></button>
+    <button class="sb-item" onclick="showModule('polynomials')"><span class="sb-icon">📘</span> Polynomials &amp; Roots <span class="badge b-silver">Mid</span></button>
+    <button class="sb-item" onclick="showModule('inequalities')"><span class="sb-icon">📘</span> Inequalities <span class="badge b-gold">Adv</span></button>
+    <button class="sb-item" onclick="showModule('functional-eq')"><span class="sb-icon">📘</span> Functional Equations <span class="badge b-plat">AIME</span></button>
   </div>
   <div>
-    <div class="sb-header">Geometry</div>
-    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">📐</span> Triangle Properties <span class="badge b-bronze">Intro</span></a>
-    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">📐</span> Circle Theorems <span class="badge b-silver">Mid</span></a>
-    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">📐</span> Coordinate Geometry <span class="badge b-silver">Mid</span></a>
-    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">📐</span> 3D Geometry <span class="badge b-gold">Adv</span></a>
+    <div class="sb-hdr">Geometry</div>
+    <button class="sb-item" onclick="showModule('triangles')"><span class="sb-icon">📐</span> Triangle Properties <span class="badge b-bronze">Intro</span></button>
+    <button class="sb-item" onclick="showModule('circles')"><span class="sb-icon">📐</span> Circle Theorems <span class="badge b-silver">Mid</span></button>
+    <button class="sb-item" onclick="showModule('coord-geo')"><span class="sb-icon">📐</span> Coordinate Geometry <span class="badge b-silver">Mid</span></button>
+    <button class="sb-item" onclick="showModule('3d-geo')"><span class="sb-icon">📐</span> 3D Geometry <span class="badge b-gold">Adv</span></button>
   </div>
   <div>
-    <div class="sb-header">Counting &amp; Probability</div>
-    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">🔢</span> Combinatorics Basics <span class="badge b-bronze">Intro</span></a>
-    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">🔢</span> Inclusion-Exclusion <span class="badge b-gold">Adv</span></a>
-    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">🔢</span> Probability <span class="badge b-silver">Mid</span></a>
-    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">🔢</span> Generating Functions <span class="badge b-plat">AIME</span></a>
+    <div class="sb-hdr">Counting &amp; Probability</div>
+    <button class="sb-item" onclick="showModule('combo-basics')"><span class="sb-icon">🔢</span> Combinatorics Basics <span class="badge b-bronze">Intro</span></button>
+    <button class="sb-item" onclick="showModule('pie')"><span class="sb-icon">🔢</span> Inclusion-Exclusion <span class="badge b-gold">Adv</span></button>
+    <button class="sb-item" onclick="showModule('probability')"><span class="sb-icon">🔢</span> Probability <span class="badge b-silver">Mid</span></button>
   </div>
   <div>
-    <div class="sb-header">Number Theory</div>
-    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">🔍</span> Divisibility &amp; GCD <span class="badge b-bronze">Intro</span></a>
-    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">🔍</span> Modular Arithmetic <span class="badge b-gold">Adv</span></a>
-    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">🔍</span> Diophantine Equations <span class="badge b-plat">AIME</span></a>
+    <div class="sb-hdr">Number Theory</div>
+    <button class="sb-item" onclick="showModule('divisibility')"><span class="sb-icon">🔍</span> Divisibility &amp; GCD <span class="badge b-bronze">Intro</span></button>
+    <button class="sb-item" onclick="showModule('modular')"><span class="sb-icon">🔍</span> Modular Arithmetic <span class="badge b-gold">Adv</span></button>
+    <button class="sb-item" onclick="showModule('diophantine')"><span class="sb-icon">🔍</span> Diophantine Equations <span class="badge b-plat">AIME</span></button>
   </div>
   <div>
-    <div class="sb-header">Practice</div>
-    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">⚡</span> Adaptive Queue</a>
-    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">⏱</span> Mock Contests</a>
-    <a class="sb-item" href="javascript:void(0)"><span class="sb-icon">📓</span> Mistake Journal</a>
+    <div class="sb-hdr">Practice</div>
+    <button class="sb-item" id="sb-problems" onclick="showView('problems')"><span class="sb-icon">⚡</span> Problem Library</button>
+    <button class="sb-item" onclick="showView('diagnostic')"><span class="sb-icon">⏱</span> Mock Contests</button>
+    <button class="sb-item" onclick="showView('progress')"><span class="sb-icon">📓</span> Mistake Journal</button>
   </div>
 </aside>
 
 <main class="main">
+
+<!-- ══════════════════════════════════
+     HOME VIEW
+══════════════════════════════════ -->
+<div id="view-home" class="view active">
   <div class="hero">
-    <div class="breadcrumb">
-      <a href="javascript:void(0)">MathAtlas</a> <span>›</span> <span>Introduction</span>
-    </div>
+    <div class="breadcrumb"><a onclick="showView('home')">MathAtlas</a> <span>›</span> <span>Introduction</span></div>
     <div class="contest-tags">
-      <span class="ctag ct-8">AMC 8</span>
-      <span class="ctag ct-10">AMC 10</span>
-      <span class="ctag ct-12">AMC 12</span>
-      <span class="ctag ct-ai">AIME</span>
+      <span class="ctag ct-8">AMC 8</span><span class="ctag ct-10">AMC 10</span>
+      <span class="ctag ct-12">AMC 12</span><span class="ctag ct-ai">AIME</span>
     </div>
     <h1>AI-Powered Competitive<br>Mathematics Preparation</h1>
     <p>Structured skill mapping, adaptive practice, and step-level AI reasoning analysis—designed for serious competition students. Not just answer checking.</p>
     <div class="hero-actions">
-      <a href="javascript:void(0)" class="btn btn-primary btn-lg">Take the Free Diagnostic</a>
-      <a href="javascript:void(0)" class="btn btn-ghost btn-lg">Browse Problem Library</a>
+      <button class="btn btn-primary btn-lg" onclick="showView('diagnostic')">Take the Free Diagnostic</button>
+      <button class="btn btn-ghost btn-lg" onclick="showView('problems')">Browse Problem Library</button>
     </div>
     <div class="hero-stats">
       <div><div class="hs-num">12<span>+</span></div><div class="hs-label">Skill domains</div></div>
@@ -378,32 +467,22 @@ footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 4
     <div class="toc">
       <div class="toc-title">On this page</div>
       <ul>
-        <li><a href="#s1">Diagnostic &amp; Skill Mapping</a></li>
-        <li><a href="#s2">AI Reasoning Analysis</a></li>
-        <li><a href="#s3">Learning Modes</a></li>
-        <li><a href="#s4">Skill Taxonomy</a></li>
-        <li><a href="#s5">Rating System</a></li>
-        <li><a href="#s6">Pricing</a></li>
+        <li><a onclick="showView('diagnostic')">Diagnostic &amp; Skill Mapping</a></li>
+        <li><a onclick="showView('problems')">AI Reasoning Analysis</a></li>
+        <li><a onclick="showView('modules')">Learning Modules</a></li>
+        <li><a onclick="showView('progress')">Progress &amp; Rating</a></li>
       </ul>
     </div>
+    <div class="infobox ib-blue"><span class="ib-icon">ℹ️</span><div><strong>About MathAtlas:</strong> We do not host copyrighted AMC or AIME problem text. All problems link to official MAA sources. Our value is the intelligence layer: skill tagging, adaptive selection, and step-level AI analysis.</div></div>
+    <div class="infobox ib-green" style="margin-bottom:32px"><span class="ib-icon">✅</span><div><strong>New here?</strong> Start with the <a onclick="showView('diagnostic')">diagnostic assessment</a> to generate your skill radar and receive a personalized study path.</div></div>
 
-    <div class="infobox ib-blue">
-      <span class="ib-icon">ℹ️</span>
-      <div><strong>About MathAtlas:</strong> MathAtlas does not host copyrighted AMC or AIME problem text. All problems link to official MAA sources. MathAtlas's value is the <em>intelligence layer</em>: skill tagging, adaptive selection, and step-level AI analysis.</div>
-    </div>
-    <div class="infobox ib-green" style="margin-bottom:32px">
-      <span class="ib-icon">✅</span>
-      <div><strong>New here?</strong> Start with the <a href="javascript:void(0)" style="color:var(--green);font-weight:600">diagnostic assessment</a> to generate your skill radar and receive a personalized study path.</div>
-    </div>
-
-    <!-- S1 -->
-    <div class="content-section" id="s1">
+    <div class="content-section">
       <h2 class="sec-heading" data-num="1">Diagnostic &amp; Skill Mapping</h2>
-      <p class="sec-intro">A structured 40-problem initial assessment evaluates your ability across all major competition domains. Results generate a visual skill radar and a sequenced study path tailored to your target contest.</p>
+      <p class="sec-intro">A 15-problem initial assessment maps your mathematical profile across all major competition domains, generating a visual skill radar and a sequenced study path.</p>
       <div class="radar-wrap">
         <div class="radar-card">
-          <div class="radar-title">Skill Radar — Sample Profile</div>
-          <svg width="210" height="210" viewBox="0 0 210 210">
+          <div class="radar-title-sm">Skill Radar — Sample Profile</div>
+          <svg width="200" height="200" viewBox="0 0 210 210">
             <polygon points="105,20 185,62.5 185,147.5 105,190 25,147.5 25,62.5" fill="none" stroke="#dee2e6" stroke-width="1"/>
             <polygon points="105,40 170,72.5 170,137.5 105,170 40,137.5 40,72.5" fill="none" stroke="#dee2e6" stroke-width="1"/>
             <polygon points="105,60 155,82.5 155,127.5 105,150 55,127.5 55,82.5" fill="none" stroke="#dee2e6" stroke-width="1"/>
@@ -412,7 +491,6 @@ footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 4
             <line x1="105" y1="105" x2="185" y2="147.5" stroke="#e9ecef"/><line x1="105" y1="105" x2="105" y2="190" stroke="#e9ecef"/>
             <line x1="105" y1="105" x2="25" y2="147.5" stroke="#e9ecef"/><line x1="105" y1="105" x2="25" y2="62.5" stroke="#e9ecef"/>
             <polygon points="105,38 174,74 172,140 105,165 42,140 38,72" fill="rgba(59,91,219,0.1)" stroke="#3b5bdb" stroke-width="1.5"/>
-            <polygon points="105,25 183,64 181,148 105,185 27,148 27,64" fill="none" stroke="#dee2e6" stroke-width="1" stroke-dasharray="4 3"/>
             <circle cx="105" cy="38" r="3.5" fill="#3b5bdb"/><circle cx="174" cy="74" r="3.5" fill="#3b5bdb"/>
             <circle cx="172" cy="140" r="3.5" fill="#3b5bdb"/><circle cx="105" cy="165" r="3.5" fill="#3b5bdb"/>
             <circle cx="42" cy="140" r="3.5" fill="#3b5bdb"/><circle cx="38" cy="72" r="3.5" fill="#3b5bdb"/>
@@ -430,143 +508,127 @@ footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 4
           <div class="rd-row"><span class="rd-name">Counting</span><div class="rd-bar"><div class="rd-fill" style="width:42%;background:#e67700"></div></div><span class="rd-pct">42%</span></div>
           <div class="rd-row"><span class="rd-name">Num. Theory</span><div class="rd-bar"><div class="rd-fill" style="width:67%;background:#2f9e44"></div></div><span class="rd-pct">67%</span></div>
           <div class="rd-row"><span class="rd-name">Probability</span><div class="rd-bar"><div class="rd-fill" style="width:35%;background:#c92a2a"></div></div><span class="rd-pct">35%</span></div>
-          <div class="rd-row"><span class="rd-name">Logic</span><div class="rd-bar"><div class="rd-fill" style="width:55%;background:#0c8599"></div></div><span class="rd-pct">55%</span></div>
-          <div class="infobox ib-orange" style="margin-top:6px;font-size:.8375rem">
-            <span class="ib-icon">⚠️</span>
-            <div>Counting &amp; Probability are your weakest domains. Study path prioritizes these first.</div>
-          </div>
-        </div>
-      </div>
-      <div class="feature-grid" style="margin-top:16px">
-        <div class="fcard"><div class="fcard-hd"><div class="fcard-icon fi-blue">🧭</div><span class="fcard-title">Personalized Study Path</span></div><p>Generated from your diagnostic. Modules follow prerequisite ordering so you never skip a foundation.</p></div>
-        <div class="fcard"><div class="fcard-hd"><div class="fcard-icon fi-green">🔄</div><span class="fcard-title">Continuous Recalibration</span></div><p>Profile updates after every session. Ratings adjust dynamically—no need for manual re-testing.</p></div>
-        <div class="fcard"><div class="fcard-hd"><div class="fcard-icon fi-purple">🎯</div><span class="fcard-title">Contest-Scoped Targeting</span></div><p>AMC 8, 10/12, and AIME tracks follow distinct sequences. Study path adjusts to your target contest.</p></div>
-        <div class="fcard"><div class="fcard-hd"><div class="fcard-icon fi-orange">📌</div><span class="fcard-title">Skill Subclassification</span></div><p>Problems tagged by subskill—Vieta's, Power of a Point, PIE—enabling precise weak-spot targeting.</p></div>
-      </div>
-    </div>
-
-    <!-- S2: LIVE AI ANALYSIS -->
-    <div class="content-section" id="s2">
-      <h2 class="sec-heading" data-num="2">AI Reasoning Analysis</h2>
-      <p class="sec-intro">Submit your solution step-by-step. Gemini reads your full reasoning chain, identifies the first logical divergence, and classifies the error type. Try it live below — type your own steps or use the pre-filled example.</p>
-
-      <div class="infobox ib-blue">
-        <span class="ib-icon">💡</span>
-        <div><strong>How it works:</strong> Enter each solution step in a separate field, type your final answer, then click <strong>Analyze Reasoning</strong>. Gemini will identify your first error and classify it—not just say "wrong."</div>
-      </div>
-
-      <div class="prob-card">
-        <div class="prob-hd">
-          <span class="prob-num">Live Demo</span>
-          <span class="prob-src">AMC 10A 2023 · #14</span>
-          <a href="https://artofproblemsolving.com/wiki/index.php/2023_AMC_10A_Problems" target="_blank" class="prob-link">View on AoPS →</a>
-        </div>
-        <div class="prob-body">
-          <div class="prob-stmt">How many ways are there to place 3 indistinguishable red chips and 3 indistinguishable blue chips in the squares of a 3×3 grid such that no two chips of the same color are directly adjacent to each other (sharing a side)?</div>
-          <div class="prob-tags">
-            <span class="ptag pt-dom">Counting</span>
-            <span class="ptag pt-sk">Inclusion-Exclusion</span>
-            <span class="ptag pt-sk">Complementary Counting</span>
-            <span class="ptag pt-diff">AMC 10 · Difficulty 1750</span>
-          </div>
-
-          <div class="steps-lbl">Your Solution Steps</div>
-          <div class="steps-list" id="stepsList">
-            <div class="step-row">
-              <div class="snum sn-neutral">1</div>
-              <textarea class="sinput" rows="1" placeholder="Enter step 1...">Total ways to place 6 chips in 9 squares = C(9,6) = 84</textarea>
-              <button class="btn-remove-step" onclick="removeStep(this)" title="Remove step">✕</button>
-            </div>
-            <div class="step-row">
-              <div class="snum sn-neutral">2</div>
-              <textarea class="sinput" rows="1" placeholder="Enter step 2...">Choose 3 squares for red from 9: C(9,3) = 84 arrangements</textarea>
-              <button class="btn-remove-step" onclick="removeStep(this)" title="Remove step">✕</button>
-            </div>
-            <div class="step-row">
-              <div class="snum sn-neutral">3</div>
-              <textarea class="sinput" rows="1" placeholder="Enter step 3...">Subtract adjacent red pairs: 12 pairs × C(7,3) = 420 invalid</textarea>
-              <button class="btn-remove-step" onclick="removeStep(this)" title="Remove step">✕</button>
-            </div>
-            <div class="step-row">
-              <div class="snum sn-neutral">4</div>
-              <textarea class="sinput" rows="1" placeholder="Enter step 4...">Answer: 84 − 420 = impossible, something went wrong</textarea>
-              <button class="btn-remove-step" onclick="removeStep(this)" title="Remove step">✕</button>
-            </div>
-          </div>
-
-          <div class="steps-controls">
-            <button class="btn-add-step" onclick="addStep()">+ Add step</button>
-            <span style="font-size:.8rem;color:var(--text3)">or press Enter in last step</span>
-          </div>
-
-          <div class="answer-row">
-            <span class="answer-label">Final answer:</span>
-            <input class="answer-input" id="answerInput" type="text" placeholder="e.g. 18" />
-            <span style="font-size:.8rem;color:var(--text3)">leave blank to skip answer check</span>
-          </div>
-
-          <div class="submit-row">
-            <button class="btn-analyze" id="analyzeBtn" onclick="analyzeSteps()">
-              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg>
-              Analyze Reasoning
-            </button>
-            <span class="analyze-note" id="analyzeNote">Powered by Gemini 2.0 Flash</span>
-          </div>
-
-          <!-- Feedback area -->
-          <div id="feedbackArea"></div>
+          <div class="infobox ib-orange" style="margin-top:6px;font-size:.8375rem"><span class="ib-icon">⚠️</span><div>Counting &amp; Probability are weakest. Study path prioritizes these first.</div></div>
+          <button class="btn btn-primary" onclick="showView('diagnostic')" style="margin-top:8px">Take Diagnostic →</button>
         </div>
       </div>
     </div>
 
-    <!-- S3 -->
-    <div class="content-section" id="s3">
-      <h2 class="sec-heading" data-num="3">Learning Modes</h2>
-      <p class="sec-intro">Four practice modes serve different stages of preparation—from structured concept introduction to full contest simulation under pressure.</p>
+    <div class="content-section">
+      <h2 class="sec-heading" data-num="2">Learning Modes</h2>
+      <p class="sec-intro">Four practice modes serve different stages of preparation—from structured concept introduction to full contest simulation.</p>
       <div class="mode-grid">
-        <div class="mcard"><div class="mcard-top"><div class="micon fi-blue">📚</div><span class="mlabel ml-free">Free</span></div><h4>Structured Curriculum</h4><p>Guided module sequence with lessons and checkpoint problems. Prerequisite ordering enforced.</p><ul><li>Worked concept explanations</li><li>Checkpoint problems per module</li><li>AMC 8 / 10 / 12 / AIME tracks</li></ul></div>
-        <div class="mcard"><div class="mcard-top"><div class="micon fi-green">⚡</div><span class="mlabel ml-free">Free</span></div><h4>Adaptive Practice</h4><p>Infinite problem queue selecting each question based on your demonstrated weaknesses. Difficulty scales automatically.</p><ul><li>Weakness-targeted selection</li><li>Dynamic difficulty scaling</li><li>Unlimited problems</li></ul></div>
-        <div class="mcard"><div class="mcard-top"><div class="micon fi-orange">⏱</div><span class="mlabel ml-prem">Premium</span></div><h4>Contest Simulation</h4><p>Full-length timed mock exams in official format with post-test AI analysis.</p><ul><li>Official contest format &amp; timing</li><li>Post-test AI analysis report</li><li>Historical comparison tracking</li></ul></div>
-        <div class="mcard"><div class="mcard-top"><div class="micon fi-purple">📓</div><span class="mlabel ml-prem">Premium</span></div><h4>Mistake Journal &amp; Analytics</h4><p>All errors logged by type, domain, and timing. AI weekly summaries surface highest-leverage areas.</p><ul><li>Error type frequency breakdown</li><li>Timing patterns per domain</li><li>AI weekly review summaries</li></ul></div>
+        <div class="mcard" onclick="showView('modules')"><div class="mcard-top"><div class="micon fi-blue">📚</div><span class="mlabel ml-free">Free</span></div><h4>Structured Curriculum</h4><p>Guided module sequence with lessons and checkpoints. Prerequisite ordering enforced.</p></div>
+        <div class="mcard" onclick="showView('problems')"><div class="mcard-top"><div class="micon fi-green">⚡</div><span class="mlabel ml-free">Free</span></div><h4>Adaptive Practice</h4><p>Infinite problem queue targeting your weaknesses. Difficulty scales automatically.</p></div>
+        <div class="mcard" onclick="showView('diagnostic')"><div class="mcard-top"><div class="micon fi-orange">⏱</div><span class="mlabel ml-prem">Premium</span></div><h4>Contest Simulation</h4><p>Full-length timed mock exams with post-test AI analysis.</p></div>
+        <div class="mcard" onclick="showView('progress')"><div class="mcard-top"><div class="micon fi-purple">📓</div><span class="mlabel ml-prem">Premium</span></div><h4>Mistake Journal &amp; Analytics</h4><p>All errors logged. AI weekly summaries surface highest-leverage areas.</p></div>
       </div>
     </div>
 
-    <!-- S4 -->
-    <div class="content-section" id="s4">
-      <h2 class="sec-heading" data-num="4">Skill Taxonomy</h2>
-      <p class="sec-intro">Every problem is tagged by domain, subskill, contest level, and internal difficulty rating—enabling MathAtlas to select problems targeting your exact weak points.</p>
-      <table class="skill-table">
-        <thead><tr><th>Domain</th><th>Skill</th><th>Sub-topics</th><th>Level</th><th>Your mastery</th></tr></thead>
-        <tbody>
-          <tr><td>Algebra</td><td class="sk-name">Polynomials &amp; Roots</td><td>Vieta's, factor theorem, rational roots</td><td><span class="badge b-silver">AMC 10/12</span></td><td><div class="pbar"><div class="pfill" style="width:78%"></div></div></td></tr>
-          <tr><td>Algebra</td><td class="sk-name">Inequalities</td><td>AM-GM, Cauchy-Schwarz, substitution</td><td><span class="badge b-gold">AIME</span></td><td><div class="pbar"><div class="pfill" style="width:54%"></div></div></td></tr>
-          <tr><td>Geometry</td><td class="sk-name">Circle Theorems</td><td>Power of a point, radical axis, inversion</td><td><span class="badge b-silver">AMC 10/12</span></td><td><div class="pbar"><div class="pfill" style="width:61%"></div></div></td></tr>
-          <tr><td>Counting</td><td class="sk-name">Inclusion-Exclusion</td><td>PIE, Möbius inversion, derangements</td><td><span class="badge b-gold">AIME</span></td><td><div class="pbar"><div class="pfill" style="width:42%;background:#e67700"></div></div></td></tr>
-          <tr><td>Number Theory</td><td class="sk-name">Modular Arithmetic</td><td>Fermat's little theorem, CRT, quadratic residues</td><td><span class="badge b-gold">AIME</span></td><td><div class="pbar"><div class="pfill" style="width:67%"></div></div></td></tr>
-          <tr><td>Probability</td><td class="sk-name">Conditional Probability</td><td>Bayes' theorem, expected value, geometric prob.</td><td><span class="badge b-silver">AMC 10/12</span></td><td><div class="pbar"><div class="pfill" style="width:35%;background:#c92a2a"></div></div></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- S5 -->
-    <div class="content-section" id="s5">
-      <h2 class="sec-heading" data-num="5">Rating System</h2>
-      <p class="sec-intro">An Elo-style internal rating updates after every problem. Solving a harder problem earns more points; missing an easier one costs more.</p>
-      <div class="infobox ib-purple">
-        <span class="ib-icon">📈</span>
-        <div><strong>Rating ranges:</strong> AMC 8 (800–1200) · AMC 10/12 (1200–1900) · AIME qualifier (~1900+).</div>
+    <div class="content-section">
+      <h2 class="sec-heading" data-num="3">Pricing</h2>
+      <div class="pricing-grid">
+        <div class="pcard"><div class="ptier">Free</div><div class="pprice">$0</div><div class="pperiod">forever</div><ul class="plist"><li><span class="chk chk-g">✓</span>Unlimited answer checking</li><li><span class="chk chk-g">✓</span>Full problem library</li><li><span class="chk chk-g">✓</span>Diagnostic &amp; skill radar</li><li><span class="chk chk-g">✓</span>5 AI reviews / day</li><li><span class="chk chk-g">✓</span>Rating system</li></ul><button class="btn btn-ghost btn-block" onclick="showView('diagnostic')">Start for free</button></div>
+        <div class="pcard hi"><div class="ptier bl">Premium</div><div class="pprice">$12</div><div class="pperiod">per month</div><ul class="plist"><li><span class="chk chk-b">✓</span>Everything in Free</li><li><span class="chk chk-b">✓</span>Unlimited AI reviews</li><li><span class="chk chk-b">✓</span>Contest simulation</li><li><span class="chk chk-b">✓</span>Advanced analytics</li><li><span class="chk chk-b">✓</span>Mistake journal AI summaries</li></ul><button class="btn btn-primary btn-block">Start Premium</button></div>
       </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div><h3>Ready to find your weak spots?</h3><p>15-minute diagnostic. Free skill radar. Personalized study path.</p></div>
+    <div style="display:flex;gap:10px"><button class="btn btn-ghost" onclick="showView('problems')">Browse Problems</button><button class="btn btn-primary" onclick="showView('diagnostic')">Take Diagnostic →</button></div>
+  </div>
+
+  <footer>
+    <div class="ft-grid">
+      <div class="ft-brand"><div style="display:flex;align-items:center;gap:8px"><div class="logo-icon">MA</div><span style="font-weight:700;font-size:1rem">Math<span style="color:var(--blue)">Atlas</span></span></div><p>AI-powered preparation for AMC 8, AMC 10, AMC 12, and AIME.</p></div>
+      <div class="ft-col"><h5>Platform</h5><ul><li><a onclick="showView('diagnostic')">Diagnostic</a></li><li><a onclick="showView('problems')">Problems</a></li><li><a onclick="showView('modules')">Modules</a></li><li><a onclick="showView('progress')">Progress</a></li></ul></div>
+      <div class="ft-col"><h5>Contests</h5><ul><li><a>AMC 8 Track</a></li><li><a>AMC 10 Track</a></li><li><a>AMC 12 Track</a></li><li><a>AIME Track</a></li></ul></div>
+      <div class="ft-col"><h5>Company</h5><ul><li><a>About</a></li><li><a>Blog</a></li><li><a>Pricing</a></li><li><a>Privacy Policy</a></li></ul></div>
+    </div>
+    <div class="ft-bot"><span class="ft-copy">© 2025 MathAtlas. All rights reserved.</span><div class="ft-links"><a>Privacy</a><a>Terms</a><a>Contact</a></div></div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════
+     PROBLEMS VIEW
+══════════════════════════════════ -->
+<div id="view-problems" class="view">
+  <div class="view-header">
+    <div class="breadcrumb"><a onclick="showView('home')">MathAtlas</a> <span>›</span> <span>Problem Library</span></div>
+    <h1>Problem Library</h1>
+    <p>5,000+ tagged problems from AMC 8, AMC 10, AMC 12, and AIME. Submit your steps for AI analysis.</p>
+  </div>
+  <div class="view-body">
+    <div class="filter-bar">
+      <span class="filter-label">Filter by:</span>
+      <select class="filter-select" onchange="filterProblems()">
+        <option value="all">All Contests</option>
+        <option value="amc8">AMC 8</option>
+        <option value="amc10">AMC 10</option>
+        <option value="amc12">AMC 12</option>
+        <option value="aime">AIME</option>
+      </select>
+      <select class="filter-select" onchange="filterProblems()">
+        <option value="all">All Domains</option>
+        <option value="algebra">Algebra</option>
+        <option value="geometry">Geometry</option>
+        <option value="counting">Counting</option>
+        <option value="number-theory">Number Theory</option>
+        <option value="probability">Probability</option>
+      </select>
+      <select class="filter-select">
+        <option value="all">All Difficulties</option>
+        <option value="easy">Easy (1–10)</option>
+        <option value="mid">Mid (11–20)</option>
+        <option value="hard">Hard (21–30)</option>
+      </select>
+    </div>
+    <div class="problems-grid" id="problemsGrid"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     MODULES VIEW
+══════════════════════════════════ -->
+<div id="view-modules" class="view">
+  <div class="view-header">
+    <div class="breadcrumb"><a onclick="showView('home')">MathAtlas</a> <span>›</span> <span>Modules</span></div>
+    <h1>Curriculum Modules</h1>
+    <p>Structured lessons with worked examples and checkpoint problems, sequenced by prerequisite.</p>
+  </div>
+  <div class="view-body">
+    <div class="infobox ib-blue" style="max-width:700px"><span class="ib-icon">💡</span><div>Modules are ordered by prerequisite. Complete earlier modules before advancing to unlock harder content.</div></div>
+    <div class="modules-grid" id="modulesGrid"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PROGRESS VIEW
+══════════════════════════════════ -->
+<div id="view-progress" class="view">
+  <div class="view-header">
+    <div class="breadcrumb"><a onclick="showView('home')">MathAtlas</a> <span>›</span> <span>My Progress</span></div>
+    <h1>My Progress</h1>
+    <p>Your rating, domain breakdown, recent activity, and mistake journal.</p>
+  </div>
+  <div class="view-body">
+    <div class="progress-grid">
+      <div class="stat-card"><div class="stat-card-label">Current Rating</div><div class="stat-card-num">1,847</div><div class="stat-card-sub pos">▲ +63 this week</div></div>
+      <div class="stat-card"><div class="stat-card-label">Problems Solved</div><div class="stat-card-num">284</div><div class="stat-card-sub">last 30 days: 47</div></div>
+      <div class="stat-card"><div class="stat-card-label">Accuracy Rate</div><div class="stat-card-num">71%</div><div class="stat-card-sub pos">▲ +4% this week</div></div>
+      <div class="stat-card"><div class="stat-card-label">AI Reviews Used</div><div class="stat-card-num">3/5</div><div class="stat-card-sub">free tier · resets daily</div></div>
       <div class="elo-card">
         <div class="elo-hd">
           <div><div class="elo-num">1,847</div><div class="elo-delta">▲ +63 this week</div></div>
-          <div style="text-align:right"><div style="font-size:.75rem;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;font-weight:600">Track</div><div style="font-size:.875rem;color:var(--text);font-weight:500;margin-top:2px">AMC 10 → AIME</div></div>
+          <div style="text-align:right"><div style="font-size:.75rem;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;font-weight:600">Track</div><div style="font-size:.875rem;font-weight:500;margin-top:2px">AMC 10 → AIME</div></div>
         </div>
         <div class="elo-body">
-          <svg width="100%" height="60" viewBox="0 0 500 60" preserveAspectRatio="none">
+          <svg width="100%" height="56" viewBox="0 0 500 56" preserveAspectRatio="none">
             <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3b5bdb" stop-opacity="0.2"/><stop offset="100%" stop-color="#3b5bdb" stop-opacity="0"/></linearGradient></defs>
-            <path d="M0,50 C30,48 50,54 80,44 C110,34 130,42 160,36 C190,30 210,40 240,32 C270,24 290,30 320,22 C350,14 380,20 410,14 C440,8 470,11 500,6 L500,60 L0,60 Z" fill="url(#sg)"/>
-            <path d="M0,50 C30,48 50,54 80,44 C110,34 130,42 160,36 C190,30 210,40 240,32 C270,24 290,30 320,22 C350,14 380,20 410,14 C440,8 470,11 500,6" fill="none" stroke="#3b5bdb" stroke-width="2"/>
-            <circle cx="500" cy="6" r="4" fill="#3b5bdb"/>
+            <path d="M0,46 C30,44 50,50 80,40 C110,30 130,38 160,32 C190,26 210,36 240,28 C270,20 290,26 320,18 C350,10 380,16 410,10 C440,4 470,7 500,2 L500,56 L0,56 Z" fill="url(#sg)"/>
+            <path d="M0,46 C30,44 50,50 80,40 C110,30 130,38 160,32 C190,26 210,36 240,28 C270,20 290,26 320,18 C350,10 380,16 410,10 C440,4 470,7 500,2" fill="none" stroke="#3b5bdb" stroke-width="2"/>
+            <circle cx="500" cy="2" r="4" fill="#3b5bdb"/>
           </svg>
           <table class="rt" style="margin-top:12px">
             <tr><td style="width:14px"><span class="rt-dot c"></span></td><td class="rt-name">2022 AMC 10B · Problem 18</td><td class="rt-diff">Diff 1680</td><td class="rt-val pos">+18</td></tr>
@@ -576,262 +638,376 @@ footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 4
           </table>
         </div>
       </div>
-    </div>
-
-    <!-- S6 -->
-    <div class="content-section" id="s6">
-      <h2 class="sec-heading" data-num="6">Pricing</h2>
-      <p class="sec-intro">Every student gets full access to practice and answer checking at no cost. Premium unlocks unlimited AI analysis and deep analytics.</p>
-      <div class="pricing-grid">
-        <div class="pcard">
-          <div class="ptier">Free</div>
-          <div class="pprice">$0</div>
-          <div class="pperiod">forever</div>
-          <ul class="plist">
-            <li><span class="chk chk-g">✓</span> Unlimited answer checking</li>
-            <li><span class="chk chk-g">✓</span> Full problem library access</li>
-            <li><span class="chk chk-g">✓</span> Diagnostic &amp; skill radar</li>
-            <li><span class="chk chk-g">✓</span> 5 AI reasoning reviews / day</li>
-            <li><span class="chk chk-g">✓</span> Rating system &amp; history</li>
-            <li><span class="chk chk-g">✓</span> Structured curriculum access</li>
-          </ul>
-          <a href="javascript:void(0)" class="btn btn-ghost btn-block">Start for free</a>
-        </div>
-        <div class="pcard hi">
-          <div class="ptier bl">Premium</div>
-          <div class="pprice">$12</div>
-          <div class="pperiod">per month · billed annually</div>
-          <ul class="plist">
-            <li><span class="chk chk-b">✓</span> Everything in Free</li>
-            <li><span class="chk chk-b">✓</span> Unlimited AI reasoning reviews</li>
-            <li><span class="chk chk-b">✓</span> Deep error taxonomy &amp; classification</li>
-            <li><span class="chk chk-b">✓</span> Full contest simulation suite</li>
-            <li><span class="chk chk-b">✓</span> Advanced timing analytics</li>
-            <li><span class="chk chk-b">✓</span> Mistake journal with AI summaries</li>
-          </ul>
-          <a href="javascript:void(0)" class="btn btn-primary btn-block">Start Premium</a>
-        </div>
+      <div class="domain-breakdown">
+        <div class="db-title">Domain Mastery</div>
+        <div class="db-row"><span class="db-name">Algebra</span><div class="db-bar"><div class="db-fill" style="width:78%;background:#3b5bdb"></div></div><span class="db-pct">78%</span></div>
+        <div class="db-row"><span class="db-name">Geometry</span><div class="db-bar"><div class="db-fill" style="width:61%;background:#6741d9"></div></div><span class="db-pct">61%</span></div>
+        <div class="db-row"><span class="db-name">Counting</span><div class="db-bar"><div class="db-fill" style="width:42%;background:#e67700"></div></div><span class="db-pct">42%</span></div>
+        <div class="db-row"><span class="db-name">Number Theory</span><div class="db-bar"><div class="db-fill" style="width:67%;background:#2f9e44"></div></div><span class="db-pct">67%</span></div>
+        <div class="db-row"><span class="db-name">Probability</span><div class="db-bar"><div class="db-fill" style="width:35%;background:#c92a2a"></div></div><span class="db-pct">35%</span></div>
+      </div>
+      <div class="mistake-journal">
+        <div class="mj-hd">📓 Mistake Journal — Recent Errors</div>
+        <div class="mj-item"><span class="mj-type ft-err">Overcounting</span><span class="mj-prob">2022 AMC 10B #18 · Inclusion-Exclusion</span><span class="mj-date">2 days ago</span></div>
+        <div class="mj-item"><span class="mj-type ft-warn">Setup Error</span><span class="mj-prob">2021 AMC 10A #21 · Coordinate Geometry</span><span class="mj-date">3 days ago</span></div>
+        <div class="mj-item"><span class="mj-type ft-err">Arithmetic Error</span><span class="mj-prob">2023 AMC 12A #14 · Polynomials</span><span class="mj-date">5 days ago</span></div>
+        <div class="mj-item"><span class="mj-type ft-warn">Incomplete Casework</span><span class="mj-prob">2020 AIME I #7 · Number Theory</span><span class="mj-date">1 week ago</span></div>
       </div>
     </div>
   </div>
+</div>
 
-  <div class="callout">
-    <div>
-      <h3>Ready to start?</h3>
-      <p>Take the diagnostic and receive your full skill radar in 15 minutes. Free, always.</p>
+<!-- ══════════════════════════════════
+     DIAGNOSTIC VIEW
+══════════════════════════════════ -->
+<div id="view-diagnostic" class="view">
+  <div class="view-header">
+    <div class="breadcrumb"><a onclick="showView('home')">MathAtlas</a> <span>›</span> <span>Diagnostic</span></div>
+    <h1>Skill Diagnostic</h1>
+    <p>15 questions across all major domains. Takes about 15 minutes.</p>
+  </div>
+  <div class="view-body">
+    <div id="diagIntro">
+      <div class="diag-intro">
+        <h2>Map your mathematical profile</h2>
+        <p>This diagnostic assesses your ability across 5 core domains. After completion, you'll receive a personalized skill radar and a recommended study path for your target contest.</p>
+        <div class="infobox ib-blue"><span class="ib-icon">ℹ️</span><div>This is a calibration tool, not a test. Answer honestly—wrong answers help us identify what to teach you first.</div></div>
+      </div>
+      <div class="diag-domains">
+        <div class="dd-card"><div class="dd-icon">📘</div><div class="dd-name">Algebra</div><div class="dd-count">3 questions</div></div>
+        <div class="dd-card"><div class="dd-icon">📐</div><div class="dd-name">Geometry</div><div class="dd-count">3 questions</div></div>
+        <div class="dd-card"><div class="dd-icon">🔢</div><div class="dd-name">Counting</div><div class="dd-count">3 questions</div></div>
+        <div class="dd-card"><div class="dd-icon">🔍</div><div class="dd-name">Number Theory</div><div class="dd-count">3 questions</div></div>
+        <div class="dd-card"><div class="dd-icon">🎲</div><div class="dd-name">Probability</div><div class="dd-count">3 questions</div></div>
+      </div>
+      <button class="diag-start-btn" onclick="startDiagnostic()">▶ Start Diagnostic</button>
     </div>
-    <div style="display:flex;gap:10px">
-      <a href="javascript:void(0)" class="btn btn-ghost">Browse Problems</a>
-      <a href="javascript:void(0)" class="btn btn-primary">Take Diagnostic →</a>
+    <div class="quiz-area" id="quizArea">
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizProgressFill" style="width:0%"></div></div>
+      <div class="quiz-meta"><span class="quiz-num" id="quizNum">Question 1 of 15</span><span class="quiz-domain ctag ct-10" id="quizDomain">Algebra</span></div>
+      <div class="quiz-question" id="quizQuestion"></div>
+      <div class="quiz-choices" id="quizChoices"></div>
+      <button class="quiz-next-btn" id="quizNextBtn" onclick="nextQuestion()">Next Question →</button>
+    </div>
+    <div class="quiz-results" id="quizResults">
+      <div class="results-header">
+        <h2>Diagnostic Complete!</h2>
+        <div class="results-score" id="resultsScore">11/15</div>
+        <p>Here's your skill breakdown. Your personalized study path has been generated.</p>
+      </div>
+      <div class="results-domains" id="resultsDomains"></div>
+      <div class="infobox ib-green"><span class="ib-icon">🎯</span><div><strong>Recommended next step:</strong> Based on your results, start with the <strong>Counting &amp; Probability</strong> modules — these are your lowest-scoring domains.</div></div>
+      <div style="display:flex;gap:12px;margin-top:20px">
+        <button class="btn btn-primary btn-lg" onclick="showView('modules')">View My Study Path →</button>
+        <button class="btn btn-ghost btn-lg" onclick="showView('problems')">Practice Problems</button>
+      </div>
     </div>
   </div>
+</div>
 
-  <footer>
-    <div class="ft-grid">
-      <div class="ft-brand">
-        <div style="display:flex;align-items:center;gap:8px"><div class="logo-icon">MA</div><span style="font-weight:700;font-size:1rem">Math<span style="color:var(--blue)">Atlas</span></span></div>
-        <p>AI-powered preparation for AMC 8, AMC 10, AMC 12, and AIME. Built for students who take mathematics seriously.</p>
-      </div>
-      <div class="ft-col"><h5>Platform</h5><ul><li><a href="javascript:void(0)">Diagnostic</a></li><li><a href="javascript:void(0)">Problem Library</a></li><li><a href="javascript:void(0)">Contest Simulation</a></li><li><a href="javascript:void(0)">Analytics</a></li></ul></div>
-      <div class="ft-col"><h5>Contests</h5><ul><li><a href="javascript:void(0)">AMC 8 Track</a></li><li><a href="javascript:void(0)">AMC 10 Track</a></li><li><a href="javascript:void(0)">AMC 12 Track</a></li><li><a href="javascript:void(0)">AIME Track</a></li><li><a href="javascript:void(0)">Official MAA Site →</a></li></ul></div>
-      <div class="ft-col"><h5>Company</h5><ul><li><a href="javascript:void(0)">About</a></li><li><a href="javascript:void(0)">Blog</a></li><li><a href="javascript:void(0)">Pricing</a></li><li><a href="javascript:void(0)">Privacy Policy</a></li><li><a href="javascript:void(0)">Terms of Service</a></li></ul></div>
-    </div>
-    <div class="ft-bot">
-      <span class="ft-copy">© 2025 MathAtlas. All rights reserved.</span>
-      <div class="ft-links"><a href="javascript:void(0)">Privacy</a><a href="javascript:void(0)">Terms</a><a href="javascript:void(0)">Contact</a></div>
-    </div>
-  </footer>
 </main>
 </div>
 
+<!-- SOLVE MODAL -->
+<div class="modal-overlay" id="solveModal">
+  <div class="modal">
+    <div class="modal-hd">
+      <h3 id="modalTitle">Solve Problem</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="prob-stmt" id="modalProbStmt" style="margin-bottom:16px"></div>
+      <div class="prob-tags" id="modalProbTags"></div>
+      <div class="steps-lbl">Your Solution Steps</div>
+      <div class="steps-list" id="modalStepsList">
+        <div class="step-row"><div class="snum sn-neutral">1</div><textarea class="sinput" rows="1" placeholder="Enter step 1..."></textarea><button class="btn-rm" onclick="removeStep(this)">✕</button></div>
+      </div>
+      <button class="btn-add-step" onclick="addStep()">+ Add step</button>
+      <div class="answer-row">
+        <span class="answer-label">Final answer:</span>
+        <input class="answer-input" id="modalAnswer" type="text" placeholder="e.g. 18"/>
+        <span style="font-size:.8rem;color:var(--text3)">optional</span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <button class="btn-analyze" id="analyzeBtn" onclick="analyzeSteps()">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Analyze Reasoning
+        </button>
+        <span style="font-size:.8rem;color:var(--text3)">Powered by Gemini</span>
+      </div>
+      <div id="feedbackArea"></div>
+    </div>
+  </div>
+</div>
+
 <script>
-// ── STEP MANAGEMENT ──
-function getSteps() {
-  return document.querySelectorAll('#stepsList .step-row');
+// ══════════════════════════════════
+// DATA
+// ══════════════════════════════════
+const PROBLEMS = [
+  {id:'AMC10A-2023-14',title:'Grid Chip Placement',contest:'amc10',domain:'counting',difficulty:'AMC 10 · #14',year:2023,stmt:'How many ways are there to place 3 indistinguishable red chips and 3 indistinguishable blue chips in a 3×3 grid such that no two chips of the same color are directly adjacent?',tags:['Counting','Inclusion-Exclusion','Complementary Counting'],link:'https://artofproblemsolving.com/wiki/index.php/2023_AMC_10A_Problems'},
+  {id:'AMC10A-2022-18',title:'Polynomial Roots Sum',contest:'amc10',domain:'algebra',difficulty:'AMC 10 · #18',year:2022,stmt:'Let p(x) = x³ − 6x² + 11x − 6. Find the sum of all x such that p(p(x)) = 0.',tags:['Algebra','Polynomials','Vieta\'s Formulas'],link:'https://artofproblemsolving.com/wiki/index.php/2022_AMC_10A_Problems'},
+  {id:'AMC12A-2023-15',title:'Triangle in Circle',contest:'amc12',domain:'geometry',difficulty:'AMC 12 · #15',year:2023,stmt:'A triangle with vertices on a circle of radius 5 has sides of length 6, 8, and 10. Find the distance from the center to the longest side.',tags:['Geometry','Circle Theorems','Right Triangles'],link:'https://artofproblemsolving.com/wiki/index.php/2023_AMC_12A_Problems'},
+  {id:'AMC8-2022-20',title:'Digit Sum Problem',contest:'amc8',domain:'number-theory',difficulty:'AMC 8 · #20',year:2022,stmt:'What is the sum of all two-digit positive integers whose digits sum to 12?',tags:['Number Theory','Digit Problems'],link:'https://artofproblemsolving.com/wiki/index.php/2022_AMC_8_Problems'},
+  {id:'AIME-2022-5',title:'Modular Counting',contest:'aime',domain:'number-theory',difficulty:'AIME I · #5',year:2022,stmt:'Find the number of integers n with 1 ≤ n ≤ 2022 such that n³ − n is divisible by 2022.',tags:['Number Theory','Modular Arithmetic','CRT'],link:'https://artofproblemsolving.com/wiki/index.php/2022_AIME_I_Problems'},
+  {id:'AMC10B-2021-14',title:'Probability Grid Walk',contest:'amc10',domain:'probability',difficulty:'AMC 10 · #14',year:2021,stmt:'A particle starts at (0,0) and at each step moves right or up with equal probability. What is the probability it passes through (2,2) on its way to (4,4)?',tags:['Probability','Counting','Lattice Paths'],link:'https://artofproblemsolving.com/wiki/index.php/2021_AMC_10B_Problems'},
+];
+
+const MODULES = [
+  {id:'algebra',icon:'📘',color:'fi-blue',name:'Algebra',progress:72,lessons:[{name:'Linear Equations & Inequalities',done:true,badge:'b-bronze'},{name:'Quadratic Equations',done:true,badge:'b-bronze'},{name:'Polynomials & Vieta\'s',done:true,badge:'b-silver'},{name:'Systems of Equations',done:false,badge:'b-silver'},{name:'Functional Equations',done:false,badge:'b-plat'}]},
+  {id:'geometry',icon:'📐',color:'fi-purple',name:'Geometry',progress:55,lessons:[{name:'Triangle Congruence & Similarity',done:true,badge:'b-bronze'},{name:'Circle Theorems',done:true,badge:'b-silver'},{name:'Power of a Point',done:false,badge:'b-silver'},{name:'Trigonometry',done:false,badge:'b-gold'},{name:'3D Geometry',done:false,badge:'b-gold'}]},
+  {id:'counting',icon:'🔢',color:'fi-orange',name:'Counting & Probability',progress:38,lessons:[{name:'Permutations & Combinations',done:true,badge:'b-bronze'},{name:'Binomial Theorem',done:false,badge:'b-silver'},{name:'Inclusion-Exclusion',done:false,badge:'b-gold'},{name:'Probability Basics',done:false,badge:'b-silver'},{name:'Expected Value',done:false,badge:'b-gold'}]},
+  {id:'numtheory',icon:'🔍',color:'fi-green',name:'Number Theory',progress:61,lessons:[{name:'Divisibility Rules & GCD',done:true,badge:'b-bronze'},{name:'Prime Factorization',done:true,badge:'b-bronze'},{name:'Modular Arithmetic',done:true,badge:'b-gold'},{name:'Chinese Remainder Theorem',done:false,badge:'b-plat'},{name:'Diophantine Equations',done:false,badge:'b-plat'}]},
+];
+
+const QUIZ_QUESTIONS = [
+  {domain:'Algebra',domainClass:'ct-10',q:'If x + y = 10 and xy = 20, what is x² + y²?',choices:['40','60','80','100'],answer:1},
+  {domain:'Algebra',domainClass:'ct-10',q:'The polynomial p(x) = x² − 5x + 6 has roots r and s. Find r² + s².',choices:['13','25','37','12'],answer:0},
+  {domain:'Algebra',domainClass:'ct-12',q:'If f(x) = 2x + 3 and g(x) = x², what is f(g(3)) − g(f(2))?',choices:['−88','12','88','−12'],answer:0},
+  {domain:'Geometry',domainClass:'ct-10',q:'A right triangle has legs 3 and 4. What is the length of the altitude to the hypotenuse?',choices:['2.4','2.6','3','2'],answer:0},
+  {domain:'Geometry',domainClass:'ct-10',q:'Two circles of radius 5 and 3 have centers 10 apart. How many common tangent lines do they have?',choices:['1','2','3','4'],answer:2},
+  {domain:'Geometry',domainClass:'ct-12',q:'A regular hexagon has area 24√3. What is its perimeter?',choices:['24','36','48','12'],answer:0},
+  {domain:'Counting',domainClass:'ct-10',q:'How many ways can 5 people sit in a row if two specific people must not sit next to each other?',choices:['72','48','96','60'],answer:0},
+  {domain:'Counting',domainClass:'ct-10',q:'How many integers from 1 to 100 are divisible by 2 or 3?',choices:['66','67','68','65'],answer:1},
+  {domain:'Counting',domainClass:'ct-ai',q:'In how many ways can you choose 3 cards from a standard 52-card deck such that all 3 are different suits?',choices:['2028','2197','2496','1716'],answer:0},
+  {domain:'Number Theory',domainClass:'ct-10',q:'What is the units digit of 7^100?',choices:['1','3','7','9'],answer:0},
+  {domain:'Number Theory',domainClass:'ct-10',q:'Find the GCD of 252 and 180.',choices:['12','18','36','6'],answer:2},
+  {domain:'Number Theory',domainClass:'ct-ai',q:'How many positive integers less than 100 are coprime to 30?',choices:['24','26','28','32'],answer:2},
+  {domain:'Probability',domainClass:'ct-10',q:'A fair coin is flipped 4 times. What is the probability of getting exactly 2 heads?',choices:['1/4','3/8','5/16','3/16'],answer:1},
+  {domain:'Probability',domainClass:'ct-10',q:'Two dice are rolled. What is P(sum = 7 | first die = 3)?',choices:['1/6','1/3','1/5','2/6'],answer:0},
+  {domain:'Probability',domainClass:'ct-12',q:'A bag has 4 red and 6 blue marbles. Two are drawn without replacement. Find P(both same color).',choices:['7/15','8/15','4/15','11/15'],answer:0},
+];
+
+// ══════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.t-link').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  const sb = document.getElementById('sb-'+name);
+  if(sb) sb.classList.add('active');
+  const nav = document.getElementById('nav-'+name);
+  if(nav) nav.classList.add('active');
+  window.scrollTo(0,0);
+  if(name==='problems') renderProblems();
+  if(name==='modules') renderModules();
 }
 
-function renumberSteps() {
-  getSteps().forEach((row, i) => {
-    row.querySelector('.snum').textContent = i + 1;
-  });
+function showModule(id) {
+  showView('modules');
 }
+
+// ══════════════════════════════════
+// PROBLEMS
+// ══════════════════════════════════
+function renderProblems(filtered) {
+  const probs = filtered || PROBLEMS;
+  const grid = document.getElementById('problemsGrid');
+  grid.innerHTML = probs.map(p => `
+    <div class="prob-card">
+      <div class="prob-card-hd">
+        <span class="prob-id">${p.id}</span>
+        <span class="prob-title">${p.title}</span>
+        <span class="badge ${p.contest==='amc8'?'b-bronze':p.contest==='amc10'?'b-silver':p.contest==='amc12'?'b-gold':'b-plat'}">${p.contest.toUpperCase()}</span>
+      </div>
+      <div class="prob-body">
+        <div class="prob-stmt">${p.stmt}</div>
+        <div class="prob-tags">
+          ${p.tags.map(t=>`<span class="ptag pt-sk">${t}</span>`).join('')}
+          <span class="ptag pt-diff">${p.difficulty}</span>
+        </div>
+        <div class="prob-actions">
+          <button class="solve-btn" onclick='openSolveModal(${JSON.stringify(p)})'>Solve with AI →</button>
+          <a href="${p.link}" target="_blank" class="official-link">View official problem ↗</a>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function filterProblems() { renderProblems(); }
+
+// ══════════════════════════════════
+// MODULES
+// ══════════════════════════════════
+function renderModules() {
+  const grid = document.getElementById('modulesGrid');
+  grid.innerHTML = MODULES.map(m => `
+    <div class="module-card">
+      <div class="module-card-hd">
+        <div class="module-card-icon ${m.color}">${m.icon}</div>
+        <h3>${m.name}</h3>
+      </div>
+      <div class="module-card-body">
+        <ul class="module-lessons">
+          ${m.lessons.map(l=>`
+            <li class="module-lesson">
+              <span class="lesson-icon">${l.done?'✅':'○'}</span>
+              <span class="lesson-name">${l.name}</span>
+              <span class="lesson-badge badge ${l.badge}">${l.badge==='b-bronze'?'Intro':l.badge==='b-silver'?'Mid':l.badge==='b-gold'?'Adv':'AIME'}</span>
+            </li>`).join('')}
+        </ul>
+        <div class="module-progress">
+          <div class="mp-bar"><div class="mp-fill" style="width:${m.progress}%"></div></div>
+          <div class="mp-label">${m.progress}% complete</div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════
+// SOLVE MODAL
+// ══════════════════════════════════
+let currentProblem = null;
+
+function openSolveModal(prob) {
+  currentProblem = prob;
+  document.getElementById('modalTitle').textContent = prob.title;
+  document.getElementById('modalProbStmt').textContent = prob.stmt;
+  document.getElementById('modalProbTags').innerHTML = prob.tags.map(t=>`<span class="ptag pt-sk">${t}</span>`).join('') + `<span class="ptag pt-diff">${prob.difficulty}</span>`;
+  document.getElementById('modalStepsList').innerHTML = `<div class="step-row"><div class="snum sn-neutral">1</div><textarea class="sinput" rows="1" placeholder="Enter step 1..."></textarea><button class="btn-rm" onclick="removeStep(this)">✕</button></div>`;
+  document.getElementById('modalAnswer').value = '';
+  document.getElementById('feedbackArea').innerHTML = '';
+  document.getElementById('analyzeBtn').disabled = false;
+  document.getElementById('analyzeBtn').innerHTML = `<svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Analyze Reasoning`;
+  document.getElementById('solveModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('solveModal').classList.remove('open');
+}
+
+document.getElementById('solveModal').addEventListener('click', function(e) {
+  if(e.target === this) closeModal();
+});
 
 function addStep() {
-  const list = document.getElementById('stepsList');
-  const count = getSteps().length + 1;
+  const list = document.getElementById('modalStepsList');
+  const count = list.querySelectorAll('.step-row').length + 1;
   const row = document.createElement('div');
   row.className = 'step-row';
-  row.innerHTML = `
-    <div class="snum sn-neutral">${count}</div>
-    <textarea class="sinput" rows="1" placeholder="Enter step ${count}..."></textarea>
-    <button class="btn-remove-step" onclick="removeStep(this)" title="Remove step">✕</button>
-  `;
+  row.innerHTML = `<div class="snum sn-neutral">${count}</div><textarea class="sinput" rows="1" placeholder="Enter step ${count}..."></textarea><button class="btn-rm" onclick="removeStep(this)">✕</button>`;
   list.appendChild(row);
   row.querySelector('textarea').focus();
 }
 
 function removeStep(btn) {
-  const row = btn.closest('.step-row');
-  if (getSteps().length <= 1) return;
-  row.remove();
-  renumberSteps();
+  const list = document.getElementById('modalStepsList');
+  if(list.querySelectorAll('.step-row').length <= 1) return;
+  btn.closest('.step-row').remove();
+  list.querySelectorAll('.step-row').forEach((r,i) => {
+    r.querySelector('.snum').textContent = i+1;
+    r.querySelector('textarea').placeholder = `Enter step ${i+1}...`;
+  });
 }
 
-// Auto-resize textareas
 document.addEventListener('input', e => {
-  if (e.target.classList.contains('sinput')) {
+  if(e.target.classList.contains('sinput')) {
     e.target.style.height = 'auto';
     e.target.style.height = e.target.scrollHeight + 'px';
   }
 });
 
-// ── AI ANALYSIS ──
+// ══════════════════════════════════
+// AI ANALYSIS
+// ══════════════════════════════════
 async function analyzeSteps() {
   const btn = document.getElementById('analyzeBtn');
-  const noteEl = document.getElementById('analyzeNote');
   const feedbackArea = document.getElementById('feedbackArea');
-
-  const steps = Array.from(getSteps()).map(row =>
-    row.querySelector('textarea').value.trim()
-  ).filter(Boolean);
-
-  if (steps.length === 0) {
-    alert('Please enter at least one solution step.');
-    return;
-  }
-
-  const problem = document.querySelector('.prob-stmt').textContent.trim();
-
-  // Loading state
+  const steps = Array.from(document.querySelectorAll('#modalStepsList .sinput')).map(t=>t.value.trim()).filter(Boolean);
+  if(!steps.length) { alert('Enter at least one step.'); return; }
   btn.disabled = true;
   btn.innerHTML = `<div class="spinner"></div> Analyzing...`;
-  noteEl.textContent = 'Gemini is reading your reasoning...';
-
-  feedbackArea.innerHTML = `
-    <div class="ai-fb">
-      <div class="ai-fb-hd"><span class="ai-badge">AI</span> Reasoning Analysis</div>
-      <div class="fb-loading"><div class="spin2"></div> Reading your solution steps...</div>
-    </div>`;
-
-  // Reset step styles
-  getSteps().forEach(row => {
-    const num = row.querySelector('.snum');
-    const input = row.querySelector('textarea');
-    num.className = 'snum sn-neutral';
-    input.className = 'sinput';
-  });
-
+  document.querySelectorAll('#modalStepsList .snum').forEach(n => n.className='snum sn-neutral');
+  document.querySelectorAll('#modalStepsList .sinput').forEach(i => i.className='sinput');
+  feedbackArea.innerHTML = `<div class="ai-fb"><div class="ai-fb-hd"><span class="ai-badge">AI</span> Reasoning Analysis</div><div class="fb-loading"><div class="spin2"></div> Reading your solution steps...</div></div>`;
   try {
-    const response = await fetch('/api/gemini', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ problem, steps })
-    });
-
-    if (!response.ok) {
-      throw new Error(`Server error: ${response.status}`);
-    }
-
-    const data = await response.json();
-    renderFeedback(data, steps);
-
-  } catch (err) {
-    feedbackArea.innerHTML = `
-      <div class="ai-fb">
-        <div class="ai-fb-hd"><span class="ai-badge">AI</span> Error</div>
-        <div class="fb-item"><span class="fbtag ft-err">Error</span>
-        <p>Could not connect to the analysis server. Make sure you have deployed to Vercel with your API key set. <strong>Error:</strong> ${err.message}</p></div>
-      </div>`;
+    const res = await fetch('/api/gemini', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({problem:currentProblem.stmt,steps})});
+    if(!res.ok) throw new Error(`Server error: ${res.status}`);
+    const data = await res.json();
+    renderFeedback(data);
+  } catch(err) {
+    feedbackArea.innerHTML = `<div class="ai-fb"><div class="ai-fb-hd"><span class="ai-badge">AI</span> Error</div><div class="fb-item"><span class="fbtag ft-err">Error</span><p>Could not connect to analysis server. Make sure the site is deployed on Vercel with GEMINI_API_KEY set. <strong>${err.message}</strong></p></div></div>`;
   } finally {
     btn.disabled = false;
-    btn.innerHTML = `<svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg> Analyze Reasoning`;
-    noteEl.textContent = 'Powered by Gemini 2.0 Flash';
+    btn.innerHTML = `<svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Analyze Reasoning`;
   }
 }
 
-function renderFeedback(data, steps) {
+function renderFeedback(data) {
   const feedbackArea = document.getElementById('feedbackArea');
-  const rows = Array.from(getSteps());
-
-  // Apply step highlighting
-  if (data.stepFeedback && Array.isArray(data.stepFeedback)) {
-    data.stepFeedback.forEach(sf => {
-      const row = rows[sf.step - 1];
-      if (!row) return;
-      const num = row.querySelector('.snum');
-      const input = row.querySelector('textarea');
-      if (sf.status === 'ok') {
-        num.className = 'snum sn-ok';
-        input.className = 'sinput s-ok';
-      } else if (sf.status === 'error') {
-        num.className = 'snum sn-err';
-        input.className = 'sinput s-err';
-      } else if (sf.status === 'warning') {
-        num.className = 'snum sn-warn';
-        input.className = 'sinput s-warn';
-      }
-    });
-  }
-
-  // All correct?
-  if (data.errorType === 'Correct' || data.firstErrorStep === null) {
-    feedbackArea.innerHTML = `
-      <div class="ai-fb">
-        <div class="ai-fb-hd"><span class="ai-badge">AI</span> Reasoning Analysis</div>
-        <div class="correct-banner">
-          <span class="cb-icon">✅</span>
-          <p><strong>All steps look correct.</strong> ${data.mainFeedback || 'Your reasoning is sound. Double-check arithmetic and make sure your answer matches.'}</p>
-        </div>
-      </div>`;
+  const rows = Array.from(document.querySelectorAll('#modalStepsList .step-row'));
+  if(data.stepFeedback) data.stepFeedback.forEach(sf => {
+    const row = rows[sf.step-1]; if(!row) return;
+    const n = row.querySelector('.snum'), i = row.querySelector('textarea');
+    if(sf.status==='ok'){n.className='snum sn-ok';i.className='sinput s-ok';}
+    else if(sf.status==='error'){n.className='snum sn-err';i.className='sinput s-err';}
+    else if(sf.status==='warning'){n.className='snum sn-warn';i.className='sinput s-warn';}
+  });
+  if(data.errorType==='Correct'||data.firstErrorStep===null){
+    feedbackArea.innerHTML=`<div class="ai-fb"><div class="ai-fb-hd"><span class="ai-badge">AI</span> Reasoning Analysis</div><div class="correct-banner"><span style="font-size:1.25rem">✅</span><p><strong>All steps correct!</strong> ${data.mainFeedback||'Your reasoning is sound.'}</p></div></div>`;
     return;
   }
+  let items='';
+  if(data.errorType&&data.errorType!=='Correct') items+=`<div class="fb-item"><span class="fbtag ft-err">${data.errorType}${data.errorCode?` <span style="font-family:'Fira Code',monospace;font-size:.7rem">(${data.errorCode})</span>`:''}</span><p>${data.mainFeedback||''}</p></div>`;
+  if(data.stepFeedback) data.stepFeedback.forEach(sf=>{if(sf.comment&&sf.status!=='ok') items+=`<div class="fb-item"><span class="fbtag ${sf.status==='error'?'ft-err':'ft-warn'}">Step ${sf.step}</span><p>${sf.comment}</p></div>`;});
+  if(data.hint) items+=`<div class="fb-item"><span class="fbtag ft-hint">Hint</span><p>${data.hint}${data.moduleLink?` Review the <a href="javascript:void(0)" onclick="showView('modules');closeModal()">${data.moduleLink} module</a>.`:''}</p></div>`;
+  feedbackArea.innerHTML=`<div class="ai-fb"><div class="ai-fb-hd"><span class="ai-badge">AI</span> Reasoning Analysis<span class="ai-ref">${data.firstErrorStep?`First error: Step ${data.firstErrorStep}`:''}</span></div>${items}</div>`;
+}
 
-  const errorStep = data.firstErrorStep ? `First error: Step ${data.firstErrorStep}` : '';
-  const errorCode = data.errorCode ? ` <span style="font-family:'Fira Code',monospace;font-size:.75rem;background:var(--red-light);color:var(--red);border-radius:4px;padding:1px 7px">${data.errorCode}</span>` : '';
+// ══════════════════════════════════
+// DIAGNOSTIC / QUIZ
+// ══════════════════════════════════
+let quizIndex = 0, quizScores = {Algebra:0,Geometry:0,Counting:0,'Number Theory':0,Probability:0}, quizDomainCounts = {Algebra:0,Geometry:0,Counting:0,'Number Theory':0,Probability:0};
 
-  let items = '';
+function startDiagnostic() {
+  quizIndex = 0;
+  Object.keys(quizScores).forEach(k=>{quizScores[k]=0;quizDomainCounts[k]=0;});
+  document.getElementById('diagIntro').style.display='none';
+  document.getElementById('quizArea').classList.add('active');
+  document.getElementById('quizResults').classList.remove('active');
+  loadQuestion();
+}
 
-  if (data.errorType && data.errorType !== 'Correct') {
-    items += `
-      <div class="fb-item">
-        <span class="fbtag ft-err">${data.errorType}${errorCode}</span>
-        <p>${data.mainFeedback || ''}</p>
-      </div>`;
-  }
+function loadQuestion() {
+  const q = QUIZ_QUESTIONS[quizIndex];
+  const pct = (quizIndex/QUIZ_QUESTIONS.length)*100;
+  document.getElementById('quizProgressFill').style.width = pct+'%';
+  document.getElementById('quizNum').textContent = `Question ${quizIndex+1} of ${QUIZ_QUESTIONS.length}`;
+  document.getElementById('quizDomain').textContent = q.domain;
+  document.getElementById('quizDomain').className = `quiz-domain ctag ${q.domainClass}`;
+  document.getElementById('quizQuestion').textContent = q.q;
+  document.getElementById('quizNextBtn').classList.remove('show');
+  document.getElementById('quizChoices').innerHTML = q.choices.map((c,i)=>`<button class="quiz-choice" onclick="selectChoice(this,${i})">${String.fromCharCode(65+i)}) ${c}</button>`).join('');
+}
 
-  // Per-step comments
-  if (data.stepFeedback) {
-    data.stepFeedback.forEach(sf => {
-      if (sf.comment && sf.status !== 'ok') {
-        const tagClass = sf.status === 'error' ? 'ft-err' : 'ft-warn';
-        items += `
-          <div class="fb-item">
-            <span class="fbtag ${tagClass}">Step ${sf.step}</span>
-            <p>${sf.comment}</p>
-          </div>`;
-      }
-    });
-  }
+function selectChoice(btn, idx) {
+  const q = QUIZ_QUESTIONS[quizIndex];
+  document.querySelectorAll('.quiz-choice').forEach(b=>b.disabled=true);
+  if(idx===q.answer){btn.classList.add('correct');quizScores[q.domain]=(quizScores[q.domain]||0)+1;}
+  else{btn.classList.add('wrong');document.querySelectorAll('.quiz-choice')[q.answer].classList.add('correct');}
+  quizDomainCounts[q.domain]=(quizDomainCounts[q.domain]||0)+1;
+  document.getElementById('quizNextBtn').classList.add('show');
+}
 
-  if (data.hint) {
-    const moduleNote = data.moduleLink
-      ? ` Review the <a href="javascript:void(0)" style="color:var(--blue)">${data.moduleLink} module</a>.`
-      : '';
-    items += `
-      <div class="fb-item">
-        <span class="fbtag ft-hint">Hint</span>
-        <p>${data.hint}${moduleNote}</p>
-      </div>`;
-  }
+function nextQuestion() {
+  quizIndex++;
+  if(quizIndex>=QUIZ_QUESTIONS.length){showResults();return;}
+  loadQuestion();
+}
 
-  feedbackArea.innerHTML = `
-    <div class="ai-fb">
-      <div class="ai-fb-hd">
-        <span class="ai-badge">AI</span> Reasoning Analysis
-        <span class="ai-ref">${errorStep}</span>
-      </div>
-      ${items}
-    </div>`;
+function showResults() {
+  document.getElementById('quizArea').classList.remove('active');
+  document.getElementById('quizResults').classList.add('active');
+  const total = Object.values(quizScores).reduce((a,b)=>a+b,0);
+  document.getElementById('resultsScore').textContent = `${total}/${QUIZ_QUESTIONS.length}`;
+  const colors = {Algebra:'#3b5bdb',Geometry:'#6741d9',Counting:'#e67700','Number Theory':'#2f9e44',Probability:'#c92a2a'};
+  document.getElementById('resultsDomains').innerHTML = Object.keys(quizScores).map(d=>{
+    const score=quizScores[d],total=quizDomainCounts[d]||3;
+    const pct=Math.round((score/total)*100);
+    return `<div class="rd-card"><div class="rd-card-name">${d}</div><div class="rd-card-score" style="color:${colors[d]}">${score}/${total}</div><div style="margin-top:8px"><div class="pbar" style="width:100%"><div class="pfill" style="width:${pct}%;background:${colors[d]}"></div></div></div></div>`;
+  }).join('');
 }
 </script>
 </body>
