@@ -924,7 +924,10 @@ async function analyzeSteps() {
   feedbackArea.innerHTML = `<div class="ai-fb"><div class="ai-fb-hd"><span class="ai-badge">AI</span> Reasoning Analysis</div><div class="fb-loading"><div class="spin2"></div> Reading your solution steps...</div></div>`;
   try {
     const res = await fetch('/api/gemini', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({problem:currentProblem.stmt,steps})});
-    if(!res.ok) throw new Error(`Server error: ${res.status}`);
+    if(!res.ok) {
+      const errBody = await res.json().catch(()=>({}));
+      throw new Error(`${res.status} — ${errBody.detail || errBody.error || 'unknown error'}`);
+    }
     const data = await res.json();
     renderFeedback(data);
   } catch(err) {
