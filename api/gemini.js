@@ -39,8 +39,7 @@ If all steps are correct use: {"firstErrorStep":null,"errorType":"Correct","erro
           contents: [{ parts: [{ text: prompt }] }],
           generationConfig: {
             temperature: 0.1,
-            maxOutputTokens: 1024,
-            responseMimeType: 'application/json'
+            maxOutputTokens: 1024
           }
         })
       }
@@ -52,23 +51,21 @@ If all steps are correct use: {"firstErrorStep":null,"errorType":"Correct","erro
       console.error('Gemini rejected:', rawText);
       return res.status(502).json({
         error: 'Gemini API rejected the request',
-        detail: rawText,
-        keyPresent: !!apiKey,
-        keyLength: apiKey.length
+        detail: rawText
       });
     }
 
     let data;
     try { data = JSON.parse(rawText); }
-    catch (e) { return res.status(502).json({ error: 'Could not parse Gemini response', raw: rawText }); }
+    catch (e) { return res.status(502).json({ error: 'Could not parse Gemini response', detail: rawText }); }
 
     const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!text) return res.status(502).json({ error: 'Gemini returned no text', raw: JSON.stringify(data).substring(0, 300) });
+    if (!text) return res.status(502).json({ error: 'Gemini returned no text', detail: JSON.stringify(data).substring(0, 500) });
 
     const cleaned = text.replace(/```json|```/g, '').trim();
     let parsed;
     try { parsed = JSON.parse(cleaned); }
-    catch (e) { return res.status(502).json({ error: 'Could not parse JSON from Gemini', raw: cleaned }); }
+    catch (e) { return res.status(502).json({ error: 'Could not parse JSON from Gemini', detail: cleaned }); }
 
     return res.status(200).json(parsed);
 
