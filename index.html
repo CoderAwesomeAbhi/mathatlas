@@ -49,8 +49,13 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:v
 .sb{width:var(--sw);position:fixed;top:var(--th);bottom:0;background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;z-index:300;flex-shrink:0}
 .sb::-webkit-scrollbar{width:3px}
 .sb::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-.sb-sec{padding:12px 0 4px}
-.sb-hdr{padding:3px 14px 6px;font-size:.625rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em}
+.sb-sec{padding:4px 0 2px}
+.sb-hdr{display:flex;align-items:center;justify-content:space-between;padding:5px 12px 5px 14px;font-size:.625rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;border-radius:5px;margin:0 4px;user-select:none;transition:background .12s}
+.sb-hdr:hover{background:var(--surface2)}
+.sb-hdr .sb-arrow{font-size:.55rem;opacity:.55;transition:transform .2s;display:inline-block;flex-shrink:0}
+.sb-modules{overflow:hidden;max-height:999px;transition:max-height .24s ease}
+.sb-sec.collapsed .sb-modules{max-height:0}
+.sb-sec.collapsed .sb-arrow{transform:rotate(-90deg)}
 .sb-item{display:flex;align-items:center;gap:8px;padding:5px 14px;font-size:.8125rem;color:var(--ink2);cursor:pointer;transition:all .12s;background:none;border:none;border-left:2px solid transparent;width:100%;text-align:left;font-family:'DM Sans',sans-serif;line-height:1.35}
 .sb-item:hover{background:var(--surface2);color:var(--ink)}
 .sb-item.on{background:var(--blue-l);color:var(--blue);border-left-color:var(--blue);font-weight:600}
@@ -315,6 +320,8 @@ footer{background:var(--surface2);border-top:1px solid var(--border);padding:32p
   </a>
   <div class="tb-mid">
     <button class="tb-tab on" id="tab-guide" onclick="showGuide()">📚 Training Guide</button>
+    <button class="tb-tab" id="tab-practice" onclick="showView('practice')">⚡ Infinite Practice</button>
+    <button class="tb-tab" id="tab-log" onclick="showView('log')">📋 Question Log</button>
     <button class="tb-tab" id="tab-progress" onclick="showView('progress')">📊 My Progress</button>
     <button class="tb-tab" id="tab-diag" onclick="showView('diag')">🎯 Diagnostic</button>
   </div>
@@ -327,10 +334,13 @@ footer{background:var(--surface2);border-top:1px solid var(--border);padding:32p
 <aside class="sb" id="sb">
 <div class="sb-sec"><div class="sb-hdr">Overview</div>
 <button class="sb-item on" id="sbg-guide" onclick="showGuide()"><span class="sb-icon">🏠</span><span class="sb-lbl">Training Roadmap</span></button>
+<button class="sb-item" id="sbg-practice" onclick="showView('practice')"><span class="sb-icon">⚡</span><span class="sb-lbl">Infinite Practice</span></button>
+<button class="sb-item" id="sbg-log" onclick="showView('log')"><span class="sb-icon">📋</span><span class="sb-lbl">Question Log</span></button>
 <button class="sb-item" id="sbg-progress" onclick="showView('progress')"><span class="sb-icon">📊</span><span class="sb-lbl">My Progress</span></button>
 <button class="sb-item" id="sbg-diag" onclick="showView('diag')"><span class="sb-icon">🎯</span><span class="sb-lbl">Skill Diagnostic</span></button>
 <div class="sb-sep"></div></div>
-<div class="sb-sec"><div class="sb-hdr" style="color:#92400e">Lv.1 — Foundations</div>
+<div class="sb-sec" id="sb-lv1"><div class="sb-hdr" onclick="toggleSbLevel('sb-lv1')" style="color:#92400e">Lv.1 — Foundations<span class="sb-arrow">▼</span></div>
+<div class="sb-modules">
 <button class="sb-item" id="sbg-f1" onclick="showModule('f1')"><span class="sb-icon">📘</span><span class="sb-lbl">Algebraic Manipulation</span><span class="sb-chip chip-bronze">BR</span></button>
 <button class="sb-item" id="sbg-f2" onclick="showModule('f2')"><span class="sb-icon">📘</span><span class="sb-lbl">Ratios, Proportions & Percentages</span><span class="sb-chip chip-bronze">BR</span></button>
 <button class="sb-item" id="sbg-f3" onclick="showModule('f3')"><span class="sb-icon">📘</span><span class="sb-lbl">Exponents & Polynomials</span><span class="sb-chip chip-bronze">BR</span></button>
@@ -339,8 +349,9 @@ footer{background:var(--surface2);border-top:1px solid var(--border);padding:32p
 <button class="sb-item" id="sbg-f6" onclick="showModule('f6')"><span class="sb-icon">🔢</span><span class="sb-lbl">Elementary Counting</span><span class="sb-chip chip-bronze">BR</span></button>
 <button class="sb-item" id="sbg-f7" onclick="showModule('f7')"><span class="sb-icon">📘</span><span class="sb-lbl">Sequences & Series</span><span class="sb-chip chip-bronze">BR</span></button>
 <button class="sb-item" id="sbg-f8" onclick="showModule('f8')"><span class="sb-icon">📘</span><span class="sb-lbl">Introductory Inequalities</span><span class="sb-chip chip-bronze">BR</span></button>
-</div>
-<div class="sb-sec"><div class="sb-hdr" style="color:#374151">Lv.2 — Core AMC Skills</div>
+</div></div>
+<div class="sb-sec" id="sb-lv2"><div class="sb-hdr" onclick="toggleSbLevel('sb-lv2')" style="color:#374151">Lv.2 — Core AMC Skills<span class="sb-arrow">▼</span></div>
+<div class="sb-modules">
 <button class="sb-item" id="sbg-c1" onclick="showModule('c1')"><span class="sb-icon">📘</span><span class="sb-lbl">Quadratics & Vieta's Formulas</span><span class="sb-chip chip-silver">SI</span></button>
 <button class="sb-item" id="sbg-c2" onclick="showModule('c2')"><span class="sb-icon">🔍</span><span class="sb-lbl">Modular Arithmetic</span><span class="sb-chip chip-silver">SI</span></button>
 <button class="sb-item" id="sbg-c3" onclick="showModule('c3')"><span class="sb-icon">🔢</span><span class="sb-lbl">Intermediate Combinatorics</span><span class="sb-chip chip-silver">SI</span></button>
@@ -349,26 +360,29 @@ footer{background:var(--surface2);border-top:1px solid var(--border);padding:32p
 <button class="sb-item" id="sbg-c6" onclick="showModule('c6')"><span class="sb-icon">📘</span><span class="sb-lbl">Functional Equations & Systems</span><span class="sb-chip chip-silver">SI</span></button>
 <button class="sb-item" id="sbg-c7" onclick="showModule('c7')"><span class="sb-icon">📐</span><span class="sb-lbl">Coordinate & Analytic Geometry</span><span class="sb-chip chip-silver">SI</span></button>
 <button class="sb-item" id="sbg-c8" onclick="showModule('c8')"><span class="sb-icon">📐</span><span class="sb-lbl">Triangle Theorems & Advanced Geometry</span><span class="sb-chip chip-silver">SI</span></button>
-</div>
-<div class="sb-sec"><div class="sb-hdr" style="color:#92400e">Lv.3 — Advanced AMC</div>
+</div></div>
+<div class="sb-sec" id="sb-lv3"><div class="sb-hdr" onclick="toggleSbLevel('sb-lv3')" style="color:#92400e">Lv.3 — Advanced AMC<span class="sb-arrow">▼</span></div>
+<div class="sb-modules">
 <button class="sb-item" id="sbg-a1" onclick="showModule('a1')"><span class="sb-icon">📘</span><span class="sb-lbl">Advanced Algebraic Techniques</span><span class="sb-chip chip-gold">GO</span></button>
 <button class="sb-item" id="sbg-a2" onclick="showModule('a2')"><span class="sb-icon">🔢</span><span class="sb-lbl">Advanced Combinatorics</span><span class="sb-chip chip-gold">GO</span></button>
 <button class="sb-item" id="sbg-a3" onclick="showModule('a3')"><span class="sb-icon">📘</span><span class="sb-lbl">Complex Numbers & Polynomials</span><span class="sb-chip chip-gold">GO</span></button>
 <button class="sb-item" id="sbg-a4" onclick="showModule('a4')"><span class="sb-icon">📐</span><span class="sb-lbl">3D Geometry & Trigonometry</span><span class="sb-chip chip-gold">GO</span></button>
 <button class="sb-item" id="sbg-a5" onclick="showModule('a5')"><span class="sb-icon">🔍</span><span class="sb-lbl">Advanced Number Theory</span><span class="sb-chip chip-gold">GO</span></button>
 <button class="sb-item" id="sbg-a6" onclick="showModule('a6')"><span class="sb-icon">🎲</span><span class="sb-lbl">Advanced Probability</span><span class="sb-chip chip-gold">GO</span></button>
-</div>
-<div class="sb-sec"><div class="sb-hdr" style="color:#0369a1">Lv.4 — AIME Preparation</div>
+</div></div>
+<div class="sb-sec" id="sb-lv4"><div class="sb-hdr" onclick="toggleSbLevel('sb-lv4')" style="color:#0369a1">Lv.4 — AIME Preparation<span class="sb-arrow">▼</span></div>
+<div class="sb-modules">
 <button class="sb-item" id="sbg-p1" onclick="showModule('p1')"><span class="sb-icon">📘</span><span class="sb-lbl">AIME Algebra</span><span class="sb-chip chip-platinum">PL</span></button>
 <button class="sb-item" id="sbg-p2" onclick="showModule('p2')"><span class="sb-icon">🔍</span><span class="sb-lbl">AIME Number Theory</span><span class="sb-chip chip-platinum">PL</span></button>
 <button class="sb-item" id="sbg-p3" onclick="showModule('p3')"><span class="sb-icon">🔢</span><span class="sb-lbl">AIME Combinatorics</span><span class="sb-chip chip-platinum">PL</span></button>
 <button class="sb-item" id="sbg-p4" onclick="showModule('p4')"><span class="sb-icon">📐</span><span class="sb-lbl">AIME Geometry</span><span class="sb-chip chip-platinum">PL</span></button>
 <button class="sb-item" id="sbg-p5" onclick="showModule('p5')"><span class="sb-icon">🎲</span><span class="sb-lbl">AIME Probability & Recursion</span><span class="sb-chip chip-platinum">PL</span></button>
-</div>
-<div class="sb-sec"><div class="sb-hdr" style="color:#6d28d9">Lv.5 — Elite Problem Solving</div>
+</div></div>
+<div class="sb-sec" id="sb-lv5"><div class="sb-hdr" onclick="toggleSbLevel('sb-lv5')" style="color:#6d28d9">Lv.5 — Elite Problem Solving<span class="sb-arrow">▼</span></div>
+<div class="sb-modules">
 <button class="sb-item" id="sbg-e1" onclick="showModule('e1')"><span class="sb-icon">⭐</span><span class="sb-lbl">Hard AIME: Algebra & Number Theory</span><span class="sb-chip chip-diamond">DI</span></button>
 <button class="sb-item" id="sbg-e2" onclick="showModule('e2')"><span class="sb-icon">⭐</span><span class="sb-lbl">Hard AIME: Combinatorics & Geometry</span><span class="sb-chip chip-diamond">DI</span></button>
-</div>
+</div></div>
 </aside>
 <main class="main">
 <div id="view-guide" class="view show">
@@ -2212,78 +2226,180 @@ footer{background:var(--surface2);border-top:1px solid var(--border);padding:32p
 </div>
 </div>
 
+
+<!-- ══════ PROGRESS VIEW ══════ -->
 <div id="view-progress" class="view">
   <div class="pv-hdr">
     <div class="bc"><a onclick="showGuide()">Training Guide</a><span>›</span><span>My Progress</span></div>
     <div style="font-family:'DM Serif Display',serif;font-size:1.75rem;margin-top:10px">My Progress</div>
-    <div style="font-size:.9375rem;color:var(--ink2);margin-top:4px">Rating, domain mastery, and mistake journal.</div>
+    <div style="font-size:.9375rem;color:var(--ink2);margin-top:4px">Live rating, domain mastery, and your full attempt history.</div>
   </div>
   <div class="pv-body">
     <div class="stats-grid">
-      <div class="stat-c"><div class="stat-lbl">Rating</div><div class="stat-val">1,847</div><div class="stat-sub up">▲ +63 this week</div></div>
-      <div class="stat-c"><div class="stat-lbl">Problems Solved</div><div class="stat-val">284</div><div class="stat-sub">47 this month</div></div>
-      <div class="stat-c"><div class="stat-lbl">Accuracy</div><div class="stat-val">71%</div><div class="stat-sub up">▲ +4%</div></div>
-      <div class="stat-c"><div class="stat-lbl">AI Reviews</div><div class="stat-val">3/5</div><div class="stat-sub">resets daily</div></div>
+      <div class="stat-c"><div class="stat-lbl">Rating</div><div class="stat-val" id="pg-rating">1,200</div><div class="stat-sub up" id="pg-rating-d">Starting rating</div></div>
+      <div class="stat-c"><div class="stat-lbl">Problems Attempted</div><div class="stat-val" id="pg-total">0</div><div class="stat-sub" id="pg-correct-d">0 correct · 0 wrong</div></div>
+      <div class="stat-c"><div class="stat-lbl">Accuracy</div><div class="stat-val" id="pg-acc">—</div><div class="stat-sub" id="pg-acc-d">No attempts yet</div></div>
+      <div class="stat-c"><div class="stat-lbl">Day Streak 🔥</div><div class="stat-val" id="pg-streak">0</div><div class="stat-sub" id="pg-streak-d">days in a row</div></div>
     </div>
-    <div class="rating-card">
-      <div class="rc-hd"><div><div class="rc-val">1,847</div><div class="rc-delta">▲ +63 this week · AMC 10 → AIME track</div></div></div>
-      <div style="padding:16px">
-        <svg width="100%" height="55" viewBox="0 0 600 55" preserveAspectRatio="none">
-          <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3d5afe" stop-opacity=".15"/><stop offset="100%" stop-color="#3d5afe" stop-opacity="0"/></linearGradient></defs>
-          <path d="M0,50 C80,46 120,52 200,38 C280,24 320,36 400,20 C480,4 540,8 600,2 L600,55 L0,55 Z" fill="url(#sg)"/>
-          <path d="M0,50 C80,46 120,52 200,38 C280,24 320,36 400,20 C480,4 540,8 600,2" fill="none" stroke="#3d5afe" stroke-width="2"/>
-          <circle cx="600" cy="2" r="3" fill="#3d5afe"/>
-        </svg>
-      </div>
-    </div>
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);margin-bottom:10px">Domain Mastery</div>
     <div class="domain-grid">
-      <div class="dc"><div class="dc-name"><span style="color:#4361ee">●</span> Algebra</div><div class="dc-bar"><div class="dc-fill" style="width:78%;background:#4361ee"></div></div><div class="dc-pct">78% mastery</div></div>
-      <div class="dc"><div class="dc-name"><span style="color:#7209b7">●</span> Geometry</div><div class="dc-bar"><div class="dc-fill" style="width:61%;background:#7209b7"></div></div><div class="dc-pct">61% mastery</div></div>
-      <div class="dc"><div class="dc-name"><span style="color:#f77f00">●</span> Counting</div><div class="dc-bar"><div class="dc-fill" style="width:42%;background:#f77f00"></div></div><div class="dc-pct">42% mastery</div></div>
-      <div class="dc"><div class="dc-name"><span style="color:#2d9b50">●</span> Number Theory</div><div class="dc-bar"><div class="dc-fill" style="width:67%;background:#2d9b50"></div></div><div class="dc-pct">67% mastery</div></div>
-      <div class="dc"><div class="dc-name"><span style="color:#e63946">●</span> Probability</div><div class="dc-bar"><div class="dc-fill" style="width:35%;background:#e63946"></div></div><div class="dc-pct">35% mastery</div></div>
+      <div class="dc"><div class="dc-name"><span style="color:#4361ee">●</span> Algebra</div><div class="dc-bar"><div class="dc-fill" id="dbar-algebra" style="width:0%;background:#4361ee"></div></div><div class="dc-pct" id="dpct-algebra">0 solved</div></div>
+      <div class="dc"><div class="dc-name"><span style="color:#7209b7">●</span> Geometry</div><div class="dc-bar"><div class="dc-fill" id="dbar-geometry" style="width:0%;background:#7209b7"></div></div><div class="dc-pct" id="dpct-geometry">0 solved</div></div>
+      <div class="dc"><div class="dc-name"><span style="color:#f77f00">●</span> Counting</div><div class="dc-bar"><div class="dc-fill" id="dbar-counting" style="width:0%;background:#f77f00"></div></div><div class="dc-pct" id="dpct-counting">0 solved</div></div>
+      <div class="dc"><div class="dc-name"><span style="color:#2d9b50">●</span> Number Theory</div><div class="dc-bar"><div class="dc-fill" id="dbar-number-theory" style="width:0%;background:#2d9b50"></div></div><div class="dc-pct" id="dpct-number-theory">0 solved</div></div>
+      <div class="dc"><div class="dc-name"><span style="color:#e63946">●</span> Probability</div><div class="dc-bar"><div class="dc-fill" id="dbar-probability" style="width:0%;background:#e63946"></div></div><div class="dc-pct" id="dpct-probability">0 solved</div></div>
     </div>
     <div class="mistake-card">
-      <div class="mc-hdr-row">📓 Mistake Journal</div>
-      <div class="mc-item"><span class="mc-tag tag-err">Overcounting</span><span class="mc-prob">AMC 10B 2022 #14 · Inclusion-Exclusion</span><span class="mc-date">2 days ago</span></div>
-      <div class="mc-item"><span class="mc-tag tag-warn">Setup Error</span><span class="mc-prob">AMC 10A 2021 #19 · Coordinate Geometry</span><span class="mc-date">3 days ago</span></div>
-      <div class="mc-item"><span class="mc-tag tag-err">Sign Error</span><span class="mc-prob">AMC 12A 2023 #16 · Polynomials</span><span class="mc-date">5 days ago</span></div>
-      <div class="mc-item"><span class="mc-tag tag-warn">Incomplete Casework</span><span class="mc-prob">AIME I 2022 #6 · Counting</span><span class="mc-date">1 week ago</span></div>
+      <div class="mc-hdr-row" style="display:flex;align-items:center;justify-content:space-between;padding:10px 18px">
+        <span>📓 Recent Attempts</span>
+        <button onclick="showView('log')" style="font-size:.75rem;color:var(--blue);font-weight:600;background:none;border:none;cursor:pointer">View full log →</button>
+      </div>
+      <div id="pg-recent"></div>
     </div>
   </div>
 </div>
 
+<!-- ══════ QUESTION LOG VIEW ══════ -->
+<div id="view-log" class="view">
+  <div class="pv-hdr">
+    <div class="bc"><a onclick="showGuide()">Training Guide</a><span>›</span><span>Question Log</span></div>
+    <div style="font-family:'DM Serif Display',serif;font-size:1.75rem;margin-top:10px">📋 Question Log</div>
+    <div style="font-size:.9375rem;color:var(--ink2);margin-top:4px">Every problem you've attempted — answers, results, dates.</div>
+  </div>
+  <div class="pv-body">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px">
+      <select id="lf-result" onchange="renderLog()" style="padding:6px 12px;border:1px solid var(--border2);border-radius:6px;font-family:'DM Sans',sans-serif;font-size:.8125rem;background:var(--surface);color:var(--ink);outline:none">
+        <option value="all">All results</option><option value="correct">✓ Correct</option><option value="wrong">✗ Wrong</option><option value="skip">Skipped</option>
+      </select>
+      <select id="lf-domain" onchange="renderLog()" style="padding:6px 12px;border:1px solid var(--border2);border-radius:6px;font-family:'DM Sans',sans-serif;font-size:.8125rem;background:var(--surface);color:var(--ink);outline:none">
+        <option value="all">All domains</option><option value="algebra">Algebra</option><option value="geometry">Geometry</option><option value="counting">Counting</option><option value="number-theory">Number Theory</option><option value="probability">Probability</option>
+      </select>
+      <span id="log-cnt" style="font-size:.8125rem;color:var(--ink3);margin-left:auto;font-family:'JetBrains Mono',monospace"></span>
+      <button onclick="clearLog()" style="padding:5px 12px;border:1px solid var(--border2);border-radius:5px;font-size:.8125rem;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--red);cursor:pointer;font-weight:600">Clear All</button>
+    </div>
+    <div id="log-empty" style="display:none" class="ib ib-blue"><span class="ib-icon">📋</span><div>No entries yet. Solve problems from the Training Guide or Infinite Practice!</div></div>
+    <div class="pt-wrap" id="log-wrap" style="display:none">
+      <table class="pt"><thead><tr><th>#</th><th>Problem</th><th>Domain</th><th>Your Answer</th><th>Result</th><th>Date</th><th></th></tr></thead>
+      <tbody id="log-body"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ INFINITE PRACTICE VIEW ══════ -->
+<div id="view-practice" class="view">
+  <div class="pv-hdr">
+    <div class="bc"><a onclick="showGuide()">Training Guide</a><span>›</span><span>Infinite Practice</span></div>
+    <div style="font-family:'DM Serif Display',serif;font-size:1.75rem;margin-top:10px">⚡ Infinite Practice</div>
+    <div style="font-size:.9375rem;color:var(--ink2);margin-top:4px">Adaptive problem stream. Filter by domain, contest, or difficulty.</div>
+  </div>
+  <div class="pv-body">
+    <!-- Filters -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:16px 18px;margin-bottom:18px">
+      <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);margin-bottom:10px">Filter Problems</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <select id="pf-domain" onchange="pracFilter()" style="padding:7px 12px;border:1px solid var(--border2);border-radius:6px;font-family:'DM Sans',sans-serif;font-size:.875rem;background:var(--surface);color:var(--ink);outline:none">
+          <option value="all">All Domains</option><option value="algebra">📘 Algebra</option><option value="geometry">📐 Geometry</option><option value="counting">🔢 Counting</option><option value="number-theory">🔍 Number Theory</option><option value="probability">🎲 Probability</option>
+        </select>
+        <select id="pf-contest" onchange="pracFilter()" style="padding:7px 12px;border:1px solid var(--border2);border-radius:6px;font-family:'DM Sans',sans-serif;font-size:.875rem;background:var(--surface);color:var(--ink);outline:none">
+          <option value="all">All Contests</option><option value="amc8">AMC 8</option><option value="amc10">AMC 10</option><option value="amc12">AMC 12</option><option value="aime">AIME</option>
+        </select>
+        <select id="pf-diff" onchange="pracFilter()" style="padding:7px 12px;border:1px solid var(--border2);border-radius:6px;font-family:'DM Sans',sans-serif;font-size:.875rem;background:var(--surface);color:var(--ink);outline:none">
+          <option value="all">All Difficulties</option><option value="easy">Easy (Elo &lt;800)</option><option value="med">Medium (800–1200)</option><option value="hard">Hard (1200–1700)</option><option value="expert">Expert (1700+)</option>
+        </select>
+        <label style="display:flex;align-items:center;gap:6px;font-size:.875rem;color:var(--ink2);cursor:pointer;user-select:none">
+          <input type="checkbox" id="pf-adaptive" onchange="pracFilter()" style="accent-color:var(--blue);width:15px;height:15px">
+          Adaptive (targets weak areas)
+        </label>
+        <span id="prac-pool-cnt" style="margin-left:auto;font-size:.8125rem;font-family:'JetBrains Mono',monospace;color:var(--ink3)">0 problems</span>
+      </div>
+    </div>
+    <!-- Session stats -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px">
+      <div class="stat-c"><div class="stat-lbl">Attempted</div><div class="stat-val" id="ps-done">0</div></div>
+      <div class="stat-c"><div class="stat-lbl">Correct</div><div class="stat-val" id="ps-cor" style="color:var(--green)">0</div></div>
+      <div class="stat-c"><div class="stat-lbl">Hot streak 🔥</div><div class="stat-val" id="ps-streak">0</div></div>
+      <div class="stat-c"><div class="stat-lbl">Session time</div><div class="stat-val" id="ps-time" style="font-size:1.25rem">0:00</div></div>
+    </div>
+    <!-- Current problem card -->
+    <div id="prac-card" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px">
+      <div style="background:var(--surface2);border-bottom:1px solid var(--border);padding:12px 18px;display:flex;align-items:center;gap:10px">
+        <span id="pc-name" style="font-weight:700;font-size:.9375rem;flex:1"></span>
+        <span id="pc-elo" style="font-family:'JetBrains Mono',monospace;font-size:.75rem;background:var(--surface3);padding:2px 8px;border-radius:4px;color:var(--ink3)"></span>
+        <span id="pc-dom" class="mv-chip" style="font-size:.625rem"></span>
+      </div>
+      <div style="padding:18px">
+        <div class="ib ib-blue" style="margin-bottom:14px"><span class="ib-icon">📌</span><div>Open the problem on AoPS to read it, solve it on paper, then submit your answer here.</div></div>
+        <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+          <a id="pc-link" href="#" target="_blank" class="btn btn-p btn-sm">Open on AoPS ↗</a>
+          <button onclick="pracSkip()" class="btn btn-g btn-sm">Skip →</button>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <input id="pc-ans" type="text" placeholder="Your answer…" onkeydown="if(event.key==='Enter')pracSubmit()"
+            style="padding:8px 12px;border:1px solid var(--border2);border-radius:6px;font-size:1rem;font-family:'JetBrains Mono',monospace;outline:none;width:160px;transition:border-color .13s">
+          <button onclick="pracSubmit()" class="btn btn-p">Submit ✓</button>
+          <span id="pc-result" style="display:none;font-size:.875rem;font-weight:700;padding:6px 12px;border-radius:5px"></span>
+        </div>
+        <div id="pc-explain" style="display:none;margin-top:12px;padding:11px 14px;background:var(--surface2);border-radius:7px;font-size:.875rem;color:var(--ink2);line-height:1.65"></div>
+      </div>
+    </div>
+    <div id="prac-empty" style="display:none" class="ib ib-amber"><span class="ib-icon">⚠️</span><div>No problems match your filters. Try widening the domain or difficulty selection.</div></div>
+    <!-- Queue preview -->
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);margin-bottom:8px">Coming up next</div>
+    <div id="prac-queue"></div>
+  </div>
+</div>
+
+<!-- ══════ DIAGNOSTIC VIEW — 50 QUESTIONS ══════ -->
 <div id="view-diag" class="view">
   <div class="mv-hdr">
     <div class="bc"><a onclick="showGuide()">Training Guide</a><span>›</span><span>Skill Diagnostic</span></div>
     <div style="font-family:'DM Serif Display',serif;font-size:1.75rem;margin-top:10px">Skill Diagnostic</div>
-    <div style="font-size:.9375rem;color:var(--ink2);margin-top:4px">15 questions across 5 domains · ~15 minutes</div>
+    <div style="font-size:.9375rem;color:var(--ink2);margin-top:4px">50 questions · 10 per domain · levels 1–5 · ~30 min</div>
   </div>
   <div class="diag-body">
     <div id="diagIntro">
-      <div class="ib ib-blue"><span class="ib-icon">ℹ️</span><div><strong>How it works:</strong> Answer 15 multiple-choice questions. Based on your performance across 5 domains, we recommend a starting point in the training guide. Wrong answers are valuable — they tell us what to focus on first.</div></div>
+      <div class="ib ib-blue"><span class="ib-icon">ℹ️</span><div><strong>How it works:</strong> 50 multiple-choice questions across 5 domains, escalating from easy to AIME-level within each domain. Every question shows an explanation after you answer. Results give a per-domain score and pinpoint exactly which module to start.</div></div>
+      <div class="ib ib-amber" style="margin-top:10px"><span class="ib-icon">⏱️</span><div>Estimated time: <strong>25–35 minutes</strong>. Progress is auto-saved — refresh and click Resume to continue.</div></div>
       <div class="diag-domain-grid">
-        <div class="dd"><div class="dd-icon">📘</div><div class="dd-name">Algebra</div><div class="dd-n">3 questions</div></div>
-        <div class="dd"><div class="dd-icon">📐</div><div class="dd-name">Geometry</div><div class="dd-n">3 questions</div></div>
-        <div class="dd"><div class="dd-icon">🔢</div><div class="dd-name">Counting</div><div class="dd-n">3 questions</div></div>
-        <div class="dd"><div class="dd-icon">🔍</div><div class="dd-name">Number Theory</div><div class="dd-n">3 questions</div></div>
-        <div class="dd"><div class="dd-icon">🎲</div><div class="dd-name">Probability</div><div class="dd-n">3 questions</div></div>
+        <div class="dd"><div class="dd-icon">📘</div><div class="dd-name">Algebra</div><div class="dd-n">10 questions</div></div>
+        <div class="dd"><div class="dd-icon">📐</div><div class="dd-name">Geometry</div><div class="dd-n">10 questions</div></div>
+        <div class="dd"><div class="dd-icon">🔢</div><div class="dd-name">Counting</div><div class="dd-n">10 questions</div></div>
+        <div class="dd"><div class="dd-icon">🔍</div><div class="dd-name">Number Theory</div><div class="dd-n">10 questions</div></div>
+        <div class="dd"><div class="dd-icon">🎲</div><div class="dd-name">Probability</div><div class="dd-n">10 questions</div></div>
       </div>
-      <button class="start-btn" onclick="startDiag()">▶ Start Diagnostic</button>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="start-btn" onclick="startDiag()">▶ Start Diagnostic</button>
+        <button class="start-btn" id="diagResumBtn" onclick="resumeDiag()" style="display:none;background:var(--green)">↩ Resume</button>
+      </div>
     </div>
-    <div id="diagQuiz" style="display:none;max-width:620px">
+    <div id="diagQuiz" style="display:none;max-width:640px">
       <div class="q-progress"><div id="qpf" class="q-prog-fill" style="width:0%"></div></div>
-      <div class="q-meta"><span class="q-num" id="qnum">Question 1 of 15</span><span id="qdom" class="q-dom" style="background:var(--blue-l);color:var(--blue)">Algebra</span></div>
-      <div class="q-text" id="qtext"></div>
+      <div class="q-meta">
+        <span class="q-num" id="qnum">Q 1 / 50</span>
+        <span id="qdom" class="q-dom" style="background:var(--blue-l);color:var(--blue)">Algebra</span>
+        <span id="qlvl" style="font-size:.625rem;padding:2px 7px;border-radius:4px;background:var(--surface3);color:var(--ink3);font-weight:700;margin-left:6px">LV 1</span>
+      </div>
+      <div class="q-text" id="qtext" style="font-size:1.0625rem;min-height:60px"></div>
       <div class="q-choices" id="qchoices"></div>
+      <div id="qexplain" style="display:none;margin-bottom:12px;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;font-size:.875rem;color:var(--ink2);line-height:1.65"></div>
       <button class="q-next" id="qnext" onclick="diagNext()">Next →</button>
     </div>
-    <div id="diagResults" style="display:none;max-width:620px">
-      <div class="results-hd"><div style="font-size:1.375rem;font-weight:700">Diagnostic Complete!</div><div class="results-score" id="rscore">11/15</div><div style="font-size:.9375rem;color:var(--ink2)">Your skill profile and recommended starting point.</div></div>
-      <div class="results-doms" id="rdoms"></div>
+    <div id="diagResults" style="display:none;max-width:680px">
+      <div class="results-hd">
+        <div style="font-size:1.375rem;font-weight:700">Diagnostic Complete! 🎉</div>
+        <div class="results-score" id="rscore">—/50</div>
+        <div style="font-size:.9375rem;color:var(--ink2)">Your comprehensive skill profile across all 5 domains.</div>
+      </div>
+      <div id="rdoms" style="display:flex;flex-direction:column;gap:9px;margin-bottom:22px"></div>
       <div id="rrec" class="ib ib-green"><span class="ib-icon">🎯</span><div></div></div>
-      <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
-        <button class="btn btn-p btn-lg" id="rgoBtn">Go to Study Path →</button>
+      <div class="pt-wrap" style="margin:16px 0">
+        <div class="pt-topbar"><span class="pt-title">Question-by-Question Breakdown</span></div>
+        <table class="pt"><thead><tr><th>#</th><th>Domain</th><th>Lv</th><th>Your Answer</th><th>Result</th><th>Explanation</th></tr></thead>
+        <tbody id="rdetail"></tbody></table>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-p btn-lg" id="rgoBtn">Go to Recommended Module →</button>
+        <button class="btn btn-g btn-lg" onclick="startDiag()">Retake</button>
         <button class="btn btn-g btn-lg" onclick="showView('progress')">View Progress</button>
       </div>
     </div>
@@ -2292,6 +2408,7 @@ footer{background:var(--surface2);border-top:1px solid var(--border);padding:32p
 </main>
 </div>
 
+<!-- ══════ SOLVE MODAL ══════ -->
 <div class="overlay" id="overlay">
   <div class="modal">
     <div class="mod-hd">
@@ -2300,18 +2417,18 @@ footer{background:var(--surface2);border-top:1px solid var(--border);padding:32p
     </div>
     <div class="mod-body">
       <div class="prob-card-link">
-        <div class="pcl-text"><strong class="pcl-name" id="modProbName"></strong>Open the problem on AoPS, solve it on paper, then submit your reasoning here for AI analysis.</div>
+        <div class="pcl-text"><strong class="pcl-name" id="modProbName"></strong>Open the problem on AoPS, solve on paper, then submit your reasoning for AI analysis.</div>
         <a id="modAops" href="#" target="_blank" class="pcl-aops">View on AoPS ↗</a>
       </div>
       <div id="modTags" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px"></div>
       <div class="answer-sec">
         <span class="answer-lbl">Your answer:</span>
-        <input class="answer-inp" id="ansInp" type="text" placeholder="e.g. 47">
+        <input class="answer-inp" id="ansInp" type="text" placeholder="e.g. 47" onkeydown="if(event.key==='Enter')checkAnswer()">
         <button class="check-btn" onclick="checkAnswer()">Check ✓</button>
         <span id="ansResult" style="display:none" class="answer-result"></span>
       </div>
       <div style="margin-bottom:10px">
-        <div class="steps-lbl">Step-by-step reasoning (optional)</div>
+        <div class="steps-lbl">Step-by-step reasoning (optional — for AI feedback)</div>
         <div class="steps-list" id="stepsList">
           <div class="step-row"><div class="snum sn-n">1</div><textarea class="sinput" rows="1" placeholder="Describe your first step..."></textarea><button class="btn-rm" onclick="rmStep(this)">✕</button></div>
         </div>
@@ -2326,30 +2443,171 @@ footer{background:var(--surface2);border-top:1px solid var(--border);padding:32p
     </div>
   </div>
 </div>
+
 <script>
-const MOD_ORDER=["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "a1", "a2", "a3", "a4", "a5", "a6", "p1", "p2", "p3", "p4", "p5", "e1", "e2"];
-const MOD_META={"f1": {"title": "Algebraic Manipulation", "level": 1, "level_name": "Foundations"}, "f2": {"title": "Ratios, Proportions & Percentages", "level": 1, "level_name": "Foundations"}, "f3": {"title": "Exponents & Polynomials", "level": 1, "level_name": "Foundations"}, "f4": {"title": "Introductory Geometry", "level": 1, "level_name": "Foundations"}, "f5": {"title": "Basic Number Theory", "level": 1, "level_name": "Foundations"}, "f6": {"title": "Elementary Counting", "level": 1, "level_name": "Foundations"}, "f7": {"title": "Sequences & Series", "level": 1, "level_name": "Foundations"}, "f8": {"title": "Introductory Inequalities", "level": 1, "level_name": "Foundations"}, "c1": {"title": "Quadratics & Vieta's Formulas", "level": 2, "level_name": "Core AMC Skills"}, "c2": {"title": "Modular Arithmetic", "level": 2, "level_name": "Core AMC Skills"}, "c3": {"title": "Intermediate Combinatorics", "level": 2, "level_name": "Core AMC Skills"}, "c4": {"title": "Probability", "level": 2, "level_name": "Core AMC Skills"}, "c5": {"title": "Circle Geometry", "level": 2, "level_name": "Core AMC Skills"}, "c6": {"title": "Functional Equations & Systems", "level": 2, "level_name": "Core AMC Skills"}, "c7": {"title": "Coordinate & Analytic Geometry", "level": 2, "level_name": "Core AMC Skills"}, "c8": {"title": "Triangle Theorems & Advanced Geometry", "level": 2, "level_name": "Core AMC Skills"}, "a1": {"title": "Advanced Algebraic Techniques", "level": 3, "level_name": "Advanced AMC"}, "a2": {"title": "Advanced Combinatorics", "level": 3, "level_name": "Advanced AMC"}, "a3": {"title": "Complex Numbers & Polynomials", "level": 3, "level_name": "Advanced AMC"}, "a4": {"title": "3D Geometry & Trigonometry", "level": 3, "level_name": "Advanced AMC"}, "a5": {"title": "Advanced Number Theory", "level": 3, "level_name": "Advanced AMC"}, "a6": {"title": "Advanced Probability", "level": 3, "level_name": "Advanced AMC"}, "p1": {"title": "AIME Algebra", "level": 4, "level_name": "AIME Preparation"}, "p2": {"title": "AIME Number Theory", "level": 4, "level_name": "AIME Preparation"}, "p3": {"title": "AIME Combinatorics", "level": 4, "level_name": "AIME Preparation"}, "p4": {"title": "AIME Geometry", "level": 4, "level_name": "AIME Preparation"}, "p5": {"title": "AIME Probability & Recursion", "level": 4, "level_name": "AIME Preparation"}, "e1": {"title": "Hard AIME: Algebra & Number Theory", "level": 5, "level_name": "Elite Problem Solving"}, "e2": {"title": "Hard AIME: Combinatorics & Geometry", "level": 5, "level_name": "Elite Problem Solving"}};
+// ════════════════════════════════════
+// CONSTANTS & MODULE META
+// ════════════════════════════════════
+const MOD_ORDER=["f1","f2","f3","f4","f5","f6","f7","f8","c1","c2","c3","c4","c5","c6","c7","c8","a1","a2","a3","a4","a5","a6","p1","p2","p3","p4","p5","e1","e2"];
+const MOD_META={"f1":{"title":"Algebraic Manipulation","level":1},"f2":{"title":"Ratios, Proportions & Percentages","level":1},"f3":{"title":"Exponents & Polynomials","level":1},"f4":{"title":"Introductory Geometry","level":1},"f5":{"title":"Basic Number Theory","level":1},"f6":{"title":"Elementary Counting","level":1},"f7":{"title":"Sequences & Series","level":1},"f8":{"title":"Introductory Inequalities","level":1},"c1":{"title":"Quadratics & Vieta's Formulas","level":2},"c2":{"title":"Modular Arithmetic","level":2},"c3":{"title":"Intermediate Combinatorics","level":2},"c4":{"title":"Probability","level":2},"c5":{"title":"Circle Geometry","level":2},"c6":{"title":"Functional Equations & Systems","level":2},"c7":{"title":"Coordinate & Analytic Geometry","level":2},"c8":{"title":"Triangle Theorems & Advanced Geometry","level":2},"a1":{"title":"Advanced Algebraic Techniques","level":3},"a2":{"title":"Advanced Combinatorics","level":3},"a3":{"title":"Complex Numbers & Polynomials","level":3},"a4":{"title":"3D Geometry & Trigonometry","level":3},"a5":{"title":"Advanced Number Theory","level":3},"a6":{"title":"Advanced Probability","level":3},"p1":{"title":"AIME Algebra","level":4},"p2":{"title":"AIME Number Theory","level":4},"p3":{"title":"AIME Combinatorics","level":4},"p4":{"title":"AIME Geometry","level":4},"p5":{"title":"AIME Probability & Recursion","level":4},"e1":{"title":"Hard AIME: Algebra & Number Theory","level":5},"e2":{"title":"Hard AIME: Combinatorics & Geometry","level":5}};
+const DCOLORS={algebra:'#4361ee',geometry:'#7209b7',counting:'#f77f00','number-theory':'#2d9b50',probability:'#e63946',mixed:'#6c757d'};
+const DBGS={algebra:'#eef0ff',geometry:'#f8e8ff',counting:'#fff3e0','number-theory':'#e8f8ee',probability:'#ffe8ea',mixed:'#f1f3f5'};
+function getDomColor(d){return DCOLORS[d]||'#333';}
+function getDomBg(d){return DBGS[d]||'#f5f5f5';}
 
-// ── NAVIGATION ──
-let _curView = 'guide';
-function showGuide(){_act('guide');_setTab('guide');_setSb('guide');}
-function showView(n){_act(n);_setTab(n);_setSb(n);window.scrollTo(0,0);}
-function showModule(id){_act('module-'+id);_setTab('guide');_setSb(id);window.scrollTo(0,0);}
-function startFromBeginning(){showModule(MOD_ORDER[0]);}
-function _act(n){document.querySelectorAll('.view').forEach(v=>v.classList.remove('show'));const el=document.getElementById('view-'+n);if(el)el.classList.add('show');}
-function _setTab(n){document.querySelectorAll('.tb-tab').forEach(t=>t.classList.remove('on'));const t=document.getElementById('tab-'+n)||document.getElementById('tab-guide');if(t)t.classList.add('on');}
-function _setSb(id){document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('on'));const el=document.getElementById('sbg-'+id);if(el)el.classList.add('on');}
+// ════════════════════════════════════
+// PERSISTENT STATE (localStorage)
+// ════════════════════════════════════
+let S = (() => { try { return JSON.parse(localStorage.getItem('ma2_state')||'null')||{}; } catch{return{};} })();
+function defS(k,v){ if(S[k]===undefined||S[k]===null) S[k]=v; }
+defS('log',[]); defS('rating',1200); defS('streak',0); defS('lastDay','');
+defS('domStats',{}); defS('diagSave',null);
+function save(){ try{ localStorage.setItem('ma2_state', JSON.stringify(S)); }catch{} }
 
-// ── ROADMAP ──
-function toggleLevel(n){document.getElementById('rl-'+n).classList.toggle('open');}
-window.addEventListener('DOMContentLoaded',()=>{toggleLevel(1);});
+// ════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════
+function showGuide(){ nav('guide'); }
+function showView(n){ nav(n); if(n==='progress')refreshProgress(); if(n==='log')renderLog(); if(n==='practice')initPractice(); }
+function showModule(id){ nav('module-'+id); _setTab('guide'); _setSb(id); _expandSbLevel(id); window.scrollTo(0,0); }
+function _expandSbLevel(modId){
+  const lvMap={f1:'sb-lv1',f2:'sb-lv1',f3:'sb-lv1',f4:'sb-lv1',f5:'sb-lv1',f6:'sb-lv1',f7:'sb-lv1',f8:'sb-lv1',
+    c1:'sb-lv2',c2:'sb-lv2',c3:'sb-lv2',c4:'sb-lv2',c5:'sb-lv2',c6:'sb-lv2',c7:'sb-lv2',c8:'sb-lv2',
+    a1:'sb-lv3',a2:'sb-lv3',a3:'sb-lv3',a4:'sb-lv3',a5:'sb-lv3',a6:'sb-lv3',
+    p1:'sb-lv4',p2:'sb-lv4',p3:'sb-lv4',p4:'sb-lv4',p5:'sb-lv4',
+    e1:'sb-lv5',e2:'sb-lv5'};
+  const lvId=lvMap[modId]; if(!lvId)return;
+  const sec=document.getElementById(lvId); if(sec) sec.classList.remove('collapsed');
+}
+function startFromBeginning(){ showModule(MOD_ORDER[0]); }
+function nav(n){ document.querySelectorAll('.view').forEach(v=>v.classList.remove('show')); const el=document.getElementById('view-'+n); if(el)el.classList.add('show'); _setTab(n); _setSb(n); window.scrollTo(0,0); }
+function _setTab(n){ document.querySelectorAll('.tb-tab').forEach(t=>t.classList.remove('on')); const t=document.getElementById('tab-'+n)||document.getElementById('tab-guide'); if(t)t.classList.add('on'); }
+function _setSb(id){ document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('on')); const el=document.getElementById('sbg-'+id); if(el)el.classList.add('on'); }
 
-// ── MODAL ──
+// ════════════════════════════════════
+// ROADMAP
+// ════════════════════════════════════
+function toggleLevel(n){ document.getElementById('rl-'+n).classList.toggle('open'); }
+function toggleSbLevel(id){
+  const sec=document.getElementById(id);
+  if(sec) sec.classList.toggle('collapsed');
+}
+
+// ════════════════════════════════════
+// STREAK + SESSION TIMER
+// ════════════════════════════════════
+let _sessionStart = Date.now();
+function tickTimer(){
+  const el=document.getElementById('ps-time'); if(!el)return;
+  const s=Math.floor((Date.now()-_sessionStart)/1000);
+  el.textContent=Math.floor(s/60)+':'+(s%60).toString().padStart(2,'0');
+}
+function updateStreak(){
+  const today=new Date().toDateString();
+  if(S.lastDay===today)return;
+  const yesterday=new Date(Date.now()-86400000).toDateString();
+  S.streak=(S.lastDay===yesterday)?S.streak+1:1;
+  S.lastDay=today;
+  save();
+}
+
+// ════════════════════════════════════
+// LOG + RATING SYSTEM
+// ════════════════════════════════════
+function logAttempt(prob, userAns, result){
+  S.log.unshift({ id:prob.id, display:prob.display, domain:prob.domain, link:prob.link,
+    answer:prob.answer, userAns, result, elo:prob.elo, ts:Date.now() });
+  if(!S.domStats[prob.domain]) S.domStats[prob.domain]={c:0,w:0};
+  if(result==='correct'){
+    S.domStats[prob.domain].c++;
+    S.rating=Math.min(2800, S.rating+Math.max(5,Math.round((prob.elo-S.rating)/15)));
+  } else if(result==='wrong'){
+    S.domStats[prob.domain].w++;
+    S.rating=Math.max(600, S.rating-Math.max(3,Math.round((S.rating-prob.elo)/20)));
+  }
+  updateStreak();
+  save();
+  refreshProgress();
+}
+
+// ════════════════════════════════════
+// PROGRESS VIEW
+// ════════════════════════════════════
+function refreshProgress(){
+  const log=S.log;
+  const c=log.filter(e=>e.result==='correct').length;
+  const w=log.filter(e=>e.result==='wrong').length;
+  const t=c+w;
+  const acc=t>0?Math.round(c/t*100):null;
+  setText('pg-rating',S.rating.toLocaleString());
+  setText('pg-rating-d',t>0?`${t} attempts · Elo-based`:'Starting rating');
+  setText('pg-total',t);
+  setText('pg-correct-d',`${c} correct · ${w} wrong`);
+  setText('pg-acc',acc!==null?acc+'%':'—');
+  setText('pg-acc-d',acc!==null?`${t} total attempts`:'No attempts yet');
+  setText('pg-streak',S.streak+' 🔥');
+  setText('pg-streak-d',S.streak===1?'day in a row':'days in a row');
+  const doms=['algebra','geometry','counting','number-theory','probability'];
+  doms.forEach(d=>{
+    const ds=S.domStats[d]||{c:0,w:0}; const dt=ds.c+ds.w;
+    const pct=dt>0?Math.round(ds.c/dt*100):0;
+    setStyle('dbar-'+d,'width',pct+'%');
+    setText('dpct-'+d,dt>0?`${ds.c}/${dt} (${pct}%)`:'0 solved');
+  });
+  const recent=log.slice(0,8);
+  const rc=document.getElementById('pg-recent');
+  if(rc) rc.innerHTML=!recent.length
+    ?'<div class="mc-item" style="color:var(--ink3);font-style:italic">No attempts yet</div>'
+    :recent.map(e=>{
+      const d=new Date(e.ts); const ds=d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+      const tag=e.result==='correct'?'<span class="mc-tag tag-ok">✓</span>':'<span class="mc-tag tag-err">✗</span>';
+      return `<div class="mc-item">${tag}<span class="mc-prob">${e.display}</span><span class="mc-date">${ds}</span></div>`;
+    }).join('');
+}
+function setText(id,v){ const el=document.getElementById(id); if(el)el.textContent=v; }
+function setStyle(id,prop,val){ const el=document.getElementById(id); if(el)el.style[prop]=val; }
+
+// ════════════════════════════════════
+// QUESTION LOG VIEW
+// ════════════════════════════════════
+function renderLog(){
+  const rf=document.getElementById('lf-result').value;
+  const df=document.getElementById('lf-domain').value;
+  const entries=S.log.filter(e=>(rf==='all'||e.result===rf)&&(df==='all'||e.domain===df));
+  setText('log-cnt',entries.length+' entries');
+  const wrap=document.getElementById('log-wrap');
+  const empty=document.getElementById('log-empty');
+  if(!entries.length){ if(wrap)wrap.style.display='none'; if(empty)empty.style.display='flex'; return; }
+  if(empty)empty.style.display='none'; if(wrap)wrap.style.display='block';
+  const tbody=document.getElementById('log-body');
+  if(!tbody)return;
+  tbody.innerHTML=entries.slice(0,300).map((e,i)=>{
+    const d=new Date(e.ts), ds=d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+    const tag=e.result==='correct'?'<span class="mc-tag tag-ok">✓ Correct</span>':e.result==='wrong'?'<span class="mc-tag tag-err">✗ Wrong</span>':'<span class="mc-tag tag-warn">Skip</span>';
+    const probJ=JSON.stringify({id:e.id,display:e.display,domain:e.domain,link:e.link,answer:e.answer,elo:e.elo||1000,skills:[]}).replace(/"/g,'&quot;');
+    return `<tr>
+      <td class="pt-num">${i+1}</td>
+      <td class="pt-name"><a href="${e.link}" target="_blank">${e.display}</a></td>
+      <td><span class="rm-dom" style="background:${getDomBg(e.domain)};color:${getDomColor(e.domain)};font-size:.625rem">${e.domain}</span></td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:.8rem">${e.userAns||'—'}</td>
+      <td>${tag}</td>
+      <td style="font-size:.75rem;color:var(--ink3);white-space:nowrap">${ds}</td>
+      <td><button class="pt-solve" onclick='openModal(JSON.parse(decodeURIComponent("${encodeURIComponent(JSON.stringify({id:e.id,display:e.display,domain:e.domain,link:e.link,answer:e.answer,elo:e.elo||1000,skills:[]}))}")))'  style="font-size:.7rem;padding:2px 7px">Retry</button></td>
+    </tr>`;
+  }).join('');
+}
+function clearLog(){
+  if(!confirm('Clear all log data? This resets your rating too.'))return;
+  S.log=[];S.domStats={};S.rating=1200;S.streak=0;save();renderLog();refreshProgress();
+}
+
+// ════════════════════════════════════
+// SOLVE MODAL
+// ════════════════════════════════════
 let _curProb=null;
 function openModal(prob){
   _curProb=prob;
-  document.getElementById('modTitle').textContent=prob.display;
-  document.getElementById('modProbName').textContent=prob.display;
+  setText('modTitle',prob.display); setText('modProbName',prob.display);
   document.getElementById('modAops').href=prob.link;
   document.getElementById('modTags').innerHTML=
     `<span class="mv-chip" style="background:${getDomBg(prob.domain)};color:${getDomColor(prob.domain)}">${prob.domain}</span>`+
@@ -2363,142 +2621,330 @@ function openModal(prob){
   document.getElementById('aiBtn').innerHTML='<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Analyze Reasoning';
   document.getElementById('overlay').classList.add('open');
 }
-function closeModal(){document.getElementById('overlay').classList.remove('open');}
-document.getElementById('overlay').addEventListener('click',e=>{if(e.target.id==='overlay')closeModal();});
+function closeModal(){ document.getElementById('overlay').classList.remove('open'); }
+document.getElementById('overlay').addEventListener('click',e=>{ if(e.target.id==='overlay')closeModal(); });
 
-// Domain colors
-const DCOLORS={algebra:'#4361ee',geometry:'#7209b7',counting:'#f77f00','number-theory':'#2d9b50',probability:'#e63946',mixed:'#6c757d'};
-const DBGS={algebra:'#eef0ff',geometry:'#f8e8ff',counting:'#fff3e0','number-theory':'#e8f8ee',probability:'#ffe8ea',mixed:'#f1f3f5'};
-function getDomColor(d){return DCOLORS[d]||'#333';}
-function getDomBg(d){return DBGS[d]||'#f5f5f5';}
-
-// Answer check
 function checkAnswer(){
   const inp=document.getElementById('ansInp').value.trim();
   const res=document.getElementById('ansResult');
-  if(!inp){return;}
+  if(!inp)return;
   const correct=String(_curProb.answer||'').trim();
+  const ok=inp===correct||inp.toLowerCase()===correct.toLowerCase();
   res.style.display='inline-block';
-  if(inp===correct||inp.toLowerCase()===correct.toLowerCase()){
-    res.className='answer-result ar-correct';res.textContent='✓ Correct!';
-  } else {
-    res.className='answer-result ar-wrong';res.textContent='✗ Incorrect';
-  }
+  res.className='answer-result '+(ok?'ar-correct':'ar-wrong');
+  res.textContent=ok?'✓ Correct!':'✗ Wrong — answer: '+correct;
+  logAttempt(_curProb, inp, ok?'correct':'wrong');
 }
 
-// Steps
 function addStep(){
   const list=document.getElementById('stepsList');
   const n=list.querySelectorAll('.step-row').length+1;
-  const row=document.createElement('div');row.className='step-row';
+  const row=document.createElement('div'); row.className='step-row';
   row.innerHTML=`<div class="snum sn-n">${n}</div><textarea class="sinput" rows="1" placeholder="Step ${n}..."></textarea><button class="btn-rm" onclick="rmStep(this)">✕</button>`;
-  list.appendChild(row);row.querySelector('textarea').focus();
+  list.appendChild(row); row.querySelector('textarea').focus();
 }
 function rmStep(btn){
   const list=document.getElementById('stepsList');
   if(list.querySelectorAll('.step-row').length<=1)return;
   btn.closest('.step-row').remove();
-  list.querySelectorAll('.step-row').forEach((r,i)=>{r.querySelector('.snum').textContent=i+1;r.querySelector('textarea').placeholder=`Step ${i+1}...`;});
+  list.querySelectorAll('.step-row').forEach((r,i)=>{ r.querySelector('.snum').textContent=i+1; r.querySelector('textarea').placeholder=`Step ${i+1}...`; });
 }
-document.addEventListener('input',e=>{if(e.target.classList.contains('sinput')){e.target.style.height='auto';e.target.style.height=e.target.scrollHeight+'px';}});
+document.addEventListener('input',e=>{ if(e.target.classList.contains('sinput')){ e.target.style.height='auto'; e.target.style.height=e.target.scrollHeight+'px'; } });
 
-// ── AI ANALYSIS ──
 async function analyze(){
-  const btn=document.getElementById('aiBtn'),res=document.getElementById('aiResult');
+  const btn=document.getElementById('aiBtn'), res=document.getElementById('aiResult');
   const steps=Array.from(document.querySelectorAll('#stepsList .sinput')).map(t=>t.value.trim()).filter(Boolean);
-  if(!steps.length){alert('Enter at least one reasoning step.');return;}
-  btn.disabled=true;btn.innerHTML='<div class="spinner"></div> Analyzing...';
+  if(!steps.length){ alert('Enter at least one reasoning step.'); return; }
+  btn.disabled=true; btn.innerHTML='<div class="spinner"></div> Analyzing...';
   document.querySelectorAll('#stepsList .snum').forEach(n=>n.className='snum sn-n');
   document.querySelectorAll('#stepsList .sinput').forEach(i=>i.className='sinput');
-  res.innerHTML=`<div class="ai-result"><div class="air-hd"><span class="ai-badge">AI</span> Reasoning Analysis</div><div class="air-loading"><div class="spin2"></div> Reading your solution steps...</div></div>`;
-  const pd=`${_curProb.display} — ${_curProb.domain} problem (${(_curProb.skills||[]).join(', ')}). Elo ${_curProb.elo}. See problem at: ${_curProb.link}`;
+  res.innerHTML=`<div class="ai-result"><div class="air-hd"><span class="ai-badge">AI</span> Reasoning Analysis</div><div class="air-loading"><div class="spin2"></div> Reading your steps...</div></div>`;
+  const pd=`${_curProb.display} — ${_curProb.domain} (${(_curProb.skills||[]).join(', ')}). Elo ${_curProb.elo}. Problem at: ${_curProb.link}`;
   try{
     const r=await fetch('/api/gemini',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({problem:pd,steps})});
-    if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(`${r.status} — ${JSON.stringify(e.detail||e.error||e)}`);}
-    const data=await r.json();renderAI(data);
+    if(!r.ok){const e=await r.json().catch(()=>({})); throw new Error(`${r.status} — ${JSON.stringify(e.error||e)}`);}
+    renderAI(await r.json());
   }catch(err){
     res.innerHTML=`<div class="ai-result"><div class="air-hd"><span class="ai-badge">AI</span> Error</div><div class="air-item"><span class="air-tag tag-err">Error</span><p>${err.message}</p></div></div>`;
-  }finally{btn.disabled=false;btn.innerHTML='<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Analyze Reasoning';}
+  }finally{
+    btn.disabled=false; btn.innerHTML='<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Analyze Reasoning';
+  }
 }
 function renderAI(data){
   const res=document.getElementById('aiResult');
   const rows=Array.from(document.querySelectorAll('#stepsList .step-row'));
-  (data.stepFeedback||[]).forEach(sf=>{
-    const row=rows[sf.step-1];if(!row)return;
-    const n=row.querySelector('.snum'),inp=row.querySelector('textarea');
-    const cls={'ok':'sn-ok','error':'sn-err','warning':'sn-warn'}[sf.status]||'sn-n';
-    n.className='snum '+cls;inp.className='sinput '+({'ok':'ok','error':'err','warning':'warn'}[sf.status]||'');
-  });
-  if(data.errorType==='Correct'||data.firstErrorStep===null){
-    res.innerHTML=`<div class="ai-result"><div class="air-hd"><span class="ai-badge">AI</span> Analysis</div><div class="correct-banner"><span>✅</span><p><strong>All steps correct!</strong> ${data.mainFeedback||''}</p></div></div>`;return;
-  }
+  (data.stepFeedback||[]).forEach(sf=>{ const row=rows[sf.step-1]; if(!row)return; const n=row.querySelector('.snum'),inp=row.querySelector('textarea'); const cls={'ok':'sn-ok','error':'sn-err','warning':'sn-warn'}[sf.status]||'sn-n'; n.className='snum '+cls; inp.className='sinput '+({'ok':'ok','error':'err','warning':'warn'}[sf.status]||''); });
+  if(data.errorType==='Correct'||data.firstErrorStep===null){ res.innerHTML=`<div class="ai-result"><div class="air-hd"><span class="ai-badge">AI</span> Analysis</div><div class="correct-banner"><span>✅</span><p><strong>All steps correct!</strong> ${data.mainFeedback||''}</p></div></div>`; return; }
   let items='';
-  if(data.errorType)items+=`<div class="air-item"><span class="air-tag tag-err">${data.errorType}</span><p>${data.mainFeedback||''}</p></div>`;
-  (data.stepFeedback||[]).forEach(sf=>{if(sf.comment&&sf.status!=='ok')items+=`<div class="air-item"><span class="air-tag ${sf.status==='error'?'tag-err':'tag-warn'}">Step ${sf.step}</span><p>${sf.comment}</p></div>`;});
-  if(data.hint)items+=`<div class="air-item"><span class="air-tag tag-hint">Hint</span><p>${data.hint}</p></div>`;
+  if(data.errorType) items+=`<div class="air-item"><span class="air-tag tag-err">${data.errorType}</span><p>${data.mainFeedback||''}</p></div>`;
+  (data.stepFeedback||[]).forEach(sf=>{ if(sf.comment&&sf.status!=='ok') items+=`<div class="air-item"><span class="air-tag ${sf.status==='error'?'tag-err':'tag-warn'}">Step ${sf.step}</span><p>${sf.comment}</p></div>`; });
+  if(data.hint) items+=`<div class="air-item"><span class="air-tag tag-hint">Hint</span><p>${data.hint}</p></div>`;
   res.innerHTML=`<div class="ai-result"><div class="air-hd"><span class="ai-badge">AI</span> Analysis<span class="air-ref">${data.firstErrorStep?'First error: Step '+data.firstErrorStep:''}</span></div>${items}</div>`;
 }
 
-// ── DIAGNOSTIC ──
+// ════════════════════════════════════
+// COLLECT ALL PROBLEMS FROM DOM
+// ════════════════════════════════════
+const ALL_PROBS = [];
+document.querySelectorAll('.pt-solve').forEach(btn=>{
+  try{ const raw=btn.getAttribute('onclick').replace(/^openModal\(/,'').replace(/\)$/,''); ALL_PROBS.push(JSON.parse(raw)); }catch{}
+});
+
+// ════════════════════════════════════
+// INFINITE PRACTICE
+// ════════════════════════════════════
+let pracQueue=[], pracCur=null, pracDone=0, pracCor=0, pracConsec=0, pracTimer=null, pracSec=0;
+
+function pracFilter(){
+  pracQueue=buildPracQueue();
+  setText('prac-pool-cnt', pracQueue.length+' problems');
+  renderPracQueue();
+  if(!pracCur) loadNextPrac();
+}
+
+function eloIn(elo,diff){ if(diff==='easy')return elo<800; if(diff==='med')return elo>=800&&elo<1200; if(diff==='hard')return elo>=1200&&elo<1700; if(diff==='expert')return elo>=1700; return true; }
+
+function buildPracQueue(){
+  const dom=document.getElementById('pf-domain').value;
+  const con=document.getElementById('pf-contest').value;
+  const diff=document.getElementById('pf-diff').value;
+  const adap=document.getElementById('pf-adaptive').checked;
+  let pool=ALL_PROBS.filter(p=>(dom==='all'||p.domain===dom)&&(con==='all'||p.contest===con)&&eloIn(p.elo,diff));
+  if(adap && pool.length>0){
+    const weakDom=Object.entries(S.domStats||{}).map(([d,v])=>({d,acc:v.c+v.w>0?v.c/(v.c+v.w):0.5})).sort((a,b)=>a.acc-b.acc)[0]?.d;
+    if(weakDom){ const wk=pool.filter(p=>p.domain===weakDom); if(wk.length>=5) pool=[...wk,...wk,...pool]; }
+  }
+  return pool.sort(()=>Math.random()-.5);
+}
+
+function initPractice(){
+  if(pracQueue.length===0) pracFilter();
+  if(!pracCur) loadNextPrac();
+  if(!pracTimer){ pracTimer=setInterval(()=>{ pracSec++; tickTimer(); },1000); }
+}
+
+function loadNextPrac(){
+  const ex=document.getElementById('prac-empty'), card=document.getElementById('prac-card');
+  document.getElementById('pc-ans').value='';
+  document.getElementById('pc-result').style.display='none';
+  document.getElementById('pc-explain').style.display='none';
+  if(!pracQueue.length){ card.style.display='none'; ex.style.display='flex'; return; }
+  card.style.display='block'; ex.style.display='none';
+  pracCur=pracQueue.shift();
+  setText('pc-name',pracCur.display);
+  setText('pc-elo','Elo '+pracCur.elo);
+  const db=document.getElementById('pc-dom');
+  if(db){ db.textContent=pracCur.domain; db.style.background=getDomBg(pracCur.domain); db.style.color=getDomColor(pracCur.domain); }
+  document.getElementById('pc-link').href=pracCur.link;
+  renderPracQueue();
+}
+
+function renderPracQueue(){
+  const el=document.getElementById('prac-queue'); if(!el)return;
+  el.innerHTML=pracQueue.slice(0,4).map(p=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 14px;border:1px solid var(--border);border-radius:6px;background:var(--surface);font-size:.8375rem;margin-bottom:5px">
+      <span style="flex:1;font-weight:500">${p.display}</span>
+      <span class="rm-dom" style="background:${getDomBg(p.domain)};color:${getDomColor(p.domain)};font-size:.625rem">${p.domain}</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--ink3)">${p.elo}</span>
+    </div>`).join('');
+}
+
+function pracSubmit(){
+  if(!pracCur)return;
+  const inp=document.getElementById('pc-ans').value.trim();
+  if(!inp)return;
+  const correct=String(pracCur.answer||'').trim();
+  const ok=inp===correct||inp.toLowerCase()===correct.toLowerCase();
+  const res=document.getElementById('pc-result');
+  res.style.display='inline-block';
+  if(ok){ res.className='answer-result ar-correct'; res.textContent='✓ Correct! +Elo'; pracCor++; pracConsec++; }
+  else { res.className='answer-result ar-wrong'; res.textContent=`✗ Wrong — Answer: ${correct}`; pracConsec=0;
+    const exp=document.getElementById('pc-explain');
+    exp.style.display='block';
+    exp.innerHTML=`The correct answer is <strong>${correct}</strong>. <a href="${pracCur.link}" target="_blank" style="color:var(--blue);font-weight:600">Review on AoPS ↗</a>`; }
+  pracDone++;
+  logAttempt(pracCur, inp, ok?'correct':'wrong');
+  setText('ps-done',pracDone); setText('ps-cor',pracCor); setText('ps-streak',pracConsec+' 🔥');
+  const d=pracCur; pracCur=null;
+  setTimeout(()=>loadNextPrac(), ok?700:2000);
+}
+function pracSkip(){ if(!pracCur)return; logAttempt(pracCur,'','skip'); pracCur=null; loadNextPrac(); }
+
+// ════════════════════════════════════
+// 50-QUESTION DIAGNOSTIC
+// ════════════════════════════════════
 const DQS=[
-  {d:'Algebra',q:'If x + y = 10 and xy = 21, what is x² + y²?',ch:['16','37','58','79'],a:2},
-  {d:'Algebra',q:'The roots of x²−7x+10=0 are r and s. Find r³+s³.',ch:['73','91','133','157'],a:1},
-  {d:'Algebra',q:'Solve for x: 2^(x+1) = 32.',ch:['4','3','5','6'],a:0},
-  {d:'Geometry',q:'A right triangle has legs 9 and 12. What is the length of the hypotenuse?',ch:['15','18','21','13'],a:0},
-  {d:'Geometry',q:'What is the area of a regular hexagon with side length 2?',ch:['6√3','8√3','4√3','12√3'],a:0},
-  {d:'Geometry',q:'Two circles of radius 5 have centers 6 apart. What is the area of their intersection? (Use 2-decimal approx)',ch:['21.81','31.42','15.70','27.26'],a:0},
-  {d:'Counting',q:'How many ways can 5 people sit in a circle?',ch:['120','24','60','12'],a:1},
-  {d:'Counting',q:'How many 3-digit numbers have all different digits and no zeros?',ch:['504','648','720','576'],a:0},
-  {d:'Counting',q:'How many subsets of {1,2,3,4,5} have exactly 2 elements?',ch:['10','15','20','5'],a:0},
-  {d:'Number Theory',q:'What is the units digit of 17^100?',ch:['7','9','1','3'],a:2},
-  {d:'Number Theory',q:'How many positive divisors does 120 have?',ch:['14','16','12','18'],a:1},
-  {d:'Number Theory',q:'What is the GCD of 168 and 180?',ch:['6','12','18','4'],a:1},
-  {d:'Probability',q:'Roll two fair dice. P(product is even)?',ch:['1/4','1/2','3/4','2/3'],a:2},
-  {d:'Probability',q:'Draw 2 cards from a standard deck without replacement. P(both are aces)?',ch:['1/221','1/169','4/663','1/17'],a:0},
-  {d:'Probability',q:'Fair coin flipped 4 times. P(exactly 3 heads)?',ch:['1/4','3/8','1/2','5/16'],a:0},
+// ── ALGEBRA (10) ────────────────────────────────────────────────────
+{d:'Algebra',lv:1,q:'Evaluate: 3 + 5 × 2.',ch:['16','13','10','11'],a:1,exp:'Multiply first: 5×2=10, then 3+10=13.'},
+{d:'Algebra',lv:1,q:'If 2x + 4 = 14, what is x?',ch:['5','4','6','3'],a:0,exp:'2x=10, x=5.'},
+{d:'Algebra',lv:2,q:'If x + y = 9 and xy = 18, what is x² + y²?',ch:['45','27','63','81'],a:0,exp:'x²+y²=(x+y)²−2xy=81−36=45.'},
+{d:'Algebra',lv:2,q:'Simplify: (x²−9)/(x+3).',ch:['x−3','x+3','x²−3','x−9'],a:0,exp:'x²−9=(x+3)(x−3), so the answer is x−3.'},
+{d:'Algebra',lv:3,q:'The roots of x²−5x+3=0 are r and s. Find r²+s².',ch:['19','22','13','25'],a:0,exp:'r²+s²=(r+s)²−2rs=25−6=19.'},
+{d:'Algebra',lv:3,q:'If f(x)=x²+2x+1 and f(k)=16, find all possible k+1.',ch:['5 and −3','4 and −4','5 and −5','3 and −5'],a:0,exp:'(k+1)²=16, k+1=±4, giving 5 or −3.'},
+{d:'Algebra',lv:4,q:'For what values of k does x²+kx+16=0 have exactly one real solution?',ch:['8','±4','±8','4'],a:2,exp:'Discriminant=0: k²=64, k=±8.'},
+{d:'Algebra',lv:4,q:'An arithmetic sequence has first term 3 and common difference 4. Its sum is 120. How many terms?',ch:['6','7','8','9'],a:2,exp:'Sₙ=n(2·3+(n-1)·4)/2=n(2n+1)=120 → n=8.'},
+{d:'Algebra',lv:5,q:'If 2^a=5^b=10, what is 1/a+1/b?',ch:['1','log 2','1/log 2','log 10'],a:0,exp:'1/a=log₁₀2, 1/b=log₁₀5. Sum=log₁₀10=1.'},
+{d:'Algebra',lv:5,q:'Let p,q be roots of x²−3x+1=0. Find p⁴+q⁴.',ch:['47','50','41','38'],a:0,exp:'p²+q²=(p+q)²−2pq=7. p⁴+q⁴=(p²+q²)²−2(pq)²=49−2=47.'},
+// ── GEOMETRY (10) ───────────────────────────────────────────────────
+{d:'Geometry',lv:1,q:'Area of a rectangle with length 8 and width 5?',ch:['40','26','80','13'],a:0,exp:'8×5=40.'},
+{d:'Geometry',lv:1,q:'A right triangle has legs 6 and 8. Hypotenuse?',ch:['10','12','9','14'],a:0,exp:'6²+8²=100, √100=10.'},
+{d:'Geometry',lv:2,q:'Area of a triangle with base 12 and height 7?',ch:['42','84','24','36'],a:0,exp:'½×12×7=42.'},
+{d:'Geometry',lv:2,q:'Sum of interior angles of a hexagon?',ch:['720°','540°','900°','660°'],a:0,exp:'(6−2)×180°=720°.'},
+{d:'Geometry',lv:3,q:'A circle has area 36π. What is its circumference?',ch:['12π','6π','36π','18π'],a:0,exp:'r=6, circumference=2π·6=12π.'},
+{d:'Geometry',lv:3,q:'Two similar triangles have sides in ratio 3:5. Ratio of their areas?',ch:['9:25','3:5','6:10','27:125'],a:0,exp:'Area ratio=(side ratio)²=9:25.'},
+{d:'Geometry',lv:4,q:'Triangle ABC has AB=AC=5, BC=6. Altitude from A to BC?',ch:['4','3','5','7'],a:0,exp:'h²=5²−3²=16, h=4.'},
+{d:'Geometry',lv:4,q:'Cylinder with radius 3 and height 5. Total surface area?',ch:['48π','30π','33π','60π'],a:0,exp:'2πr²+2πrh=18π+30π=48π.'},
+{d:'Geometry',lv:5,q:'A chord of length 8 is 3 units from the center of a circle. The radius is:',ch:['5','4','√73','√41'],a:0,exp:'r²=4²+3²=25, r=5.'},
+{d:'Geometry',lv:5,q:'A rhombus has diagonals 10 and 24. Its perimeter is:',ch:['52','60','48','56'],a:0,exp:'Side=√(5²+12²)=13. Perimeter=52.'},
+// ── COUNTING (10) ───────────────────────────────────────────────────
+{d:'Counting',lv:1,q:'How many ways can 3 books be arranged on a shelf?',ch:['3','6','9','27'],a:1,exp:'3!=6.'},
+{d:'Counting',lv:1,q:'How many ways to choose 2 toppings from 5?',ch:['10','20','25','15'],a:0,exp:'C(5,2)=10.'},
+{d:'Counting',lv:2,q:'How many 4-digit numbers exist (no leading zeros)?',ch:['9000','8999','8100','9999'],a:0,exp:'1000–9999: 9000 numbers.'},
+{d:'Counting',lv:2,q:'In how many ways can 4 people line up so A is before B?',ch:['12','24','6','8'],a:0,exp:'4!/2=12 (half have A before B by symmetry).'},
+{d:'Counting',lv:3,q:'Distribute 7 identical cookies to 3 kids with each getting ≥1. How many ways?',ch:['15','21','28','10'],a:0,exp:'Stars and bars: C(6,2)=15.'},
+{d:'Counting',lv:3,q:'How many integers 1–30 are divisible by 2 or 3?',ch:['20','15','25','22'],a:0,exp:'15+10−5=20 by inclusion-exclusion.'},
+{d:'Counting',lv:4,q:'6 people seated in a circle, where two specific must be adjacent. How many arrangements?',ch:['48','120','24','96'],a:0,exp:'Treat pair as unit: 4!×2=48.'},
+{d:'Counting',lv:4,q:'Lattice paths from (0,0) to (4,4) passing through (2,2)?',ch:['36','70','56','42'],a:0,exp:'C(4,2)×C(4,2)=6×6=36.'},
+{d:'Counting',lv:5,q:'How many subsets of {1,...,10} have an even sum?',ch:['512','511','500','256'],a:0,exp:'Exactly half of 2¹⁰=1024 subsets have even sum: 512.'},
+{d:'Counting',lv:5,q:'How many ways to tile a 2×8 board with 1×2 dominoes?',ch:['55','34','89','21'],a:0,exp:'Fibonacci-style: f(n)=f(n-1)+f(n-2), f(8)=55.'},
+// ── NUMBER THEORY (10) ──────────────────────────────────────────────
+{d:'Number Theory',lv:1,q:'GCD of 12 and 18?',ch:['6','3','9','12'],a:0,exp:'12=2²×3, 18=2×3². GCD=6.'},
+{d:'Number Theory',lv:1,q:'Is 97 prime?',ch:['Yes','No (÷7)','No (÷11)','No (÷13)'],a:0,exp:'97 is not divisible by any prime ≤√97≈9.8. Yes.'},
+{d:'Number Theory',lv:2,q:'How many positive divisors does 72 have?',ch:['12','9','8','18'],a:0,exp:'72=2³×3². τ=(3+1)(2+1)=12.'},
+{d:'Number Theory',lv:2,q:'Units digit of 3^47?',ch:['3','9','7','1'],a:2,exp:'Cycle 3,9,7,1 (period 4). 47 mod 4=3 → units digit 7.'},
+{d:'Number Theory',lv:3,q:'LCM of 12, 18, and 24?',ch:['72','36','48','144'],a:0,exp:'LCM=2³×3²=72.'},
+{d:'Number Theory',lv:3,q:'Remainder when 2^100 is divided by 7?',ch:['2','4','1','0'],a:0,exp:'2³≡1(mod7). 100=3·33+1. 2^100≡2^1=2(mod7).'},
+{d:'Number Theory',lv:4,q:'How many integers from 1–100 are coprime to 100?',ch:['40','36','50','45'],a:0,exp:'φ(100)=100·(1−1/2)·(1−1/5)=40.'},
+{d:'Number Theory',lv:4,q:'Solutions to x²≡1(mod 8): x≡?',ch:['1,3,5,7','1,7','1,−1','±1(mod4)'],a:0,exp:'All odd x satisfy x²≡1(mod8).'},
+{d:'Number Theory',lv:5,q:'Smallest positive integer n with n²≡−1(mod 13)?',ch:['5','6','4','7'],a:0,exp:'5²=25=2·13−1≡−1(mod13).'},
+{d:'Number Theory',lv:5,q:'How many trailing zeros does 100! have?',ch:['24','20','25','30'],a:0,exp:'⌊100/5⌋+⌊100/25⌋=20+4=24.'},
+// ── PROBABILITY (10) ────────────────────────────────────────────────
+{d:'Probability',lv:1,q:'A bag has 3 red, 2 blue, 5 green. P(drawing red)?',ch:['3/10','1/3','3/7','2/5'],a:0,exp:'3/10.'},
+{d:'Probability',lv:1,q:'Roll a fair die. P(result > 4)?',ch:['1/3','1/2','1/6','2/3'],a:0,exp:'{5,6}: P=2/6=1/3.'},
+{d:'Probability',lv:2,q:'Flip a coin 3 times. P(at least 2 heads)?',ch:['1/2','3/8','5/8','1/4'],a:0,exp:'P(2H)+P(3H)=3/8+1/8=4/8=1/2.'},
+{d:'Probability',lv:2,q:'Two dice rolled. P(sum is prime)?',ch:['5/12','7/18','15/36','1/2'],a:0,exp:'Prime sums (2,3,5,7,11)→15 outcomes. P=15/36=5/12.'},
+{d:'Probability',lv:3,q:'Box: 5 red, 3 blue. Draw 2 without replacement. P(both red)?',ch:['5/14','10/28','25/64','2/7'],a:0,exp:'(5/8)×(4/7)=20/56=5/14.'},
+{d:'Probability',lv:3,q:'P(A)=0.6, P(B)=0.4, independent. P(A or B)?',ch:['0.76','1.0','0.64','0.24'],a:0,exp:'0.6+0.4−0.24=0.76.'},
+{d:'Probability',lv:4,q:'Number from {1..20}, given it\'s even. P(it\'s > 12)?',ch:['2/5','3/10','4/10','3/8'],a:0,exp:'Even & >12: {14,16,18,20}=4. Total even=10. P=2/5.'},
+{d:'Probability',lv:4,q:'Win $4 (p=1/5) or lose $1 (p=4/5). Expected value?',ch:['$0','$0.25','−$0.20','$0.80'],a:0,exp:'E=4/5−4/5=0.'},
+{d:'Probability',lv:5,q:'Roll a die until getting a 6. Expected number of rolls?',ch:['6','5','7','4'],a:0,exp:'Geometric with p=1/6. E=1/p=6.'},
+{d:'Probability',lv:5,q:'Cards drawn until first ace appears. Expected number drawn?',ch:['10.6','9.8','10.2','11.5'],a:0,exp:'4 aces split 52 cards into 5 equal sections: E=53/5=10.6.'},
 ];
-let qi=0,qs={Algebra:0,Geometry:0,Counting:0,'Number Theory':0,Probability:0},qc={Algebra:0,Geometry:0,Counting:0,'Number Theory':0,Probability:0};
-const DMAP={Algebra:'f1',Geometry:'f4','Counting':'f6','Number Theory':'f5',Probability:'c4'};
+
+const DMAP_START={Algebra:'f1',Geometry:'f4',Counting:'f6','Number Theory':'f5',Probability:'c4'};
+const DMAP_MID={Algebra:'c1',Geometry:'c5',Counting:'c3','Number Theory':'c2',Probability:'c4'};
+const DMAP_ADV={Algebra:'a1',Geometry:'a4',Counting:'a2','Number Theory':'a5',Probability:'a6'};
+const DCOL={Algebra:'#4361ee',Geometry:'#7209b7',Counting:'#f77f00','Number Theory':'#2d9b50',Probability:'#e63946'};
+let dqi=0, dScores={}, dAnswers=[];
+
 function startDiag(){
-  qi=0;Object.keys(qs).forEach(k=>{qs[k]=0;qc[k]=0;});
+  dqi=0; dScores={}; dAnswers=[];
+  ['Algebra','Geometry','Counting','Number Theory','Probability'].forEach(d=>dScores[d]={c:0,w:0,t:0});
+  S.diagSave=null; save();
   document.getElementById('diagIntro').style.display='none';
   document.getElementById('diagQuiz').style.display='block';
   document.getElementById('diagResults').style.display='none';
-  loadQ();
+  loadDQ();
 }
-function loadQ(){
-  const q=DQS[qi];
-  document.getElementById('qpf').style.width=(qi/15*100)+'%';
-  document.getElementById('qnum').textContent=`Question ${qi+1} of 15`;
-  document.getElementById('qdom').textContent=q.d;
-  document.getElementById('qtext').textContent=q.q;
+function resumeDiag(){
+  if(!S.diagSave){startDiag();return;}
+  const sv=S.diagSave; dqi=sv.qi; dScores=sv.scores; dAnswers=sv.answers;
+  document.getElementById('diagIntro').style.display='none';
+  document.getElementById('diagQuiz').style.display='block';
+  document.getElementById('diagResults').style.display='none';
+  loadDQ();
+}
+
+function loadDQ(){
+  if(dqi>=DQS.length){showDiagResults();return;}
+  const q=DQS[dqi];
+  document.getElementById('qpf').style.width=(dqi/DQS.length*100)+'%';
+  setText('qnum',`Q ${dqi+1} / ${DQS.length}`);
+  const domEl=document.getElementById('qdom');
+  if(domEl){domEl.textContent=q.d; domEl.style.background=DCOL[q.d]+'22'; domEl.style.color=DCOL[q.d];}
+  setText('qlvl','LV '+q.lv);
+  setText('qtext',q.q);
   document.getElementById('qnext').classList.remove('show');
-  document.getElementById('qchoices').innerHTML=q.ch.map((c,i)=>`<button class="q-choice" onclick="pickQ(this,${i})">${String.fromCharCode(65+i)}) ${c}</button>`).join('');
+  document.getElementById('qexplain').style.display='none';
+  document.getElementById('qchoices').innerHTML=q.ch.map((c,i)=>
+    `<button class="q-choice" onclick="pickDQ(this,${i})">${String.fromCharCode(65+i)}) ${c}</button>`
+  ).join('');
 }
-function pickQ(btn,idx){
-  const q=DQS[qi];
+
+function pickDQ(btn,idx){
+  const q=DQS[dqi];
   document.querySelectorAll('.q-choice').forEach(b=>b.disabled=true);
-  if(idx===q.a){btn.className='q-choice cor';qs[q.d]++;}
-  else{btn.className='q-choice wrg';document.querySelectorAll('.q-choice')[q.a].className='q-choice cor';}
-  qc[q.d]++;document.getElementById('qnext').classList.add('show');
+  const ok=idx===q.a;
+  btn.className=ok?'q-choice cor':'q-choice wrg';
+  if(!ok) document.querySelectorAll('.q-choice')[q.a].className='q-choice cor';
+  dScores[q.d].t++;
+  if(ok) dScores[q.d].c++; else dScores[q.d].w++;
+  dAnswers[dqi]={ok,chosen:idx};
+  const ex=document.getElementById('qexplain');
+  ex.style.display='block'; ex.innerHTML=(ok?'✅ ':'❌ ')+q.exp;
+  document.getElementById('qnext').classList.add('show');
+  S.diagSave={qi:dqi,scores:dScores,answers:dAnswers}; save();
 }
-function diagNext(){qi++;if(qi>=15){showResults();return;}loadQ();}
-function showResults(){
+
+function diagNext(){ dqi++; loadDQ(); }
+
+function showDiagResults(){
   document.getElementById('diagQuiz').style.display='none';
   document.getElementById('diagResults').style.display='block';
-  const tot=Object.values(qs).reduce((a,b)=>a+b,0);
-  document.getElementById('rscore').textContent=`${tot}/15`;
-  const DCOL={Algebra:'#4361ee',Geometry:'#7209b7','Counting':'#f77f00','Number Theory':'#2d9b50',Probability:'#e63946'};
-  document.getElementById('rdoms').innerHTML=Object.keys(qs).map(d=>{
-    const s=qs[d],t=qc[d]||3,pct=Math.round(s/t*100);
-    return `<div class="rd"><div class="rd-name">${d}</div><div class="rd-score" style="color:${DCOL[d]}">${s}/${t}</div><div class="rd-bar"><div class="rd-fill" style="width:${pct}%;background:${DCOL[d]}"></div></div></div>`;
+  S.diagSave=null; save();
+  const tot=Object.values(dScores).reduce((s,v)=>s+v.c,0);
+  setText('rscore',`${tot}/${DQS.length}`);
+  document.getElementById('rdoms').innerHTML=['Algebra','Geometry','Counting','Number Theory','Probability'].map(d=>{
+    const sc=dScores[d]; const pct=sc.t>0?Math.round(sc.c/sc.t*100):0;
+    const color=DCOL[d];
+    const modId=pct>=70?DMAP_ADV[d]:pct>=40?DMAP_MID[d]:DMAP_START[d];
+    const lvLbl=pct>=70?'Advanced level':pct>=40?'Intermediate level':'Foundations';
+    return `<div style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px;flex-wrap:wrap">
+      <div style="width:120px;flex-shrink:0"><div style="font-size:.8125rem;font-weight:700;color:${color}">${d}</div><div style="font-size:.625rem;color:var(--ink3);margin-top:2px">Start: ${lvLbl}</div></div>
+      <div style="flex:1;min-width:120px"><div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${color};border-radius:4px;transition:width .5s"></div></div></div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.875rem;font-weight:700;color:${color};width:50px;text-align:right">${sc.c}/${sc.t}</div>
+      <button onclick="showModule('${modId}')" class="btn btn-p btn-sm" style="font-size:.75rem">Go →</button>
+    </div>`;
   }).join('');
-  const weak=Object.entries(qs).sort((a,b)=>a[1]-b[1])[0][0];
-  const recId=DMAP[weak]||'f1';
-  const recTitle=MOD_META[recId]?.title||'Algebra Fundamentals';
-  document.getElementById('rrec').querySelector('div').innerHTML=`<strong>Recommended starting point:</strong> Your weakest area is <strong>${weak}</strong>. We recommend starting with <a onclick="showModule('${recId}')">${recTitle}</a>.`;
-  document.getElementById('rgoBtn').onclick=()=>showModule(recId);
+  const weakDom=['Algebra','Geometry','Counting','Number Theory','Probability'].sort((a,b)=>{
+    const pa=dScores[a].t>0?dScores[a].c/dScores[a].t:0;
+    const pb=dScores[b].t>0?dScores[b].c/dScores[b].t:0;
+    return pa-pb;
+  })[0];
+  const wPct=dScores[weakDom].t>0?Math.round(dScores[weakDom].c/dScores[weakDom].t*100):0;
+  const wMod=wPct>=70?DMAP_ADV[weakDom]:wPct>=40?DMAP_MID[weakDom]:DMAP_START[weakDom];
+  document.getElementById('rrec').querySelector('div').innerHTML=
+    `<strong>Priority:</strong> Weakest area is <strong>${weakDom}</strong> (${wPct}%). Recommended module: <a onclick="showModule('${wMod}')" style="font-weight:700;cursor:pointer;color:var(--green)">${MOD_META[wMod]?.title||wMod}</a>`;
+  document.getElementById('rgoBtn').onclick=()=>showModule(wMod);
+  document.getElementById('rdetail').innerHTML=dAnswers.map((a,i)=>{
+    if(!a)return'';
+    const q=DQS[i]; const color=DCOL[q.d];
+    const tag=a.ok?'<span class="mc-tag tag-ok">✓</span>':'<span class="mc-tag tag-err">✗</span>';
+    return `<tr>
+      <td class="pt-num">${i+1}</td>
+      <td><span style="font-size:.625rem;padding:2px 6px;border-radius:3px;font-weight:700;background:${color}22;color:${color}">${q.d}</span></td>
+      <td style="font-size:.75rem;color:var(--ink3)">${q.lv}</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:.8rem">${a?q.ch[a.chosen]:'—'}</td>
+      <td>${tag}</td>
+      <td style="font-size:.8rem;color:var(--ink2)">${q.exp}</td>
+    </tr>`;
+  }).join('');
 }
+
+// ════════════════════════════════════
+// INIT
+// ════════════════════════════════════
+window.addEventListener('DOMContentLoaded',()=>{
+  toggleLevel(1);
+  // Start levels 2-5 collapsed in sidebar for cleanliness
+  ['sb-lv2','sb-lv3','sb-lv4','sb-lv5'].forEach(id=>{
+    const sec=document.getElementById(id);
+    if(sec) sec.classList.add('collapsed');
+  });
+  refreshProgress();
+  if(S.diagSave){ const rb=document.getElementById('diagResumBtn'); if(rb)rb.style.display='inline-flex'; }
+  setInterval(tickTimer,1000);
+});
 </script>
 </body>
 </html>
