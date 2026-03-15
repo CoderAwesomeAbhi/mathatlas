@@ -2470,7 +2470,7 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
 
 
 <!-- ═══ TOOLS VIEW ═══ -->
-<div id="view-tools" class="view" style="display:none">
+<div id="view-tools" class="view">
   <div class="pv-hdr" style="padding:28px 32px 16px">
     <h2 style="font-size:1.35rem;font-weight:700;margin:0 0 4px">🔧 Interactive Math Tools</h2>
     <p style="color:var(--ink2);margin:0;font-size:.9rem">Graph equations, solve step-by-step, explore geometry, number theory — all live in your browser.</p>
@@ -2614,7 +2614,7 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
 </div>
 
 <!-- ═══ CONCEPTS VIEW ═══ -->
-<div id="view-concepts" class="view" style="display:none">
+<div id="view-concepts" class="view">
   <div class="pv-hdr" style="padding:28px 32px 16px">
     <h2 style="font-size:1.35rem;font-weight:700;margin:0 0 4px">📖 Concept Pages</h2>
     <p style="color:var(--ink2);margin:0;font-size:.9rem">Definition · Derivation · Examples · Common mistakes — one page per concept.</p>
@@ -2640,7 +2640,7 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
 </div>
 
 <!-- ═══ PLAYGROUND VIEW ═══ -->
-<div id="view-playground" class="view" style="display:none">
+<div id="view-playground" class="view">
   <div class="pv-hdr" style="padding:28px 32px 16px">
     <h2 style="font-size:1.35rem;font-weight:700;margin:0 0 4px">🎮 Math Playground</h2>
     <p style="color:var(--ink2);margin:0;font-size:.9rem">Explore math visually — prime sieves, fractals, probability simulations, Pascal's triangle.</p>
@@ -4282,33 +4282,35 @@ function closeConcept(){
 // _navCore handles the original built-in views
 // ════════════════════════════════════
 function showView(n){
-  // Hide ALL views and clear ALL tab highlights first
-  document.querySelectorAll('.view').forEach(v=>v.style.display='none');
-  document.querySelectorAll('.tb-tab').forEach(t=>t.classList.remove('on'));
+  // Use classList only — never inline styles (inline overrides CSS classes)
+  document.querySelectorAll('.view').forEach(v=>{
+    v.classList.remove('show');
+    v.style.display=''; // clear any lingering inline style
+  });
 
   if(n==='tools'){
-    const el=document.getElementById('view-tools'); if(el)el.style.display='block';
+    const el=document.getElementById('view-tools');
+    if(el){el.classList.add('show');el.style.display='';}
     const tb=document.getElementById('tab-tools'); if(tb)tb.classList.add('on');
     setTimeout(()=>{const c=document.getElementById('graphCanvas');if(c&&!graphFns.length){graphFns=['y = sin(x)'];drawGraph(c);}},150);
     return;
   }
   if(n==='concepts'){
-    const el=document.getElementById('view-concepts'); if(el)el.style.display='block';
+    const el=document.getElementById('view-concepts');
+    if(el){el.classList.add('show');el.style.display='';}
     const tb=document.getElementById('tab-concepts'); if(tb)tb.classList.add('on');
     renderConceptGrid(CONCEPTS);
     return;
   }
   if(n==='playground'){
-    const el=document.getElementById('view-playground'); if(el)el.style.display='block';
+    const el=document.getElementById('view-playground');
+    if(el){el.classList.add('show');el.style.display='';}
     const tb=document.getElementById('tab-playground'); if(tb)tb.classList.add('on');
     setTimeout(()=>runSieve(),100);
     return;
   }
-  // Core built-in views — delegate to _navCore (no recursion)
+  // Core built-in views — nav() uses classList.add('show') correctly
   _navCore(n);
-  const tabMap={guide:'tab-guide',practice:'tab-practice',log:'tab-log',progress:'tab-progress',diag:'tab-diag'};
-  const tabId=tabMap[n]||(n.startsWith('module-')?'tab-guide':null);
-  if(tabId){const t=document.getElementById(tabId);if(t)t.classList.add('on');}
 }
 // Init on tools view load
 document.addEventListener('DOMContentLoaded',()=>{
