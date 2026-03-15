@@ -309,8 +309,47 @@ table.pt tbody tr:hover{background:var(--surface2);cursor:pointer}
 footer{background:var(--surface2);border-top:1px solid var(--border);padding:32px 64px 24px}
 .ft-bottom{border-top:1px solid var(--border);padding-top:16px;margin-top:24px;display:flex;justify-content:space-between;align-items:center}
 .ft-copy{font-size:.8125rem;color:var(--ink3)}
+
+/* DARK MODE */
+body.dark-mode{
+  --bg:#0f0f13;--surface:#1a1a22;--surface2:#22222e;--surface3:#2a2a38;
+  --border:#2e2e3e;--border2:#3a3a50;
+  --ink:#f0f0f5;--ink2:#a8a8c0;--ink3:#5a5a78;
+  --blue:#7b8fff;--blue-l:#1a1f3a;--blue-d:#9babff;
+  --green:#34d67a;--green-l:#0a2018;
+  --amber:#fbbf24;--amber-l:#2a1a00;
+  --red:#f87171;--red-l:#2a0a0a;
+  --purple:#a78bfa;--purple-l:#1a1030;
+}
+body.dark-mode .tb{background:var(--surface);border-color:var(--border)}
+body.dark-mode .modal{background:var(--surface);border:1px solid var(--border2)}
+body.dark-mode input,body.dark-mode textarea,body.dark-mode select{background:var(--surface2);color:var(--ink);border-color:var(--border2)}
+body.dark-mode .sb{background:var(--surface)}
+body.dark-mode .q-choice{background:var(--surface2)!important}
+
+
+/* ── NEW TOOLS / CONCEPTS / PLAYGROUND STYLES ── */
+.tool-tab-btn{padding:8px 18px;border:1.5px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--ink2);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.875rem;font-weight:600;transition:all .13s}
+.tool-tab-btn:hover{background:var(--surface2);color:var(--ink)}
+.tool-tab-btn.active-tool{background:var(--blue);border-color:var(--blue);color:#fff}
+.quick-btn{padding:5px 12px;border:1px solid var(--border2);border-radius:6px;background:var(--surface2);color:var(--ink2);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.8rem;transition:all .12s}
+.quick-btn:hover{background:var(--blue-l);color:var(--blue);border-color:var(--blue)}
+.concept-card{background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:18px;cursor:pointer;transition:all .13s;position:relative}
+.concept-card:hover{border-color:var(--blue);box-shadow:0 4px 16px rgba(61,90,254,.1);transform:translateY(-1px)}
+.concept-card .cc-domain{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.concept-card h3{font-size:1rem;margin:0 0 6px;color:var(--ink)}
+.concept-card p{font-size:.85rem;color:var(--ink2);margin:0;line-height:1.5}
+.nt-panel,.play-panel,.tool-panel{animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.solver-step{padding:10px 14px;border-left:3px solid var(--blue);background:var(--blue-l);border-radius:0 8px 8px 0;margin-bottom:8px;font-size:.875rem;color:var(--ink2)}
+.xp-badge{display:inline-flex;align-items:center;gap:4px;background:var(--amber-l);color:var(--amber);border-radius:6px;padding:3px 9px;font-size:.78rem;font-weight:700}
+
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.1/math.min.js" defer></script>
 </head>
 <body>
 
@@ -325,8 +364,12 @@ footer{background:var(--surface2);border-top:1px solid var(--border);padding:32p
     <button type="button" class="tb-tab" id="tab-log" onclick="showView('log')">📋 Question Log</button>
     <button type="button" class="tb-tab" id="tab-progress" onclick="showView('progress')">📊 My Progress</button>
     <button type="button" class="tb-tab" id="tab-diag" onclick="showView('diag')">🎯 Diagnostic</button>
+    <button type="button" class="tb-tab" id="tab-tools" onclick="showView('tools')">🔧 Tools</button>
+    <button type="button" class="tb-tab" id="tab-concepts" onclick="showView('concepts')">📖 Concepts</button>
+    <button type="button" class="tb-tab" id="tab-playground" onclick="showView('playground')">🎮 Playground</button>
   </div>
   <div class="tb-right">
+    <button type="button" id="darkToggle" onclick="toggleDark()" title="Toggle dark mode" style="background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 9px;cursor:pointer;font-size:1rem;margin-right:6px">🌙</button>
     <button type="button" class="btn btn-g btn-sm" id="signInBtn" onclick="openSignInModal()">Sign In</button>
     <button type="button" class="btn btn-p btn-sm" onclick="showView('diag')">Start Free →</button>
   </div>
@@ -2447,6 +2490,253 @@ footer{background:var(--surface2);border-top:1px solid var(--border);padding:32p
   </div>
 </div>
 
+
+
+<!-- ═══ TOOLS VIEW ═══ -->
+<div id="view-tools" class="view" style="display:none;padding:28px 32px;max-width:1100px;margin:0 auto">
+  <h2 style="font-size:1.5rem;margin:0 0 6px">🔧 Interactive Math Tools</h2>
+  <p style="color:var(--ink2);margin:0 0 24px">Graph equations, solve step-by-step, explore geometry — all in your browser.</p>
+
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px">
+    <button type="button" onclick="switchTool('graph')" id="tool-btn-graph" class="tool-tab-btn active-tool">📈 Graph Visualizer</button>
+    <button type="button" onclick="switchTool('solver')" id="tool-btn-solver" class="tool-tab-btn">🧮 Equation Solver</button>
+    <button type="button" onclick="switchTool('geometry')" id="tool-btn-geometry" class="tool-tab-btn">📐 Geometry</button>
+    <button type="button" onclick="switchTool('numtheory')" id="tool-btn-numtheory" class="tool-tab-btn">🔢 Number Theory</button>
+  </div>
+
+  <!-- GRAPH VISUALIZER -->
+  <div id="tool-graph" class="tool-panel">
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:20px">
+      <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+        <input id="graph-input" type="text" placeholder="e.g.  y = x^2,  y = sin(x),  y = 2x+1" style="flex:1;min-width:200px;padding:10px 14px;border:1.5px solid var(--border2);border-radius:8px;font-size:.9375rem;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif" onkeydown="if(event.key==='Enter')plotGraph()">
+        <button type="button" onclick="plotGraph()" class="btn btn-p" style="padding:10px 20px">Plot →</button>
+        <button type="button" onclick="clearGraph()" class="btn" style="padding:10px 16px;background:var(--surface2);border:1px solid var(--border2)">Clear</button>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+        <span style="font-size:.8rem;color:var(--ink3);margin-right:4px">Quick:</span>
+        <button type="button" onclick="quickPlot('y = x^2')" class="quick-btn">y = x²</button>
+        <button type="button" onclick="quickPlot('y = sin(x)')" class="quick-btn">sin(x)</button>
+        <button type="button" onclick="quickPlot('y = abs(x)')" class="quick-btn">|x|</button>
+        <button type="button" onclick="quickPlot('y = 1/x')" class="quick-btn">1/x</button>
+        <button type="button" onclick="quickPlot('y = sqrt(x)')" class="quick-btn">√x</button>
+        <button type="button" onclick="quickPlot('y = 2^x')" class="quick-btn">2ˣ</button>
+        <button type="button" onclick="quickPlot('y = x^3 - 3*x')" class="quick-btn">x³−3x</button>
+      </div>
+      <div style="position:relative;background:var(--surface2);border-radius:8px;overflow:hidden">
+        <canvas id="graphCanvas" width="900" height="420" style="width:100%;display:block;cursor:crosshair"></canvas>
+        <div id="graphInfo" style="position:absolute;top:8px;right:12px;font-size:.78rem;color:var(--ink2);background:var(--surface);padding:4px 8px;border-radius:6px;border:1px solid var(--border)"></div>
+      </div>
+      <div id="graphStatus" style="margin-top:8px;font-size:.85rem;color:var(--ink2)">Type an equation above and click Plot</div>
+    </div>
+  </div>
+
+  <!-- EQUATION SOLVER -->
+  <div id="tool-solver" class="tool-panel" style="display:none">
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:20px">
+      <p style="font-size:.9rem;color:var(--ink2);margin:0 0 14px">Enter an expression to factor, expand, simplify, or solve.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+        <select id="solver-mode" style="padding:9px 12px;border:1.5px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:.9rem">
+          <option value="simplify">Simplify</option>
+          <option value="factor">Factor</option>
+          <option value="expand">Expand</option>
+          <option value="evaluate">Evaluate</option>
+          <option value="derivative">Derivative</option>
+        </select>
+        <input id="solver-input" type="text" placeholder="e.g.  x^2 - 5x + 6,  2*(x+3)^2,  sin(pi/4)" style="flex:1;min-width:200px;padding:10px 14px;border:1.5px solid var(--border2);border-radius:8px;font-size:.9375rem;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif" onkeydown="if(event.key==='Enter')runSolver()">
+        <button type="button" onclick="runSolver()" class="btn btn-p" style="padding:10px 20px">Solve →</button>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+        <span style="font-size:.8rem;color:var(--ink3)">Try:</span>
+        <button type="button" onclick="quickSolve('factor','x^2 - 5x + 6')" class="quick-btn">factor x²-5x+6</button>
+        <button type="button" onclick="quickSolve('expand','(x+2)^3')" class="quick-btn">expand (x+2)³</button>
+        <button type="button" onclick="quickSolve('derivative','x^3 + 2x')" class="quick-btn">d/dx(x³+2x)</button>
+        <button type="button" onclick="quickSolve('simplify','2x + 3x - x')" class="quick-btn">simplify 2x+3x-x</button>
+      </div>
+      <div id="solver-result" style="background:var(--surface2);border-radius:10px;padding:18px;min-height:80px;font-size:1rem;color:var(--ink)">
+        <span style="color:var(--ink3)">Result will appear here…</span>
+      </div>
+      <div id="solver-steps" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <!-- GEOMETRY TOOL -->
+  <div id="tool-geometry" class="tool-panel" style="display:none">
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:20px">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+        <select id="geo-shape" onchange="initGeo()" style="padding:9px 12px;border:1.5px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif">
+          <option value="triangle">Triangle</option>
+          <option value="circle">Circle</option>
+          <option value="polygon">Regular Polygon</option>
+        </select>
+        <button type="button" onclick="initGeo()" class="btn" style="padding:9px 16px;background:var(--surface2);border:1px solid var(--border2)">Reset</button>
+        <span style="font-size:.85rem;color:var(--ink2);align-self:center">Drag the vertices to explore!</span>
+      </div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap">
+        <canvas id="geoCanvas" width="500" height="420" style="border:1.5px solid var(--border2);border-radius:10px;background:var(--surface2);cursor:grab;flex-shrink:0;max-width:100%"></canvas>
+        <div id="geo-stats" style="min-width:180px;flex:1">
+          <div style="font-weight:700;margin-bottom:10px;color:var(--ink)">Properties</div>
+          <div id="geo-props" style="font-size:.88rem;line-height:2;color:var(--ink2)">Drag a vertex to update</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NUMBER THEORY TOOLS -->
+  <div id="tool-numtheory" class="tool-panel" style="display:none">
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:20px">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
+        <button type="button" onclick="switchNT('prime')" id="nt-btn-prime" class="quick-btn" style="padding:8px 16px">Prime Check</button>
+        <button type="button" onclick="switchNT('factor')" id="nt-btn-factor" class="quick-btn" style="padding:8px 16px">Factorize</button>
+        <button type="button" onclick="switchNT('gcd')" id="nt-btn-gcd" class="quick-btn" style="padding:8px 16px">GCD / LCM</button>
+        <button type="button" onclick="switchNT('euler')" id="nt-btn-euler" class="quick-btn" style="padding:8px 16px">Euler φ</button>
+        <button type="button" onclick="switchNT('modpow')" id="nt-btn-modpow" class="quick-btn" style="padding:8px 16px">Modular Exp</button>
+      </div>
+      <div id="nt-prime" class="nt-panel">
+        <div style="display:flex;gap:10px;margin-bottom:12px">
+          <input id="nt-n1" type="number" placeholder="Enter a number" style="flex:1;padding:10px;border:1.5px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif" onkeydown="if(event.key==='Enter')runNT('prime')">
+          <button type="button" onclick="runNT('prime')" class="btn btn-p" style="padding:10px 20px">Check →</button>
+        </div>
+        <div id="nt-result" style="background:var(--surface2);border-radius:8px;padding:16px;font-size:.95rem;color:var(--ink);min-height:60px"><span style="color:var(--ink3)">Result here…</span></div>
+      </div>
+      <div id="nt-factor" class="nt-panel" style="display:none">
+        <div style="display:flex;gap:10px;margin-bottom:12px">
+          <input id="nt-n2" type="number" placeholder="Enter a number" style="flex:1;padding:10px;border:1.5px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif" onkeydown="if(event.key==='Enter')runNT('factor')">
+          <button type="button" onclick="runNT('factor')" class="btn btn-p" style="padding:10px 20px">Factor →</button>
+        </div>
+        <div id="nt-result2" style="background:var(--surface2);border-radius:8px;padding:16px;font-size:.95rem;color:var(--ink);min-height:60px"><span style="color:var(--ink3)">Result here…</span></div>
+      </div>
+      <div id="nt-gcd" class="nt-panel" style="display:none">
+        <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+          <input id="nt-a" type="number" placeholder="a" style="width:120px;padding:10px;border:1.5px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif">
+          <input id="nt-b" type="number" placeholder="b" style="width:120px;padding:10px;border:1.5px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif">
+          <button type="button" onclick="runNT('gcd')" class="btn btn-p" style="padding:10px 20px">Calculate →</button>
+        </div>
+        <div id="nt-result3" style="background:var(--surface2);border-radius:8px;padding:16px;font-size:.95rem;color:var(--ink);min-height:60px"><span style="color:var(--ink3)">Result here…</span></div>
+      </div>
+      <div id="nt-euler" class="nt-panel" style="display:none">
+        <div style="display:flex;gap:10px;margin-bottom:12px">
+          <input id="nt-n3" type="number" placeholder="Enter n for φ(n)" style="flex:1;padding:10px;border:1.5px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif" onkeydown="if(event.key==='Enter')runNT('euler')">
+          <button type="button" onclick="runNT('euler')" class="btn btn-p" style="padding:10px 20px">Calculate →</button>
+        </div>
+        <div id="nt-result4" style="background:var(--surface2);border-radius:8px;padding:16px;font-size:.95rem;color:var(--ink);min-height:60px"><span style="color:var(--ink3)">Result here…</span></div>
+      </div>
+      <div id="nt-modpow" class="nt-panel" style="display:none">
+        <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+          <input id="nt-base" type="number" placeholder="base" style="width:100px;padding:10px;border:1.5px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif">
+          <span style="align-self:center;font-size:1.2rem;color:var(--ink2)">^</span>
+          <input id="nt-exp" type="number" placeholder="exp" style="width:100px;padding:10px;border:1.5px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif">
+          <span style="align-self:center;font-size:1.2rem;color:var(--ink2)">mod</span>
+          <input id="nt-mod" type="number" placeholder="mod" style="width:100px;padding:10px;border:1.5px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif">
+          <button type="button" onclick="runNT('modpow')" class="btn btn-p" style="padding:10px 20px">Calculate →</button>
+        </div>
+        <div id="nt-result5" style="background:var(--surface2);border-radius:8px;padding:16px;font-size:.95rem;color:var(--ink);min-height:60px"><span style="color:var(--ink3)">Result here…</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CONCEPTS VIEW ═══ -->
+<div id="view-concepts" class="view" style="display:none;padding:28px 32px;max-width:1100px;margin:0 auto">
+  <h2 style="font-size:1.5rem;margin:0 0 6px">📖 Concept Pages</h2>
+  <p style="color:var(--ink2);margin:0 0 20px">Theory + examples + practice — everything you need to master each topic.</p>
+  <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+    <input id="concept-search" type="text" placeholder="Search concepts… (e.g. binomial theorem, quadratic formula)" style="flex:1;min-width:200px;padding:10px 14px;border:1.5px solid var(--border2);border-radius:8px;font-size:.9375rem;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif" oninput="filterConcepts()">
+    <select id="concept-domain" onchange="filterConcepts()" style="padding:10px 12px;border:1.5px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif">
+      <option value="">All Domains</option>
+      <option value="Algebra">Algebra</option>
+      <option value="Geometry">Geometry</option>
+      <option value="Number Theory">Number Theory</option>
+      <option value="Counting">Counting & Combinatorics</option>
+      <option value="Probability">Probability</option>
+    </select>
+  </div>
+  <div id="concept-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px"></div>
+  <div id="concept-detail" style="display:none;background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:28px;margin-top:8px">
+    <button type="button" onclick="closeConcept()" style="background:none;border:none;color:var(--ink2);cursor:pointer;font-size:.9rem;margin-bottom:16px;display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif">← Back to all concepts</button>
+    <div id="concept-detail-body"></div>
+  </div>
+</div>
+
+<!-- ═══ PLAYGROUND VIEW ═══ -->
+<div id="view-playground" class="view" style="display:none;padding:28px 32px;max-width:1100px;margin:0 auto">
+  <h2 style="font-size:1.5rem;margin:0 0 6px">🎮 Math Playground</h2>
+  <p style="color:var(--ink2);margin:0 0 20px">Explore math visually — fractals, primes, probability, and more.</p>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px">
+    <button type="button" onclick="switchPlay('primes')" id="play-btn-primes" class="tool-tab-btn active-tool">🔢 Prime Sieve</button>
+    <button type="button" onclick="switchPlay('fractal')" id="play-btn-fractal" class="tool-tab-btn">🌿 Fractals</button>
+    <button type="button" onclick="switchPlay('prob')" id="play-btn-prob" class="tool-tab-btn">🎲 Probability Sim</button>
+    <button type="button" onclick="switchPlay('pascals')" id="play-btn-pascals" class="tool-tab-btn">🔺 Pascal's Triangle</button>
+  </div>
+
+  <!-- PRIME SIEVE -->
+  <div id="play-primes" class="play-panel">
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:20px">
+      <p style="color:var(--ink2);font-size:.9rem;margin:0 0 14px">Sieve of Eratosthenes — watch primes get highlighted as composites are eliminated.</p>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px">
+        <label style="font-size:.9rem;color:var(--ink2)">Show primes up to:</label>
+        <input id="sieve-n" type="number" value="100" min="10" max="500" style="width:90px;padding:8px;border:1.5px solid var(--border2);border-radius:7px;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif">
+        <button type="button" onclick="runSieve()" class="btn btn-p" style="padding:8px 18px">Run Sieve</button>
+        <button type="button" onclick="animateSieve()" class="btn" style="padding:8px 18px;background:var(--surface2);border:1px solid var(--border2)">▶ Animate</button>
+        <span id="sieve-count" style="font-size:.85rem;color:var(--ink2)"></span>
+      </div>
+      <div id="sieve-grid" style="display:flex;flex-wrap:wrap;gap:4px;max-height:320px;overflow-y:auto;padding:8px;background:var(--surface2);border-radius:8px"></div>
+    </div>
+  </div>
+
+  <!-- FRACTAL -->
+  <div id="play-fractal" class="play-panel" style="display:none">
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:20px">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px">
+        <select id="fractal-type" onchange="drawFractal()" style="padding:9px 12px;border:1.5px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif">
+          <option value="sierpinski">Sierpinski Triangle</option>
+          <option value="tree">Fractal Tree</option>
+          <option value="snowflake">Koch Snowflake</option>
+        </select>
+        <label style="font-size:.85rem;color:var(--ink2)">Depth:</label>
+        <input id="fractal-depth" type="range" min="1" max="8" value="5" oninput="document.getElementById('fractal-depth-val').textContent=this.value;drawFractal()" style="width:100px">
+        <span id="fractal-depth-val" style="font-size:.9rem;color:var(--ink2)">5</span>
+      </div>
+      <canvas id="fractalCanvas" width="700" height="450" style="width:100%;border-radius:8px;background:#0a0a14;display:block"></canvas>
+    </div>
+  </div>
+
+  <!-- PROBABILITY SIM -->
+  <div id="play-prob" class="play-panel" style="display:none">
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:20px">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px">
+        <select id="prob-type" style="padding:9px 12px;border:1.5px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif">
+          <option value="coin">Coin Flips</option>
+          <option value="dice">Dice Rolls</option>
+          <option value="pi">Monte Carlo π</option>
+        </select>
+        <input id="prob-n" type="number" value="1000" min="10" max="50000" style="width:100px;padding:8px;border:1.5px solid var(--border2);border-radius:7px;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif">
+        <label style="font-size:.85rem;color:var(--ink2)">trials</label>
+        <button type="button" onclick="runProbSim()" class="btn btn-p" style="padding:8px 18px">Simulate →</button>
+      </div>
+      <canvas id="probCanvas" width="700" height="340" style="width:100%;border-radius:8px;background:var(--surface2);display:block"></canvas>
+      <div id="prob-stats" style="margin-top:12px;font-size:.9rem;color:var(--ink2)"></div>
+    </div>
+  </div>
+
+  <!-- PASCALS TRIANGLE -->
+  <div id="play-pascals" class="play-panel" style="display:none">
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:20px">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px">
+        <label style="font-size:.9rem;color:var(--ink2)">Rows:</label>
+        <input id="pascal-rows" type="range" min="3" max="16" value="8" oninput="document.getElementById('pascal-rows-val').textContent=this.value;drawPascal()" style="width:120px">
+        <span id="pascal-rows-val" style="font-weight:700;color:var(--ink)">8</span>
+        <select id="pascal-highlight" onchange="drawPascal()" style="padding:8px 12px;border:1.5px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif">
+          <option value="none">No highlight</option>
+          <option value="even">Highlight even (Sierpinski!)</option>
+          <option value="div3">Divisible by 3</option>
+          <option value="primerow">Prime row sums</option>
+        </select>
+      </div>
+      <div id="pascal-grid" style="overflow-x:auto;text-align:center;font-size:.85rem;line-height:2.2"></div>
+    </div>
+  </div>
+</div>
+
 <script>
 // ════════════════════════════════════
 // CONSTANTS & MODULE META
@@ -3114,7 +3404,892 @@ function handleGoogleSignIn(){closeSignInModal();}
 function handleEmailSignIn(){closeSignInModal();}
 
 function getDomColor(d){return DCOLORS[d]||'#333';}
-function getDomBg(d){return DBGS[d]||'#f5f5f5';}</script>
+function getDomBg(d){return DBGS[d]||'#f5f5f5';}
+
+// ════════════════════════════════════
+// DARK MODE
+// ════════════════════════════════════
+function toggleDark(){
+  const d=document.body.classList.toggle('dark-mode');
+  document.getElementById('darkToggle').textContent=d?'☀️':'🌙';
+  try{localStorage.setItem('ma_dark',d?'1':'0');}catch{}
+}
+(function(){
+  try{if(localStorage.getItem('ma_dark')==='1'){document.body.classList.add('dark-mode');const b=document.getElementById('darkToggle');if(b)b.textContent='☀️';}}catch{}
+})();
+
+// ════════════════════════════════════
+// TOOL PANEL SWITCHING
+// ════════════════════════════════════
+function switchTool(name){
+  ['graph','solver','geometry','numtheory'].forEach(t=>{
+    const p=document.getElementById('tool-'+t);
+    const b=document.getElementById('tool-btn-'+t);
+    if(p){p.style.display=t===name?'block':'none';}
+    if(b){b.classList.toggle('active-tool',t===name);}
+  });
+  if(name==='geometry')initGeo();
+}
+function switchPlay(name){
+  ['primes','fractal','prob','pascals'].forEach(t=>{
+    const p=document.getElementById('play-'+t);
+    const b=document.getElementById('play-btn-'+t);
+    if(p){p.style.display=t===name?'block':'none';}
+    if(b){b.classList.toggle('active-tool',t===name);}
+  });
+  if(name==='primes')runSieve();
+  if(name==='fractal')drawFractal();
+  if(name==='pascals')drawPascal();
+}
+function switchNT(name){
+  ['prime','factor','gcd','euler','modpow'].forEach(t=>{
+    const p=document.getElementById('nt-'+t);
+    const b=document.getElementById('nt-btn-'+t);
+    if(p){p.style.display=t===name?'block':'none';}
+    if(b){b.classList.toggle('active-tool',t===name);}
+  });
+}
+
+// ════════════════════════════════════
+// GRAPH VISUALIZER
+// ════════════════════════════════════
+let graphFns = [];
+const GRAPH_COLORS = ['#3d5afe','#e63946','#1b9c52','#b45309','#7c3aed','#0ea5e9'];
+let graphDrag = null;
+let graphViewport = {xMin:-10, xMax:10, yMin:-8, yMax:8};
+
+function quickPlot(eq){ document.getElementById('graph-input').value=eq; plotGraph(); }
+function clearGraph(){ graphFns=[]; const c=document.getElementById('graphCanvas'); if(c)drawGraph(c); document.getElementById('graphStatus').textContent='Canvas cleared.'; }
+
+function plotGraph(){
+  const inp = document.getElementById('graph-input').value.trim();
+  if(!inp) return;
+  // Support multiple equations separated by comma
+  const eqs = inp.split(',').map(s=>s.trim()).filter(Boolean);
+  graphFns = eqs;
+  const c = document.getElementById('graphCanvas');
+  if(!c) return;
+  drawGraph(c);
+}
+
+function drawGraph(canvas){
+  const ctx = canvas.getContext('2d');
+  const W = canvas.offsetWidth || canvas.width;
+  const H = canvas.offsetHeight || canvas.height;
+  canvas.width = W*window.devicePixelRatio||W;
+  canvas.height = (H||420)*window.devicePixelRatio||H||420;
+  ctx.scale(window.devicePixelRatio||1, window.devicePixelRatio||1);
+  const w=W, h=H||420;
+  const vp = graphViewport;
+
+  const toX = x => (x-vp.xMin)/(vp.xMax-vp.xMin)*w;
+  const toY = y => h - (y-vp.yMin)/(vp.yMax-vp.yMin)*h;
+  const fromX = px => vp.xMin + px/w*(vp.xMax-vp.xMin);
+
+  // Background
+  const isDark = document.body.classList.contains('dark-mode');
+  ctx.fillStyle = isDark ? '#0f0f18' : '#f8f8ff';
+  ctx.fillRect(0,0,w,h);
+
+  // Grid
+  ctx.strokeStyle = isDark ? '#1e1e2e' : '#e8e8f0';
+  ctx.lineWidth = 1;
+  const gridStep = bestGridStep(vp.xMax - vp.xMin);
+  for(let x=Math.ceil(vp.xMin/gridStep)*gridStep; x<=vp.xMax; x+=gridStep){
+    const px=toX(x); ctx.beginPath(); ctx.moveTo(px,0); ctx.lineTo(px,h); ctx.stroke();
+  }
+  for(let y=Math.ceil(vp.yMin/gridStep)*gridStep; y<=vp.yMax; y+=gridStep){
+    const py=toY(y); ctx.beginPath(); ctx.moveTo(0,py); ctx.lineTo(w,py); ctx.stroke();
+  }
+
+  // Axes
+  ctx.strokeStyle = isDark ? '#3a3a5a' : '#c0c0d0';
+  ctx.lineWidth = 1.5;
+  const ax=toX(0), ay=toY(0);
+  ctx.beginPath(); ctx.moveTo(0,ay); ctx.lineTo(w,ay); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(ax,0); ctx.lineTo(ax,h); ctx.stroke();
+
+  // Axis labels
+  ctx.fillStyle = isDark ? '#6060a0' : '#9090b0';
+  ctx.font = '11px DM Sans, sans-serif';
+  ctx.textAlign = 'center';
+  for(let x=Math.ceil(vp.xMin/gridStep)*gridStep; x<=vp.xMax; x+=gridStep){
+    if(Math.abs(x)<0.001) continue;
+    const px=toX(x);
+    ctx.fillText(x%1===0?x:x.toFixed(1), px, Math.min(ay+14,h-4));
+  }
+  ctx.textAlign = 'right';
+  for(let y=Math.ceil(vp.yMin/gridStep)*gridStep; y<=vp.yMax; y+=gridStep){
+    if(Math.abs(y)<0.001) continue;
+    const py=toY(y);
+    ctx.fillText(y%1===0?y:y.toFixed(1), Math.max(ax-4,28), py+4);
+  }
+
+  // Plot each function
+  let errors = [];
+  graphFns.forEach((eq, i) => {
+    const col = GRAPH_COLORS[i % GRAPH_COLORS.length];
+    const expr = eq.replace(/^y\s*=\s*/i,'').replace(/\^/g,'**');
+    ctx.strokeStyle = col;
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    let started=false, lastValid=false;
+    for(let px=0; px<=w; px+=1){
+      const x = fromX(px);
+      let y;
+      try{
+        // safe eval with math context
+        y = safeEval(expr, x);
+      }catch(e){ lastValid=false; continue; }
+      if(!isFinite(y)||isNaN(y)){ lastValid=false; continue; }
+      const py = toY(y);
+      if(!started||!lastValid){ ctx.moveTo(px,py); started=true; }
+      else { ctx.lineTo(px,py); }
+      lastValid=true;
+    }
+    ctx.stroke();
+
+    // Legend
+    ctx.fillStyle=col;
+    ctx.fillRect(12, 12+i*22, 18, 3);
+    ctx.fillStyle=isDark?'#e0e0f0':'#222';
+    ctx.font='12px DM Sans,sans-serif';
+    ctx.textAlign='left';
+    ctx.fillText(eq, 36, 18+i*22);
+  });
+
+  const statusEl = document.getElementById('graphStatus');
+  if(statusEl && errors.length===0 && graphFns.length>0){
+    statusEl.textContent = `Plotted: ${graphFns.join(', ')}  |  x: [${vp.xMin}, ${vp.xMax}]`;
+  }
+}
+
+function bestGridStep(range){
+  const steps = [0.25,0.5,1,2,5,10,20,50,100];
+  return steps.find(s=>range/s<=12) || 100;
+}
+
+function safeEval(expr, x){
+  // math.js safe evaluate
+  if(typeof math !== 'undefined'){
+    return math.evaluate(expr, {x});
+  }
+  // Fallback: manual parse
+  const fn = new Function('x','Math','return '+expr.replace(/sin/g,'Math.sin').replace(/cos/g,'Math.cos').replace(/tan/g,'Math.tan').replace(/sqrt/g,'Math.sqrt').replace(/abs/g,'Math.abs').replace(/log/g,'Math.log').replace(/exp/g,'Math.exp').replace(/pi/g,'Math.PI').replace(/e(?![a-z])/g,'Math.E'));
+  return fn(x, Math);
+}
+
+// Graph zoom/pan
+(function(){
+  let isDragging=false, lastX=0, lastY=0;
+  document.addEventListener('DOMContentLoaded',()=>{
+    const c=document.getElementById('graphCanvas');
+    if(!c)return;
+    c.addEventListener('mousedown',e=>{isDragging=true;lastX=e.clientX;lastY=e.clientY;});
+    c.addEventListener('mousemove',e=>{
+      if(!isDragging)return;
+      const vp=graphViewport, w=c.offsetWidth, h=c.offsetHeight;
+      const dx=(e.clientX-lastX)/w*(vp.xMax-vp.xMin);
+      const dy=(e.clientY-lastY)/h*(vp.yMax-vp.yMin);
+      vp.xMin-=dx; vp.xMax-=dx; vp.yMin+=dy; vp.yMax+=dy;
+      lastX=e.clientX; lastY=e.clientY;
+      if(graphFns.length)drawGraph(c);
+    });
+    c.addEventListener('mouseup',()=>{isDragging=false;});
+    c.addEventListener('wheel',e=>{
+      e.preventDefault();
+      const vp=graphViewport, factor=e.deltaY>0?1.15:0.87;
+      const cx=(vp.xMin+vp.xMax)/2, cy=(vp.yMin+vp.yMax)/2;
+      const rw=(vp.xMax-vp.xMin)/2*factor, rh=(vp.yMax-vp.yMin)/2*factor;
+      vp.xMin=cx-rw; vp.xMax=cx+rw; vp.yMin=cy-rh; vp.yMax=cy+rh;
+      if(graphFns.length)drawGraph(c);
+    },{passive:false});
+  });
+})();
+
+// ════════════════════════════════════
+// EQUATION SOLVER
+// ════════════════════════════════════
+function quickSolve(mode, expr){
+  document.getElementById('solver-mode').value=mode;
+  document.getElementById('solver-input').value=expr;
+  runSolver();
+}
+
+function runSolver(){
+  const mode=document.getElementById('solver-mode').value;
+  const inp=document.getElementById('solver-input').value.trim();
+  if(!inp)return;
+  const res=document.getElementById('solver-result');
+  const steps=document.getElementById('solver-steps');
+  steps.innerHTML='';
+
+  try{
+    let result, stepsArr=[];
+    if(typeof math==='undefined'){res.innerHTML='<span style="color:var(--red)">Loading math engine… try again in a moment.</span>';return;}
+
+    if(mode==='factor'){
+      // Factor using mathjs
+      stepsArr.push(`Expression: <strong>${inp}</strong>`);
+      stepsArr.push(`Attempting to factor...`);
+      try{
+        const parsed = math.parse(inp);
+        result = math.simplify(inp).toString();
+        stepsArr.push(`Simplified form: <strong>${result}</strong>`);
+        // Try to find roots for quadratics
+        const m = inp.match(/(-?\d*)x\^2\s*([+-]\s*\d*x)?\s*([+-]\s*\d+)?/);
+        if(m){
+          const a=parseFloat(m[1]||1), b_str=(m[2]||'').replace(/\s/g,''), c_str=(m[3]||'0').replace(/\s/g,'');
+          const b=parseFloat(b_str||0), c=parseFloat(c_str||0);
+          if(!isNaN(a)&&!isNaN(b)&&!isNaN(c)){
+            const disc=b*b-4*a*c;
+            if(disc>=0){
+              const r1=(-b+Math.sqrt(disc))/(2*a), r2=(-b-Math.sqrt(disc))/(2*a);
+              stepsArr.push(`Discriminant: b²−4ac = ${b}²−4(${a})(${c}) = <strong>${disc}</strong>`);
+              if(Math.abs(r1-r2)<1e-10) stepsArr.push(`One repeated root: x = <strong>${r1.toFixed(4)}</strong>`);
+              else stepsArr.push(`Roots: x = <strong>${r1.toFixed(4)}</strong> and x = <strong>${r2.toFixed(4)}</strong>`);
+              if(Number.isInteger(r1)&&Number.isInteger(r2)) result=`${a===1?'':'('+a+')'}(x − ${r1})(x − ${r2})`;
+            } else {
+              stepsArr.push(`Discriminant = ${disc} < 0: no real roots (complex roots exist)`);
+            }
+          }
+        }
+      }catch(e){result=inp;}
+    } else if(mode==='expand'){
+      stepsArr.push(`Expanding: <strong>${inp}</strong>`);
+      result = math.simplify(inp, {exactFractions:false}).toString();
+      stepsArr.push(`Result: <strong>${result}</strong>`);
+    } else if(mode==='simplify'){
+      stepsArr.push(`Simplifying: <strong>${inp}</strong>`);
+      result = math.simplify(inp).toString();
+      stepsArr.push(`Result: <strong>${result}</strong>`);
+    } else if(mode==='evaluate'){
+      stepsArr.push(`Evaluating: <strong>${inp}</strong>`);
+      result = math.evaluate(inp);
+      stepsArr.push(`Numerical result: <strong>${typeof result==='object'?JSON.stringify(result):result}</strong>`);
+    } else if(mode==='derivative'){
+      stepsArr.push(`Finding d/dx of: <strong>${inp}</strong>`);
+      result = math.derivative(inp, 'x').toString();
+      stepsArr.push(`d/dx = <strong>${result}</strong>`);
+    }
+
+    res.innerHTML = `<div style="font-size:1.1rem;font-weight:700;color:var(--blue);margin-bottom:8px">${result}</div>`;
+    steps.innerHTML = stepsArr.map(s=>`<div class="solver-step">${s}</div>`).join('');
+  } catch(e){
+    res.innerHTML=`<span style="color:var(--red)">Error: ${e.message}. Check your input format.</span>`;
+  }
+}
+
+// ════════════════════════════════════
+// INTERACTIVE GEOMETRY
+// ════════════════════════════════════
+let geoState = {shape:'triangle', pts:[], dragging:-1};
+
+function initGeo(){
+  const shape = document.getElementById('geo-shape')?.value || 'triangle';
+  geoState.shape = shape;
+  const c = document.getElementById('geoCanvas');
+  if(!c) return;
+  const w=c.width, h=c.height;
+  if(shape==='triangle'){
+    geoState.pts=[{x:w/2,y:60},{x:80,y:h-80},{x:w-80,y:h-80}];
+  } else if(shape==='circle'){
+    geoState.pts=[{x:w/2,y:h/2},{x:w/2+120,y:h/2}];
+  } else {
+    const n=6, r=140, cx=w/2, cy=h/2;
+    geoState.pts=[];
+    for(let i=0;i<n;i++) geoState.pts.push({x:cx+r*Math.cos(i*2*Math.PI/n-Math.PI/2),y:cy+r*Math.sin(i*2*Math.PI/n-Math.PI/2)});
+  }
+  drawGeo();
+}
+
+function drawGeo(){
+  const c=document.getElementById('geoCanvas');
+  if(!c)return;
+  const ctx=c.getContext('2d'), w=c.width, h=c.height;
+  const isDark=document.body.classList.contains('dark-mode');
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle=isDark?'#0f0f18':'#f5f5fa';
+  ctx.fillRect(0,0,w,h);
+
+  const pts=geoState.pts;
+  const blue='#3d5afe', light=isDark?'rgba(61,90,254,.15)':'rgba(61,90,254,.08)';
+
+  if(geoState.shape==='triangle'&&pts.length>=3){
+    ctx.beginPath(); ctx.moveTo(pts[0].x,pts[0].y);
+    pts.forEach(p=>ctx.lineTo(p.x,p.y)); ctx.closePath();
+    ctx.fillStyle=light; ctx.fill();
+    ctx.strokeStyle=blue; ctx.lineWidth=2; ctx.stroke();
+    // Angle labels
+    const labels=['A','B','C'];
+    pts.forEach((p,i)=>{
+      ctx.fillStyle=blue; ctx.font='bold 14px DM Sans,sans-serif'; ctx.textAlign='center';
+      ctx.fillText(labels[i], p.x+(p.x-pts.reduce((s,q)=>s+q.x,0)/3)*0.15, p.y+(p.y-pts.reduce((s,q)=>s+q.y,0)/3)*0.15);
+    });
+    // Stats
+    const sides=[dist(pts[0],pts[1]),dist(pts[1],pts[2]),dist(pts[2],pts[0])];
+    const a=angle(pts[1],pts[0],pts[2]), b=angle(pts[0],pts[1],pts[2]), cv=angle(pts[1],pts[2],pts[0]);
+    const area=Math.abs((pts[1].x-pts[0].x)*(pts[2].y-pts[0].y)-(pts[2].x-pts[0].x)*(pts[1].y-pts[0].y))/2;
+    document.getElementById('geo-props').innerHTML=
+      `<div>Side AB: <strong>${(sides[0]*0.05).toFixed(2)} u</strong></div>
+       <div>Side BC: <strong>${(sides[1]*0.05).toFixed(2)} u</strong></div>
+       <div>Side CA: <strong>${(sides[2]*0.05).toFixed(2)} u</strong></div>
+       <div style="margin-top:8px">∠A: <strong>${a.toFixed(1)}°</strong></div>
+       <div>∠B: <strong>${b.toFixed(1)}°</strong></div>
+       <div>∠C: <strong>${cv.toFixed(1)}°</strong></div>
+       <div style="margin-top:8px">Area: <strong>${(area*0.0025).toFixed(3)} u²</strong></div>
+       <div>Perimeter: <strong>${((sides[0]+sides[1]+sides[2])*0.05).toFixed(2)} u</strong></div>`;
+  } else if(geoState.shape==='circle'&&pts.length>=2){
+    const r=dist(pts[0],pts[1]);
+    ctx.beginPath(); ctx.arc(pts[0].x,pts[0].y,r,0,2*Math.PI);
+    ctx.fillStyle=light; ctx.fill();
+    ctx.strokeStyle=blue; ctx.lineWidth=2; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pts[0].x,pts[0].y); ctx.lineTo(pts[1].x,pts[1].y);
+    ctx.strokeStyle='rgba(61,90,254,.5)'; ctx.setLineDash([4,4]); ctx.stroke(); ctx.setLineDash([]);
+    document.getElementById('geo-props').innerHTML=
+      `<div>Radius: <strong>${(r*0.05).toFixed(2)} u</strong></div>
+       <div>Diameter: <strong>${(r*0.1).toFixed(2)} u</strong></div>
+       <div>Circumference: <strong>${(2*Math.PI*r*0.05).toFixed(3)} u</strong></div>
+       <div>Area: <strong>${(Math.PI*r*r*0.0025).toFixed(3)} u²</strong></div>`;
+  } else if(geoState.shape==='polygon'&&pts.length>0){
+    ctx.beginPath(); ctx.moveTo(pts[0].x,pts[0].y);
+    pts.forEach(p=>ctx.lineTo(p.x,p.y)); ctx.closePath();
+    ctx.fillStyle=light; ctx.fill();
+    ctx.strokeStyle=blue; ctx.lineWidth=2; ctx.stroke();
+    const n=pts.length;
+    const sideLen=dist(pts[0],pts[1]);
+    const cx=pts.reduce((s,p)=>s+p.x,0)/n, cy=pts.reduce((s,p)=>s+p.y,0)/n;
+    const apothem=dist({x:cx,y:cy},{x:(pts[0].x+pts[1].x)/2,y:(pts[0].y+pts[1].y)/2});
+    document.getElementById('geo-props').innerHTML=
+      `<div>Sides: <strong>${n}</strong></div>
+       <div>Side length: <strong>${(sideLen*0.05).toFixed(2)} u</strong></div>
+       <div>Perimeter: <strong>${(sideLen*n*0.05).toFixed(2)} u</strong></div>
+       <div>Apothem: <strong>${(apothem*0.05).toFixed(2)} u</strong></div>
+       <div>Area: <strong>${(n*sideLen*apothem/2*0.0025).toFixed(3)} u²</strong></div>
+       <div>Int. angle: <strong>${((n-2)*180/n).toFixed(1)}°</strong></div>`;
+  }
+
+  // Draw control points
+  pts.forEach((p,i)=>{
+    ctx.beginPath(); ctx.arc(p.x,p.y,8,0,2*Math.PI);
+    ctx.fillStyle=geoState.dragging===i?'#e63946':blue;
+    ctx.fill();
+    ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.stroke();
+  });
+}
+
+function dist(a,b){return Math.sqrt((a.x-b.x)**2+(a.y-b.y)**2);}
+function angle(a,b,c){
+  const v1={x:a.x-b.x,y:a.y-b.y}, v2={x:c.x-b.x,y:c.y-b.y};
+  const dot=v1.x*v2.x+v1.y*v2.y, m1=Math.sqrt(v1.x**2+v1.y**2), m2=Math.sqrt(v2.x**2+v2.y**2);
+  return Math.acos(Math.max(-1,Math.min(1,dot/(m1*m2))))*180/Math.PI;
+}
+
+(function(){
+  document.addEventListener('DOMContentLoaded',()=>{
+    const c=document.getElementById('geoCanvas');
+    if(!c)return;
+    const getPos=(e)=>{ const r=c.getBoundingClientRect(); const cl=e.touches?e.touches[0]:e; return {x:(cl.clientX-r.left)*c.width/r.width,y:(cl.clientY-r.top)*c.height/r.height}; };
+    const down=(e)=>{ const p=getPos(e); geoState.dragging=geoState.pts.findIndex(pt=>dist(pt,p)<18); if(geoState.dragging>=0)e.preventDefault(); };
+    const move=(e)=>{ if(geoState.dragging<0)return; e.preventDefault(); const p=getPos(e); geoState.pts[geoState.dragging]=p; drawGeo(); };
+    const up=()=>{geoState.dragging=-1;};
+    c.addEventListener('mousedown',down); c.addEventListener('mousemove',move); c.addEventListener('mouseup',up);
+    c.addEventListener('touchstart',down,{passive:false}); c.addEventListener('touchmove',move,{passive:false}); c.addEventListener('touchend',up);
+  });
+})();
+
+// ════════════════════════════════════
+// NUMBER THEORY TOOLS
+// ════════════════════════════════════
+function runNT(mode){
+  const results = ['nt-result','nt-result2','nt-result3','nt-result4','nt-result5'];
+  const resId = {prime:0,factor:1,gcd:2,euler:3,modpow:4}[mode];
+  const el = document.getElementById(results[resId]);
+  if(!el) return;
+
+  try{
+    if(mode==='prime'){
+      const n=parseInt(document.getElementById('nt-n1').value);
+      if(isNaN(n)||n<2){el.innerHTML='<span style="color:var(--red)">Enter a number ≥ 2</span>';return;}
+      const prime=isPrime(n);
+      el.innerHTML=`<span style="font-size:1.1rem;font-weight:700;color:${prime?'var(--green)':'var(--red)'}">${n} is ${prime?'PRIME ✓':'COMPOSITE ✗'}</span>
+        ${prime?`<div style="margin-top:8px;color:var(--ink2);font-size:.875rem">It has exactly 2 divisors: 1 and ${n}.</div>`:`<div style="margin-top:8px;color:var(--ink2);font-size:.875rem">Smallest factor: ${smallestFactor(n)}</div>`}`;
+    } else if(mode==='factor'){
+      const n=parseInt(document.getElementById('nt-n2').value);
+      if(isNaN(n)||n<2){el.innerHTML='<span style="color:var(--red)">Enter a number ≥ 2</span>';return;}
+      const factors=primeFactors(n);
+      const grouped={}; factors.forEach(f=>{grouped[f]=(grouped[f]||0)+1;});
+      const factorStr=Object.entries(grouped).map(([p,e])=>e>1?`${p}<sup>${e}</sup>`:p).join(' × ');
+      const divs=divisors(n);
+      el.innerHTML=`<div style="font-size:1.1rem;font-weight:700;color:var(--blue)">${n} = ${factorStr}</div>
+        <div style="margin-top:8px;color:var(--ink2);font-size:.875rem">${divs.length} divisors: ${divs.slice(0,20).join(', ')}${divs.length>20?'…':''}</div>
+        <div style="color:var(--ink2);font-size:.875rem">Sum of divisors: ${divs.reduce((a,b)=>a+b,0)}</div>`;
+    } else if(mode==='gcd'){
+      const a=parseInt(document.getElementById('nt-a').value), b=parseInt(document.getElementById('nt-b').value);
+      if(isNaN(a)||isNaN(b)){el.innerHTML='<span style="color:var(--red)">Enter both numbers</span>';return;}
+      const g=gcd(Math.abs(a),Math.abs(b)), l=Math.abs(a*b)/g;
+      el.innerHTML=`<div><span style="font-weight:700">GCD(${a}, ${b}) = <span style="color:var(--blue)">${g}</span></span></div>
+        <div style="margin-top:6px"><span style="font-weight:700">LCM(${a}, ${b}) = <span style="color:var(--purple)">${l}</span></span></div>
+        <div style="margin-top:8px;font-size:.85rem;color:var(--ink2)">Using: GCD × LCM = |a × b| = ${Math.abs(a*b)}</div>`;
+    } else if(mode==='euler'){
+      const n=parseInt(document.getElementById('nt-n3').value);
+      if(isNaN(n)||n<1){el.innerHTML='<span style="color:var(--red)">Enter a positive integer</span>';return;}
+      const phi=eulerPhi(n);
+      el.innerHTML=`<div style="font-size:1.1rem;font-weight:700">φ(${n}) = <span style="color:var(--blue)">${phi}</span></div>
+        <div style="margin-top:8px;font-size:.875rem;color:var(--ink2)">${phi} integers in [1, ${n}] are coprime with ${n}.</div>`;
+    } else if(mode==='modpow'){
+      const base=BigInt(document.getElementById('nt-base').value||0);
+      const exp=BigInt(document.getElementById('nt-exp').value||0);
+      const mod=BigInt(document.getElementById('nt-mod').value||1);
+      if(mod===0n){el.innerHTML='<span style="color:var(--red)">Mod cannot be 0</span>';return;}
+      const result=modPow(base,exp,mod);
+      el.innerHTML=`<div style="font-size:1.1rem;font-weight:700">${base}<sup>${exp}</sup> mod ${mod} = <span style="color:var(--blue)">${result}</span></div>
+        <div style="margin-top:8px;font-size:.875rem;color:var(--ink2)">Computed using fast modular exponentiation (binary method).</div>`;
+    }
+  }catch(e){el.innerHTML=`<span style="color:var(--red)">Error: ${e.message}</span>`;}
+}
+
+function isPrime(n){ if(n<2)return false; if(n<4)return true; if(n%2===0||n%3===0)return false; for(let i=5;i*i<=n;i+=6)if(n%i===0||n%(i+2)===0)return false; return true; }
+function smallestFactor(n){ if(n%2===0)return 2; for(let i=3;i*i<=n;i+=2)if(n%i===0)return i; return n; }
+function primeFactors(n){ const f=[]; for(let d=2;d*d<=n;d++){ while(n%d===0){f.push(d);n/=d;} } if(n>1)f.push(n); return f; }
+function divisors(n){ const d=[]; for(let i=1;i*i<=n;i++){ if(n%i===0){d.push(i);if(i!==n/i)d.push(n/i);} } return d.sort((a,b)=>a-b); }
+function gcd(a,b){ while(b){[a,b]=[b,a%b];} return a; }
+function eulerPhi(n){ let result=n; for(let p=2;p*p<=n;p++){ if(n%p===0){ while(n%p===0)n/=p; result-=result/p; } } if(n>1)result-=result/n; return result; }
+function modPow(base,exp,mod){ let result=1n; base%=mod; while(exp>0n){ if(exp%2n===1n)result=result*base%mod; exp/=2n; base=base*base%mod; } return result; }
+
+// ════════════════════════════════════
+// PRIME SIEVE VISUALIZER
+// ════════════════════════════════════
+let sieveTimeout=null;
+function runSieve(){
+  const n=parseInt(document.getElementById('sieve-n').value)||100;
+  const grid=document.getElementById('sieve-grid');
+  if(!grid)return;
+  const sieve=new Uint8Array(n+1).fill(1);
+  sieve[0]=sieve[1]=0;
+  for(let i=2;i*i<=n;i++) if(sieve[i]) for(let j=i*i;j<=n;j+=i) sieve[j]=0;
+
+  grid.innerHTML='';
+  for(let i=2;i<=n;i++){
+    const cell=document.createElement('div');
+    cell.textContent=i;
+    cell.style.cssText=`width:38px;height:38px;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:.8rem;font-weight:${sieve[i]?'700':'400'};background:${sieve[i]?'var(--blue)':'var(--surface3)'};color:${sieve[i]?'#fff':'var(--ink3)'};transition:all .2s`;
+    grid.appendChild(cell);
+  }
+  const count=sieve.reduce((s,v)=>s+v,0);
+  document.getElementById('sieve-count').textContent=`${count} primes found`;
+}
+
+function animateSieve(){
+  const n=parseInt(document.getElementById('sieve-n').value)||100;
+  const grid=document.getElementById('sieve-grid');
+  if(!grid)return;
+  // First render all as unprocessed
+  grid.innerHTML='';
+  const cells=[];
+  for(let i=2;i<=n;i++){
+    const cell=document.createElement('div');
+    cell.id=`sieve-cell-${i}`; cell.textContent=i;
+    cell.style.cssText=`width:38px;height:38px;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:.8rem;font-weight:700;background:var(--green-l);color:var(--green);transition:background .3s,color .3s`;
+    grid.appendChild(cell);
+    cells.push(cell);
+  }
+  // Animate sieving
+  const sieve=new Uint8Array(n+1).fill(1); sieve[0]=sieve[1]=0;
+  let i=2; clearTimeout(sieveTimeout);
+  function step(){
+    if(i*i>n){
+      // Mark all remaining primes
+      for(let j=2;j<=n;j++) if(sieve[j]) cells[j-2].style.background='var(--blue)', cells[j-2].style.color='#fff';
+      const count=sieve.reduce((s,v)=>s+v,0);
+      document.getElementById('sieve-count').textContent=`${count} primes found`;
+      return;
+    }
+    if(sieve[i]){
+      cells[i-2].style.background='var(--amber)'; cells[i-2].style.color='#fff';
+      for(let j=i*i;j<=n;j+=i){
+        sieve[j]=0;
+        cells[j-2].style.background='var(--red-l)'; cells[j-2].style.color='var(--red)';
+      }
+    }
+    i++;
+    sieveTimeout=setTimeout(step, 180);
+  }
+  step();
+}
+
+// ════════════════════════════════════
+// FRACTAL GENERATOR
+// ════════════════════════════════════
+function drawFractal(){
+  const type=document.getElementById('fractal-type')?.value||'sierpinski';
+  const depth=parseInt(document.getElementById('fractal-depth')?.value||5);
+  const c=document.getElementById('fractalCanvas');
+  if(!c)return;
+  const ctx=c.getContext('2d');
+  const w=c.width||700, h=c.height||450;
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle='#0a0a14'; ctx.fillRect(0,0,w,h);
+
+  if(type==='sierpinski'){
+    ctx.strokeStyle='#7b8fff'; ctx.lineWidth=1;
+    function drawTri(ax,ay,bx,by,cx,cy,d){
+      if(d===0){ ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(bx,by); ctx.lineTo(cx,cy); ctx.closePath(); ctx.fillStyle=`hsl(${230+d*20},70%,65%)`; ctx.fill(); return; }
+      const mx1=(ax+bx)/2,my1=(ay+by)/2, mx2=(bx+cx)/2,my2=(by+cy)/2, mx3=(ax+cx)/2,my3=(ay+cy)/2;
+      drawTri(ax,ay,mx1,my1,mx3,my3,d-1); drawTri(mx1,my1,bx,by,mx2,my2,d-1); drawTri(mx3,my3,mx2,my2,cx,cy,d-1);
+    }
+    drawTri(w/2,30,30,h-30,w-30,h-30,depth);
+
+  } else if(type==='tree'){
+    function drawBranch(x,y,angle,len,d){
+      if(d===0||len<2)return;
+      const ex=x+len*Math.cos(angle), ey=y+len*Math.sin(angle);
+      const g=ctx.createLinearGradient(x,y,ex,ey);
+      g.addColorStop(0,`hsl(${90+d*8},60%,${40+d*4}%)`); g.addColorStop(1,`hsl(${120+d*8},70%,${50+d*3}%)`);
+      ctx.strokeStyle=g; ctx.lineWidth=Math.max(1,d/2);
+      ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(ex,ey); ctx.stroke();
+      drawBranch(ex,ey,angle-0.4,len*0.72,d-1);
+      drawBranch(ex,ey,angle+0.3,len*0.68,d-1);
+    }
+    drawBranch(w/2,h-20,-Math.PI/2,h*0.28,depth);
+
+  } else if(type==='snowflake'){
+    function kochLine(ax,ay,bx,by,d){
+      if(d===0){ ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(bx,by); ctx.strokeStyle=`hsl(200,80%,${60+d*5}%)`; ctx.lineWidth=1; ctx.stroke(); return; }
+      const dx=(bx-ax)/3,dy=(by-ay)/3;
+      const p1x=ax+dx,p1y=ay+dy, p2x=ax+2*dx,p2y=ay+2*dy;
+      const px=p1x+(dx*Math.cos(-Math.PI/3)-dy*Math.sin(-Math.PI/3));
+      const py=p1y+(dx*Math.sin(-Math.PI/3)+dy*Math.cos(-Math.PI/3));
+      kochLine(ax,ay,p1x,p1y,d-1); kochLine(p1x,p1y,px,py,d-1); kochLine(px,py,p2x,p2y,d-1); kochLine(p2x,p2y,bx,by,d-1);
+    }
+    const R=Math.min(w,h)*0.35, cx=w/2, cy=h/2;
+    const pts=[[cx+R*Math.cos(-Math.PI/2),cy+R*Math.sin(-Math.PI/2)],[cx+R*Math.cos(Math.PI/6),cy+R*Math.sin(Math.PI/6)],[cx+R*Math.cos(5*Math.PI/6),cy+R*Math.sin(5*Math.PI/6)]];
+    for(let i=0;i<3;i++) kochLine(pts[i][0],pts[i][1],pts[(i+1)%3][0],pts[(i+1)%3][1],Math.min(depth,6));
+  }
+}
+
+// ════════════════════════════════════
+// PROBABILITY SIMULATOR
+// ════════════════════════════════════
+function runProbSim(){
+  const type=document.getElementById('prob-type').value;
+  const n=Math.min(50000,parseInt(document.getElementById('prob-n').value)||1000);
+  const c=document.getElementById('probCanvas');
+  if(!c)return;
+  const ctx=c.getContext('2d');
+  const w=c.width||700, h=c.height||340;
+  ctx.clearRect(0,0,w,h);
+  const isDark=document.body.classList.contains('dark-mode');
+  ctx.fillStyle=isDark?'#0f0f18':'#f8f8ff'; ctx.fillRect(0,0,w,h);
+
+  if(type==='coin'){
+    const counts={H:0,T:0};
+    for(let i=0;i<n;i++) Math.random()<0.5?counts.H++:counts.T++;
+    const barW=80, gap=60;
+    [['H','Heads','#3d5afe'],['T','Tails','#e63946']].forEach(([k,label,col],i)=>{
+      const bh=(counts[k]/n)*h*0.7;
+      const x=w/3+i*(barW+gap)-barW/2;
+      ctx.fillStyle=col+'40'; ctx.fillRect(x,h-80-bh,barW,bh);
+      ctx.fillStyle=col; ctx.fillRect(x,h-80-bh,barW,4);
+      ctx.fillStyle=isDark?'#e0e0f0':'#222'; ctx.font='bold 15px DM Sans,sans-serif'; ctx.textAlign='center';
+      ctx.fillText(label,x+barW/2,h-55);
+      ctx.font='13px DM Sans,sans-serif'; ctx.fillStyle=col;
+      ctx.fillText(`${counts[k]} (${(counts[k]/n*100).toFixed(1)}%)`,x+barW/2,h-35);
+    });
+    document.getElementById('prob-stats').innerHTML=`Expected: 50% each | Got: H=${(counts.H/n*100).toFixed(1)}%, T=${(counts.T/n*100).toFixed(1)}% | Trials: ${n}`;
+
+  } else if(type==='dice'){
+    const counts=new Array(7).fill(0);
+    for(let i=0;i<n;i++) counts[Math.ceil(Math.random()*6)]++;
+    const maxC=Math.max(...counts.slice(1));
+    const barW=Math.min(60,(w-80)/7);
+    counts.slice(1).forEach((c2,i)=>{
+      const bh=(c2/maxC)*(h*0.65);
+      const x=50+i*(barW+10);
+      const col=`hsl(${i*50+200},70%,60%)`;
+      ctx.fillStyle=col+'50'; ctx.fillRect(x,h-80-bh,barW,bh);
+      ctx.fillStyle=col; ctx.fillRect(x,h-80-bh,barW,4);
+      ctx.fillStyle=isDark?'#e0e0f0':'#222'; ctx.font='bold 14px DM Sans,sans-serif'; ctx.textAlign='center';
+      ctx.fillText(i+1,x+barW/2,h-55);
+      ctx.font='11px DM Sans,sans-serif'; ctx.fillText(`${(c2/n*100).toFixed(1)}%`,x+barW/2,h-35);
+    });
+    document.getElementById('prob-stats').innerHTML=`Expected: 16.67% each | ${n} dice rolls simulated`;
+
+  } else if(type==='pi'){
+    // Monte Carlo
+    let inside=0;
+    const pts=Math.min(n,5000);
+    const R=Math.min(w,h)*0.45, cx=w/2, cy=h/2;
+    ctx.strokeStyle=isDark?'#3a3a5a':'#c0c0d0'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.arc(cx,cy,R,0,2*Math.PI); ctx.stroke();
+    ctx.strokeRect(cx-R,cy-R,2*R,2*R);
+    for(let i=0;i<pts;i++){
+      const rx=(Math.random()-0.5)*2*R, ry=(Math.random()-0.5)*2*R;
+      const inCirc=rx*rx+ry*ry<=R*R;
+      if(inCirc)inside++;
+      ctx.fillStyle=inCirc?'rgba(61,90,254,.6)':'rgba(230,57,70,.4)';
+      ctx.fillRect(cx+rx-1.5,cy+ry-1.5,3,3);
+    }
+    // Run rest without drawing
+    for(let i=pts;i<n;i++){
+      const rx=(Math.random()-0.5)*2, ry=(Math.random()-0.5)*2;
+      if(rx*rx+ry*ry<=1)inside++;
+    }
+    const piEst=(4*inside/n).toFixed(6);
+    ctx.fillStyle=isDark?'#e0e0f0':'#111'; ctx.font='bold 16px DM Sans,sans-serif'; ctx.textAlign='center';
+    ctx.fillText(`π ≈ ${piEst}`, cx, 30);
+    document.getElementById('prob-stats').innerHTML=`Monte Carlo estimation: π ≈ ${piEst} (actual: ${Math.PI.toFixed(6)}) | Error: ${Math.abs(Math.PI-parseFloat(piEst)).toFixed(6)}`;
+  }
+}
+
+// ════════════════════════════════════
+// PASCAL'S TRIANGLE
+// ════════════════════════════════════
+function drawPascal(){
+  const rows=parseInt(document.getElementById('pascal-rows')?.value||8);
+  const highlight=document.getElementById('pascal-highlight')?.value||'none';
+  const grid=document.getElementById('pascal-grid');
+  if(!grid)return;
+
+  // Build Pascal's triangle
+  const tri=[[1]];
+  for(let r=1;r<rows;r++){
+    const row=[1];
+    for(let c=1;c<r;c++) row.push(tri[r-1][c-1]+tri[r-1][c]);
+    row.push(1);
+    tri.push(row);
+  }
+
+  const isDark=document.body.classList.contains('dark-mode');
+  grid.innerHTML='';
+  tri.forEach((row,r)=>{
+    const rowEl=document.createElement('div');
+    rowEl.style.display='flex'; rowEl.style.justifyContent='center'; rowEl.style.gap='4px'; rowEl.style.marginBottom='3px';
+    row.forEach((val,c)=>{
+      const cell=document.createElement('span');
+      const minW=Math.max(32,58-rows*2);
+      cell.style.cssText=`display:inline-flex;align-items:center;justify-content:center;width:${minW}px;height:${minW}px;border-radius:6px;font-size:${Math.max(9,13-rows)}px;font-weight:700;transition:all .2s;`;
+      let colored=false;
+      if(highlight==='even'&&val%2===0){cell.style.background='var(--blue)';cell.style.color='#fff';colored=true;}
+      else if(highlight==='div3'&&val%3===0){cell.style.background='var(--purple)';cell.style.color='#fff';colored=true;}
+      else if(highlight==='primerow'){
+        // If the row sum is prime
+        const rowSum=row.reduce((a,b)=>a+b,0);
+        if(isPrime(rowSum)){cell.style.background='var(--green)';cell.style.color='#fff';colored=true;}
+      }
+      if(!colored){cell.style.background=isDark?'var(--surface2)':'var(--surface)';cell.style.color='var(--ink)';cell.style.border='1px solid var(--border)';}
+      cell.textContent=val<=999?val:'…';
+      cell.title=`C(${r},${c}) = ${val}`;
+      rowEl.appendChild(cell);
+    });
+    grid.appendChild(rowEl);
+  });
+}
+
+// ════════════════════════════════════
+// CONCEPT PAGES
+// ════════════════════════════════════
+const CONCEPTS = [
+  {id:'quadratic',domain:'Algebra',title:'Quadratic Formula',icon:'📐',summary:'Solve ax²+bx+c=0 for any a,b,c.',formula:'x = \\\\frac{-b \\\\pm \\\\sqrt{b^2-4ac}}{2a}',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Quadratic Formula</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:16px;text-align:center;font-size:1.4rem;margin-bottom:16px">x = (−b ± √(b²−4ac)) / (2a)</div>
+    <h4 style="color:var(--ink2);font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;margin:16px 0 8px">Derivation</h4>
+    <p style="color:var(--ink2);font-size:.9rem">Start with ax²+bx+c=0. Divide by a, complete the square, then isolate x. The discriminant Δ = b²−4ac determines the number of real roots: Δ>0 (two real roots), Δ=0 (one repeated root), Δ<0 (complex roots).</p>
+    <h4 style="color:var(--ink2);font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;margin:16px 0 8px">Examples</h4>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>x²−5x+6=0</strong><br>a=1,b=−5,c=6 → x=(5±√(25−24))/2 = (5±1)/2 → <strong>x=3 or x=2</strong></div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>2x²+3x−2=0</strong><br>x=(−3±√(9+16))/4 = (−3±5)/4 → <strong>x=½ or x=−2</strong></div>
+    <h4 style="color:var(--ink2);font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;margin:16px 0 8px">Common Mistakes</h4>
+    <ul style="color:var(--ink2);font-size:.875rem;line-height:1.8">
+      <li>Forgetting to apply ± (both roots!)</li>
+      <li>Sign error with −b (if b is negative, −b is positive)</li>
+      <li>Not dividing the whole expression by 2a</li>
+    </ul>`,
+  },
+  {id:'binomial',domain:'Counting',title:'Binomial Theorem',icon:'🔢',summary:'Expand (a+b)ⁿ using binomial coefficients.',formula:'(a+b)^n = \\\\sum_{k=0}^{n} \\\\binom{n}{k} a^{n-k} b^k',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Binomial Theorem</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:16px;text-align:center;font-size:1.1rem;margin-bottom:16px">(a+b)ⁿ = Σ C(n,k) · aⁿ⁻ᵏ · bᵏ  for k=0 to n</div>
+    <h4 style="color:var(--ink2);font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;margin:16px 0 8px">Key Facts</h4>
+    <ul style="color:var(--ink2);font-size:.9rem;line-height:2">
+      <li>C(n,k) = n! / (k!(n−k)!) = Pascal's triangle entry</li>
+      <li>Sum of coefficients: setting a=b=1 → 2ⁿ</li>
+      <li>Alternating sum: setting a=1,b=−1 → 0</li>
+    </ul>
+    <h4 style="color:var(--ink2);font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;margin:16px 0 8px">Example</h4>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem">(x+1)⁴ = x⁴ + 4x³ + 6x² + 4x + 1<br><span style="color:var(--ink3)">Coefficients: 1, 4, 6, 4, 1 (row 4 of Pascal's triangle)</span></div>`,
+  },
+  {id:'vieta',domain:'Algebra',title:"Vieta's Formulas",icon:'🧩',summary:"Relate polynomial roots to coefficients.",formula:'r_1+r_2 = -b/a, \\\\quad r_1 r_2 = c/a',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Vieta's Formulas</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:16px;margin-bottom:16px;font-size:.95rem">For ax²+bx+c=0 with roots r₁,r₂:<br><strong>r₁+r₂ = −b/a</strong> &nbsp;&nbsp; <strong>r₁·r₂ = c/a</strong></div>
+    <h4 style="color:var(--ink2);font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;margin:0 0 8px">Why This Matters</h4>
+    <p style="color:var(--ink2);font-size:.9rem">You can often find r₁+r₂ and r₁r₂ without solving for individual roots — critical for AMC/AIME.</p>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Example:</strong> If r₁+r₂=7 and r₁r₂=10, find r₁²+r₂².<br>Answer: (r₁+r₂)²−2r₁r₂ = 49−20 = <strong>29</strong></div>`,
+  },
+  {id:'modinv',domain:'Number Theory',title:'Modular Arithmetic',icon:'🔄',summary:'Arithmetic on remainders. Core tool for number theory.',formula:'a \\\\equiv r \\\\pmod{m} \\\\iff m \\\\mid (a-r)',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Modular Arithmetic</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:16px;margin-bottom:16px;font-size:.95rem">a ≡ b (mod m) means m divides (a−b). Think of it as "clock arithmetic."</div>
+    <h4 style="color:var(--ink2);font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;margin:0 0 8px">Rules</h4>
+    <ul style="color:var(--ink2);font-size:.9rem;line-height:2">
+      <li>(a+b) mod m = ((a mod m)+(b mod m)) mod m</li>
+      <li>(a·b) mod m = ((a mod m)·(b mod m)) mod m</li>
+      <li>Fermat's Little Theorem: aᵖ⁻¹ ≡ 1 (mod p) for prime p</li>
+    </ul>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Find 7⁵⁰ mod 13</strong><br>7¹²≡1 (mod 13) by Fermat. 50=4·12+2. So 7⁵⁰≡7²=49≡<strong>10</strong> (mod 13)</div>`,
+  },
+  {id:'counting-prin',domain:'Counting',title:'Counting Principles',icon:'🔢',summary:'Multiplication, addition, inclusion-exclusion.',formula:'|A \\\\cup B| = |A|+|B|-|A \\\\cap B|',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Fundamental Counting Principles</h3>
+    <div style="display:grid;gap:10px;margin-bottom:16px">
+      <div style="background:var(--blue-l);border-radius:10px;padding:14px"><strong>Multiplication Principle:</strong> If event A has m outcomes and B has n, together they have m·n outcomes.</div>
+      <div style="background:var(--green-l);border-radius:10px;padding:14px"><strong>Addition Principle:</strong> If A and B are mutually exclusive, |A or B| = |A|+|B|.</div>
+      <div style="background:var(--purple-l);border-radius:10px;padding:14px"><strong>Inclusion-Exclusion:</strong> |A∪B| = |A|+|B|−|A∩B|</div>
+    </div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Example:</strong> How many integers 1–100 are divisible by 3 or 5?<br>|3|=33, |5|=20, |15|=6 → 33+20−6 = <strong>47</strong></div>`,
+  },
+  {id:'geo-similar',domain:'Geometry',title:'Similar Triangles',icon:'📐',summary:'Triangles with the same angles. Ratios are equal.',formula:'\\\\frac{a}{a\'} = \\\\frac{b}{b\'} = \\\\frac{c}{c\'} = k',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Similar Triangles</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:14px;margin-bottom:14px">Two triangles are similar if they have equal angles (AA, SAS, or SSS similarity). Corresponding sides are in the same ratio k.</div>
+    <h4 style="color:var(--ink2);font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;margin:0 0 8px">Key Ratios</h4>
+    <ul style="color:var(--ink2);font-size:.9rem;line-height:2">
+      <li>Side ratio: k</li>
+      <li>Perimeter ratio: k</li>
+      <li>Area ratio: k²</li>
+      <li>Volume ratio (3D): k³</li>
+    </ul>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Classic AMC trick:</strong> If similar triangles have area ratio 4:9, their side ratio is 2:3.</div>`,
+  },
+  {id:'prob-basic',domain:'Probability',title:'Basic Probability',icon:'🎲',summary:'P(A) = favorable / total outcomes.',formula:'P(A) = \\\\frac{|A|}{|S|}, \\\\quad P(A^c) = 1-P(A)',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Probability Fundamentals</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:14px;margin-bottom:14px;font-size:.95rem">P(event) = (# favorable outcomes) / (# total outcomes)</div>
+    <h4 style="color:var(--ink2);font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;margin:0 0 8px">Rules</h4>
+    <ul style="color:var(--ink2);font-size:.9rem;line-height:2">
+      <li>0 ≤ P(A) ≤ 1</li>
+      <li>P(Aᶜ) = 1−P(A) (complement)</li>
+      <li>P(A or B) = P(A)+P(B)−P(A and B)</li>
+      <li>P(A and B) = P(A)·P(B) if independent</li>
+    </ul>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Example:</strong> Roll two dice. P(sum=7)?<br>Favorable: (1,6),(2,5),(3,4),(4,3),(5,2),(6,1) = 6 outcomes. Total: 36.<br>P = 6/36 = <strong>1/6</strong></div>`,
+  },
+  {id:'amgm',domain:'Algebra',title:'AM-GM Inequality',icon:'⚖️',summary:'Arithmetic mean ≥ geometric mean for non-negatives.',formula:'\\\\frac{a+b}{2} \\\\geq \\\\sqrt{ab}',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">AM-GM Inequality</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:14px;margin-bottom:14px;font-size:1.05rem;text-align:center">(a₁+a₂+⋯+aₙ)/n ≥ (a₁·a₂·⋯·aₙ)^(1/n)</div>
+    <p style="color:var(--ink2);font-size:.9rem">Equality holds if and only if all values are equal. Used to find minimum/maximum values.</p>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Minimize x+1/x for x>0:</strong><br>By AM-GM: x+1/x ≥ 2√(x·1/x) = 2. Minimum = <strong>2</strong> at x=1.</div>`,
+  },
+  {id:'pigeonhole',domain:'Counting',title:'Pigeonhole Principle',icon:'🐦',summary:'n+1 items in n boxes means some box has ≥2.',formula:'\\\\lceil n/m \\\\rceil \\\\text{ items in some box}',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Pigeonhole Principle</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:14px;margin-bottom:14px">If n+1 objects are placed in n boxes, at least one box contains 2+ objects.</div>
+    <h4 style="color:var(--ink2);font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;margin:0 0 8px">Generalized</h4>
+    <p style="color:var(--ink2);font-size:.9rem">With N objects in k boxes, some box contains at least ⌈N/k⌉ objects.</p>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Classic AMC problem:</strong> Among any 13 people, at least two share a birth month.<br><em>Proof:</em> 13 people, 12 months. By pigeonhole, some month has ≥ ⌈13/12⌉ = 2 people. ✓</div>`,
+  },
+  {id:'pythagorean',domain:'Geometry',title:'Pythagorean Theorem',icon:'📏',summary:'a²+b²=c² in right triangles.',formula:'a^2 + b^2 = c^2',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Pythagorean Theorem</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:14px;margin-bottom:14px;text-align:center;font-size:1.3rem">a² + b² = c²</div>
+    <p style="color:var(--ink2);font-size:.9rem">In a right triangle, the square of the hypotenuse (c) equals the sum of squares of the legs (a,b).</p>
+    <h4 style="color:var(--ink2);font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;margin:12px 0 6px">Common Triples</h4>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      ${['3,4,5','5,12,13','8,15,17','7,24,25','9,40,41','11,60,61','6,8,10','10,24,26'].map(t=>`<span style="background:var(--surface2);padding:5px 10px;border-radius:6px;font-size:.85rem;font-weight:600">${t}</span>`).join('')}
+    </div>`,
+  },
+  {id:'logs',domain:'Algebra',title:'Logarithm Laws',icon:'📊',summary:'Rules for simplifying log expressions.',formula:'\\\\log(ab) = \\\\log a + \\\\log b',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Logarithm Laws</h3>
+    <div style="display:grid;gap:8px;margin-bottom:16px">
+      <div style="background:var(--surface2);border-radius:8px;padding:10px;font-size:.9rem"><strong>Product:</strong> log(ab) = log a + log b</div>
+      <div style="background:var(--surface2);border-radius:8px;padding:10px;font-size:.9rem"><strong>Quotient:</strong> log(a/b) = log a − log b</div>
+      <div style="background:var(--surface2);border-radius:8px;padding:10px;font-size:.9rem"><strong>Power:</strong> log(aⁿ) = n·log a</div>
+      <div style="background:var(--surface2);border-radius:8px;padding:10px;font-size:.9rem"><strong>Change of base:</strong> log_b(a) = ln(a)/ln(b)</div>
+    </div>
+    <div style="background:var(--blue-l);border-radius:8px;padding:12px;font-size:.9rem"><strong>AMC trick:</strong> log₂(8)·log₈(16) = 3·(4/3) = 4. Use change-of-base to simplify chains.</div>`,
+  },
+  {id:'geo-circles',domain:'Geometry',title:'Circle Theorems',icon:'⭕',summary:'Inscribed angles, chords, power of a point.',formula:'\\\\text{Inscribed angle} = \\\\frac{1}{2} \\\\text{arc}',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Circle Theorems</h3>
+    <div style="display:grid;gap:10px">
+      <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Inscribed Angle Theorem:</strong> An inscribed angle = ½ the intercepted arc.</div>
+      <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Thales' Theorem:</strong> Angle inscribed in semicircle = 90°.</div>
+      <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Power of a Point:</strong> If two chords AB and CD intersect at P: AP·PB = CP·PD.</div>
+      <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Tangent-Chord:</strong> Angle between tangent and chord = inscribed angle on opposite side.</div>
+    </div>`,
+  },
+];
+
+function filterConcepts(){
+  const q=(document.getElementById('concept-search')?.value||'').toLowerCase();
+  const dom=document.getElementById('concept-domain')?.value||'';
+  const filtered=CONCEPTS.filter(c=>
+    (!dom||c.domain===dom) &&
+    (!q||c.title.toLowerCase().includes(q)||c.summary.toLowerCase().includes(q)||c.domain.toLowerCase().includes(q))
+  );
+  renderConceptGrid(filtered);
+}
+
+function renderConceptGrid(list){
+  const grid=document.getElementById('concept-grid');
+  const detail=document.getElementById('concept-detail');
+  if(!grid)return;
+  grid.style.display='grid'; detail.style.display='none';
+  const domColors={Algebra:'var(--blue)',Geometry:'var(--purple)',Counting:'var(--amber)','Number Theory':'var(--green)',Probability:'var(--red)'};
+  grid.innerHTML=list.map(c=>`
+    <div class="concept-card" onclick="openConcept('${c.id}')">
+      <div class="cc-domain" style="color:${domColors[c.domain]||'var(--ink2)'}">${c.domain}</div>
+      <h3>${c.icon} ${c.title}</h3>
+      <p>${c.summary}</p>
+    </div>`).join('');
+  if(list.length===0) grid.innerHTML='<div style="color:var(--ink3);grid-column:1/-1;text-align:center;padding:40px">No concepts found. Try a different search.</div>';
+}
+
+function openConcept(id){
+  const c=CONCEPTS.find(x=>x.id===id);
+  if(!c)return;
+  document.getElementById('concept-grid').style.display='none';
+  const detail=document.getElementById('concept-detail');
+  detail.style.display='block';
+  document.getElementById('concept-detail-body').innerHTML=c.body;
+}
+
+function closeConcept(){
+  document.getElementById('concept-grid').style.display='grid';
+  document.getElementById('concept-detail').style.display='none';
+}
+
+// ════════════════════════════════════
+// EXTEND showView for new tabs
+// ════════════════════════════════════
+const _origShowView = showView;
+function showView(n){
+  _origShowView(n);
+  // Handle new views
+  if(n==='tools'){
+    document.querySelectorAll('.tb-tab').forEach(t=>t.classList.remove('on'));
+    const tb=document.getElementById('tab-tools'); if(tb)tb.classList.add('on');
+    document.querySelectorAll('.view').forEach(v=>v.style.display='none');
+    const el=document.getElementById('view-tools'); if(el)el.style.display='block';
+    // Init graph
+    setTimeout(()=>{const c=document.getElementById('graphCanvas');if(c&&graphFns.length===0){graphFns=['y = sin(x)'];drawGraph(c);}},100);
+  }
+  if(n==='concepts'){
+    document.querySelectorAll('.tb-tab').forEach(t=>t.classList.remove('on'));
+    const tb=document.getElementById('tab-concepts'); if(tb)tb.classList.add('on');
+    document.querySelectorAll('.view').forEach(v=>v.style.display='none');
+    const el=document.getElementById('view-concepts'); if(el)el.style.display='block';
+    renderConceptGrid(CONCEPTS);
+  }
+  if(n==='playground'){
+    document.querySelectorAll('.tb-tab').forEach(t=>t.classList.remove('on'));
+    const tb=document.getElementById('tab-playground'); if(tb)tb.classList.add('on');
+    document.querySelectorAll('.view').forEach(v=>v.style.display='none');
+    const el=document.getElementById('view-playground'); if(el)el.style.display='block';
+    runSieve();
+  }
+}
+
+// Init on tools view load
+document.addEventListener('DOMContentLoaded',()=>{
+  // Auto-render KaTeX if loaded
+  if(typeof renderMathInElement!=='undefined'){
+    renderMathInElement(document.body,{delimiters:[{left:'\\\\(',right:'\\\\)',display:false},{left:'\\\\[',right:'\\\\]',display:true}]});
+  }
+});
+
+</script>
 
 <!-- Google Sign-In Modal -->
 <div class="overlay" id="signin-overlay">
