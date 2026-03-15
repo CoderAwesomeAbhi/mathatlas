@@ -310,6 +310,7 @@ footer{background:var(--surface2);border-top:1px solid var(--border);padding:32p
 .ft-bottom{border-top:1px solid var(--border);padding-top:16px;margin-top:24px;display:flex;justify-content:space-between;align-items:center}
 .ft-copy{font-size:.8125rem;color:var(--ink3)}
 </style>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
@@ -326,7 +327,7 @@ footer{background:var(--surface2);border-top:1px solid var(--border);padding:32p
     <button type="button" class="tb-tab" id="tab-diag" onclick="showView('diag')">🎯 Diagnostic</button>
   </div>
   <div class="tb-right">
-    <button type="button" class="btn btn-g btn-sm" onclick="openSignInModal()">Sign In</button>
+    <button type="button" class="btn btn-g btn-sm" id="signInBtn" onclick="openSignInModal()">Sign In</button>
     <button type="button" class="btn btn-p btn-sm" onclick="showView('diag')">Start Free →</button>
   </div>
 </header>
@@ -2463,7 +2464,7 @@ function getDomBg(d){return DBGS[d]||'#f5f5f5';}
 let S = (() => { try { return JSON.parse(localStorage.getItem('ma2_state')||'null')||{}; } catch{return{};} })();
 function defS(k,v){ if(S[k]===undefined||S[k]===null) S[k]=v; }
 defS('log',[]); defS('rating',1200); defS('streak',0); defS('lastDay','');
-defS('domStats',{}); defS('diagSave',null);
+defS('domStats',{}); defS('diagSave',null); defS('user',null);
 function save(){ try{ localStorage.setItem('ma2_state', JSON.stringify(S)); }catch{} }
 
 // ════════════════════════════════════
@@ -3028,543 +3029,114 @@ window.addEventListener('DOMContentLoaded',()=>{
   if(S.diagSave){ const rb=document.getElementById('diagResumBtn'); if(rb)rb.style.display='inline-flex'; }
   setInterval(tickTimer,1000);
 });
-// ── SIGN IN MODAL ──
+// ── SIGN IN MODAL (Google Identity Services) ──
+// ⚠️  Replace with your own Google OAuth Client ID from console.cloud.google.com
+const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+
+let _gisReady = false;
+function _initGIS(){
+  if(_gisReady || !window.google) return;
+  _gisReady = true;
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: _handleCredential,
+    auto_select: false,
+    cancel_on_tap_outside: true
+  });
+  // Render the official Google button inside #g-btn-container
+  const container = document.getElementById('g-btn-container');
+  if(container){
+    google.accounts.id.renderButton(container, {
+      theme: 'outline',
+      size: 'large',
+      width: 344,
+      text: 'signin_with',
+      shape: 'rectangular',
+      logo_alignment: 'left'
+    });
+  }
+}
+
+function _handleCredential(response){
+  // Decode JWT payload (no library needed)
+  const parts = response.credential.split('.');
+  const payload = JSON.parse(atob(parts[1].replace(/-/g,'+').replace(/_/g,'/')));
+  const user = { name: payload.name, email: payload.email, picture: payload.picture, sub: payload.sub };
+  S.user = user; save();
+  closeSignInModal();
+  _updateUserUI(user);
+}
+
+function _updateUserUI(user){
+  const btn = document.getElementById('signInBtn');
+  if(!btn) return;
+  if(user){
+    btn.innerHTML = `<img src="${user.picture}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:2px solid var(--border2)" alt="${user.name}" title="${user.name} — click to sign out">`;
+    btn.onclick = _signOut;
+    btn.title = user.name + ' — click to sign out';
+  } else {
+    btn.textContent = 'Sign In';
+    btn.onclick = openSignInModal;
+    btn.title = '';
+  }
+}
+
+function _signOut(){
+  if(window.google) google.accounts.id.revoke(S.user?.email||'', ()=>{});
+  S.user = null; save();
+  _updateUserUI(null);
+}
+
 function openSignInModal(){
-  document.getElementById('signin-overlay').classList.add('open');
+  // Try to init GIS (script may have loaded by now)
+  if(window.google && !_gisReady) _initGIS();
+  const overlay = document.getElementById('signin-overlay');
+  overlay.classList.add('open');
+  // If GIS not ready yet (slow load), show button area as loading
+  const container = document.getElementById('g-btn-container');
+  if(container && !container.children.length){
+    if(window.google){ _initGIS(); }
+    else { container.innerHTML='<p style="color:var(--ink2);font-size:.85rem">Loading Google Sign-In…</p>'; }
+  }
 }
 function closeSignInModal(){
   document.getElementById('signin-overlay').classList.remove('open');
-  document.getElementById('signin-msg').style.display='none';
 }
 document.getElementById('signin-overlay').addEventListener('click',e=>{
   if(e.target.id==='signin-overlay') closeSignInModal();
 });
+// Init on GIS script load
+window.onGoogleLibraryLoad = _initGIS;
+// Restore user session on load
+if(S.user) _updateUserUI(S.user);
 function handleGoogleSignIn(){closeSignInModal();}
 
 function handleEmailSignIn(){closeSignInModal();}
 
 function getDomColor(d){return DCOLORS[d]||'#333';}
-function getDomBg(d){return DBGS[d]||'#f5f5f5';}
+function getDomBg(d){return DBGS[d]||'#f5f5f5';}</script>
 
-// ════════════════════════════════════
-// PERSISTENT STATE (localStorage)
-// ════════════════════════════════════
-let S = (() => { try { return JSON.parse(localStorage.getItem('ma2_state')||'null')||{}; } catch{return{};} })();
-function defS(k,v){ if(S[k]===undefined||S[k]===null) S[k]=v; }
-defS('log',[]); defS('rating',1200); defS('streak',0); defS('lastDay','');
-defS('domStats',{}); defS('diagSave',null);
-function save(){ try{ localStorage.setItem('ma2_state', JSON.stringify(S)); }catch{} }
-
-// ════════════════════════════════════
-// NAVIGATION
-// ════════════════════════════════════
-function showGuide(){ nav('guide'); }
-function showView(n){ nav(n); if(n==='progress')refreshProgress(); if(n==='log')renderLog(); if(n==='practice')initPractice(); }
-function showModule(id){ nav('module-'+id); _setTab('guide'); _setSb(id); _expandSbLevel(id); window.scrollTo(0,0); }
-function _expandSbLevel(modId){
-  const lvMap={f1:'sb-lv1',f2:'sb-lv1',f3:'sb-lv1',f4:'sb-lv1',f5:'sb-lv1',f6:'sb-lv1',f7:'sb-lv1',f8:'sb-lv1',
-    c1:'sb-lv2',c2:'sb-lv2',c3:'sb-lv2',c4:'sb-lv2',c5:'sb-lv2',c6:'sb-lv2',c7:'sb-lv2',c8:'sb-lv2',
-    a1:'sb-lv3',a2:'sb-lv3',a3:'sb-lv3',a4:'sb-lv3',a5:'sb-lv3',a6:'sb-lv3',
-    p1:'sb-lv4',p2:'sb-lv4',p3:'sb-lv4',p4:'sb-lv4',p5:'sb-lv4',
-    e1:'sb-lv5',e2:'sb-lv5'};
-  const lvId=lvMap[modId]; if(!lvId)return;
-  const sec=document.getElementById(lvId); if(sec) sec.classList.remove('collapsed');
-}
-function startFromBeginning(){ showModule(MOD_ORDER[0]); }
-function nav(n){ document.querySelectorAll('.view').forEach(v=>v.classList.remove('show')); const el=document.getElementById('view-'+n); if(el)el.classList.add('show'); _setTab(n); _setSb(n); window.scrollTo(0,0); }
-function _setTab(n){ document.querySelectorAll('.tb-tab').forEach(t=>t.classList.remove('on')); const t=document.getElementById('tab-'+n)||document.getElementById('tab-guide'); if(t)t.classList.add('on'); }
-function _setSb(id){ document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('on')); const el=document.getElementById('sbg-'+id); if(el)el.classList.add('on'); }
-
-// ════════════════════════════════════
-// ROADMAP
-// ════════════════════════════════════
-function toggleLevel(n){ document.getElementById('rl-'+n).classList.toggle('open'); }
-function toggleSbLevel(id){
-  const sec=document.getElementById(id);
-  if(sec) sec.classList.toggle('collapsed');
-}
-
-// ════════════════════════════════════
-// STREAK + SESSION TIMER
-// ════════════════════════════════════
-let _sessionStart = Date.now();
-function tickTimer(){
-  const el=document.getElementById('ps-time'); if(!el)return;
-  const s=Math.floor((Date.now()-_sessionStart)/1000);
-  el.textContent=Math.floor(s/60)+':'+(s%60).toString().padStart(2,'0');
-}
-function updateStreak(){
-  const today=new Date().toDateString();
-  if(S.lastDay===today)return;
-  const yesterday=new Date(Date.now()-86400000).toDateString();
-  S.streak=(S.lastDay===yesterday)?S.streak+1:1;
-  S.lastDay=today;
-  save();
-}
-
-// ════════════════════════════════════
-// LOG + RATING SYSTEM
-// ════════════════════════════════════
-function logAttempt(prob, userAns, result){
-  S.log.unshift({ id:prob.id, display:prob.display, domain:prob.domain, link:prob.link,
-    answer:prob.answer, userAns, result, elo:prob.elo, ts:Date.now() });
-  if(!S.domStats[prob.domain]) S.domStats[prob.domain]={c:0,w:0};
-  if(result==='correct'){
-    S.domStats[prob.domain].c++;
-    S.rating=Math.min(2800, S.rating+Math.max(5,Math.round((prob.elo-S.rating)/15)));
-  } else if(result==='wrong'){
-    S.domStats[prob.domain].w++;
-    S.rating=Math.max(600, S.rating-Math.max(3,Math.round((S.rating-prob.elo)/20)));
-  }
-  updateStreak();
-  save();
-  refreshProgress();
-}
-
-// ════════════════════════════════════
-// PROGRESS VIEW
-// ════════════════════════════════════
-function refreshProgress(){
-  const log=S.log;
-  const c=log.filter(e=>e.result==='correct').length;
-  const w=log.filter(e=>e.result==='wrong').length;
-  const t=c+w;
-  const acc=t>0?Math.round(c/t*100):null;
-  setText('pg-rating',S.rating.toLocaleString());
-  setText('pg-rating-d',t>0?`${t} attempts · Elo-based`:'Starting rating');
-  setText('pg-total',t);
-  setText('pg-correct-d',`${c} correct · ${w} wrong`);
-  setText('pg-acc',acc!==null?acc+'%':'—');
-  setText('pg-acc-d',acc!==null?`${t} total attempts`:'No attempts yet');
-  setText('pg-streak',S.streak+' 🔥');
-  setText('pg-streak-d',S.streak===1?'day in a row':'days in a row');
-  const doms=['algebra','geometry','counting','number-theory','probability'];
-  doms.forEach(d=>{
-    const ds=S.domStats[d]||{c:0,w:0}; const dt=ds.c+ds.w;
-    const pct=dt>0?Math.round(ds.c/dt*100):0;
-    setStyle('dbar-'+d,'width',pct+'%');
-    setText('dpct-'+d,dt>0?`${ds.c}/${dt} (${pct}%)`:'0 solved');
-  });
-  const recent=log.slice(0,8);
-  const rc=document.getElementById('pg-recent');
-  if(rc) rc.innerHTML=!recent.length
-    ?'<div class="mc-item" style="color:var(--ink3);font-style:italic">No attempts yet</div>'
-    :recent.map(e=>{
-      const d=new Date(e.ts); const ds=d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
-      const tag=e.result==='correct'?'<span class="mc-tag tag-ok">✓</span>':'<span class="mc-tag tag-err">✗</span>';
-      return `<div class="mc-item">${tag}<span class="mc-prob">${e.display}</span><span class="mc-date">${ds}</span></div>`;
-    }).join('');
-}
-function setText(id,v){ const el=document.getElementById(id); if(el)el.textContent=v; }
-function setStyle(id,prop,val){ const el=document.getElementById(id); if(el)el.style[prop]=val; }
-
-// ════════════════════════════════════
-// QUESTION LOG VIEW
-// ════════════════════════════════════
-function renderLog(){
-  const rf=document.getElementById('lf-result').value;
-  const df=document.getElementById('lf-domain').value;
-  const entries=S.log.filter(e=>(rf==='all'||e.result===rf)&&(df==='all'||e.domain===df));
-  setText('log-cnt',entries.length+' entries');
-  const wrap=document.getElementById('log-wrap');
-  const empty=document.getElementById('log-empty');
-  if(!entries.length){ if(wrap)wrap.style.display='none'; if(empty)empty.style.display='flex'; return; }
-  if(empty)empty.style.display='none'; if(wrap)wrap.style.display='block';
-  const tbody=document.getElementById('log-body');
-  if(!tbody)return;
-  tbody.innerHTML=entries.slice(0,300).map((e,i)=>{
-    const d=new Date(e.ts), ds=d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-    const tag=e.result==='correct'?'<span class="mc-tag tag-ok">✓ Correct</span>':e.result==='wrong'?'<span class="mc-tag tag-err">✗ Wrong</span>':'<span class="mc-tag tag-warn">Skip</span>';
-    const probJ=JSON.stringify({id:e.id,display:e.display,domain:e.domain,link:e.link,answer:e.answer,elo:e.elo||1000,skills:[]}).replace(/"/g,'&quot;');
-    return `<tr>
-      <td class="pt-num">${i+1}</td>
-      <td class="pt-name"><a href="${e.link}" target="_blank">${e.display}</a></td>
-      <td><span class="rm-dom" style="background:${getDomBg(e.domain)};color:${getDomColor(e.domain)};font-size:.625rem">${e.domain}</span></td>
-      <td style="font-family:'JetBrains Mono',monospace;font-size:.8rem">${e.userAns||'—'}</td>
-      <td>${tag}</td>
-      <td style="font-size:.75rem;color:var(--ink3);white-space:nowrap">${ds}</td>
-      <td><button type="button" class="pt-solve" onclick='openModal(JSON.parse(decodeURIComponent("${encodeURIComponent(JSON.stringify({id:e.id,display:e.display,domain:e.domain,link:e.link,answer:e.answer,elo:e.elo||1000,skills:[]}))}")))'  style="font-size:.7rem;padding:2px 7px">Retry</button></td>
-    </tr>`;
-  }).join('');
-}
-function clearLog(){
-  if(!confirm('Clear all log data? This resets your rating too.'))return;
-  S.log=[];S.domStats={};S.rating=1200;S.streak=0;save();renderLog();refreshProgress();
-}
-
-// ════════════════════════════════════
-// SOLVE MODAL
-// ════════════════════════════════════
-let _curProb=null;
-function openModal(prob){
-  _curProb=prob;
-  setText('modTitle',prob.display); setText('modProbName',prob.display);
-  document.getElementById('modAops').href=prob.link;
-  document.getElementById('modTags').innerHTML=
-    `<span class="mv-chip" style="background:${getDomBg(prob.domain)};color:${getDomColor(prob.domain)}">${prob.domain}</span>`+
-    (prob.skills||[]).map(s=>`<span class="pt-sk">${s}</span>`).join('')+
-    `<span class="pt-sk" style="font-family:'JetBrains Mono',monospace">Elo ${prob.elo}</span>`;
-  document.getElementById('stepsList').innerHTML=`<div class="step-row"><div class="snum sn-n">1</div><textarea class="sinput" rows="1" placeholder="Describe your first step..."></textarea><button type="button" class="btn-rm" onclick="rmStep(this)">✕</button></div>`;
-  document.getElementById('ansInp').value='';
-  document.getElementById('ansResult').style.display='none';
-  document.getElementById('aiResult').innerHTML='';
-  document.getElementById('aiBtn').disabled=false;
-  document.getElementById('aiBtn').innerHTML='<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Analyze Reasoning';
-  document.getElementById('overlay').classList.add('open');
-}
-function closeModal(){ document.getElementById('overlay').classList.remove('open'); }
-document.getElementById('overlay').addEventListener('click',e=>{ if(e.target.id==='overlay')closeModal(); });
-
-function checkAnswer(){
-  const inp=document.getElementById('ansInp').value.trim();
-  const res=document.getElementById('ansResult');
-  if(!inp)return;
-  const correct=String(_curProb.answer||'').trim();
-  const ok=inp===correct||inp.toLowerCase()===correct.toLowerCase();
-  res.style.display='inline-block';
-  res.className='answer-result '+(ok?'ar-correct':'ar-wrong');
-  res.textContent=ok?'✓ Correct!':'✗ Wrong — answer: '+correct;
-  logAttempt(_curProb, inp, ok?'correct':'wrong');
-}
-
-function addStep(){
-  const list=document.getElementById('stepsList');
-  const n=list.querySelectorAll('.step-row').length+1;
-  const row=document.createElement('div'); row.className='step-row';
-  row.innerHTML=`<div class="snum sn-n">${n}</div><textarea class="sinput" rows="1" placeholder="Step ${n}..."></textarea><button type="button" class="btn-rm" onclick="rmStep(this)">✕</button>`;
-  list.appendChild(row); row.querySelector('textarea').focus();
-}
-function rmStep(btn){
-  const list=document.getElementById('stepsList');
-  if(list.querySelectorAll('.step-row').length<=1)return;
-  btn.closest('.step-row').remove();
-  list.querySelectorAll('.step-row').forEach((r,i)=>{ r.querySelector('.snum').textContent=i+1; r.querySelector('textarea').placeholder=`Step ${i+1}...`; });
-}
-document.addEventListener('input',e=>{ if(e.target.classList.contains('sinput')){ e.target.style.height='auto'; e.target.style.height=e.target.scrollHeight+'px'; } });
-
-async function analyze(){
-  const btn=document.getElementById('aiBtn'), res=document.getElementById('aiResult');
-  const steps=Array.from(document.querySelectorAll('#stepsList .sinput')).map(t=>t.value.trim()).filter(Boolean);
-  if(!steps.length){ alert('Enter at least one reasoning step.'); return; }
-  btn.disabled=true; btn.innerHTML='<div class="spinner"></div> Analyzing...';
-  document.querySelectorAll('#stepsList .snum').forEach(n=>n.className='snum sn-n');
-  document.querySelectorAll('#stepsList .sinput').forEach(i=>i.className='sinput');
-  res.innerHTML=`<div class="ai-result"><div class="air-hd"><span class="ai-badge">AI</span> Reasoning Analysis</div><div class="air-loading"><div class="spin2"></div> Reading your steps...</div></div>`;
-  const pd=`${_curProb.display} — ${_curProb.domain} (${(_curProb.skills||[]).join(', ')}). Elo ${_curProb.elo}. Problem at: ${_curProb.link}`;
-  try{
-    const r=await fetch('/api/gemini',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({problem:pd,steps})});
-    if(!r.ok){const e=await r.json().catch(()=>({})); throw new Error(`${r.status} — ${JSON.stringify(e.error||e)}`);}
-    renderAI(await r.json());
-  }catch(err){
-    res.innerHTML=`<div class="ai-result"><div class="air-hd"><span class="ai-badge">AI</span> Error</div><div class="air-item"><span class="air-tag tag-err">Error</span><p>${err.message}</p></div></div>`;
-  }finally{
-    btn.disabled=false; btn.innerHTML='<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Analyze Reasoning';
-  }
-}
-function renderAI(data){
-  const res=document.getElementById('aiResult');
-  const rows=Array.from(document.querySelectorAll('#stepsList .step-row'));
-  (data.stepFeedback||[]).forEach(sf=>{ const row=rows[sf.step-1]; if(!row)return; const n=row.querySelector('.snum'),inp=row.querySelector('textarea'); const cls={'ok':'sn-ok','error':'sn-err','warning':'sn-warn'}[sf.status]||'sn-n'; n.className='snum '+cls; inp.className='sinput '+({'ok':'ok','error':'err','warning':'warn'}[sf.status]||''); });
-  if(data.errorType==='Correct'||data.firstErrorStep===null){ res.innerHTML=`<div class="ai-result"><div class="air-hd"><span class="ai-badge">AI</span> Analysis</div><div class="correct-banner"><span>✅</span><p><strong>All steps correct!</strong> ${data.mainFeedback||''}</p></div></div>`; return; }
-  let items='';
-  if(data.errorType) items+=`<div class="air-item"><span class="air-tag tag-err">${data.errorType}</span><p>${data.mainFeedback||''}</p></div>`;
-  (data.stepFeedback||[]).forEach(sf=>{ if(sf.comment&&sf.status!=='ok') items+=`<div class="air-item"><span class="air-tag ${sf.status==='error'?'tag-err':'tag-warn'}">Step ${sf.step}</span><p>${sf.comment}</p></div>`; });
-  if(data.hint) items+=`<div class="air-item"><span class="air-tag tag-hint">Hint</span><p>${data.hint}</p></div>`;
-  res.innerHTML=`<div class="ai-result"><div class="air-hd"><span class="ai-badge">AI</span> Analysis<span class="air-ref">${data.firstErrorStep?'First error: Step '+data.firstErrorStep:''}</span></div>${items}</div>`;
-}
-
-// ════════════════════════════════════
-// COLLECT ALL PROBLEMS FROM DOM
-// ════════════════════════════════════
-const ALL_PROBS = [];
-document.querySelectorAll('.pt-solve').forEach(btn=>{
-  try{ const raw=btn.getAttribute('onclick').replace(/^openModal\(/,'').replace(/\)$/,''); ALL_PROBS.push(JSON.parse(raw)); }catch{}
-});
-
-// ════════════════════════════════════
-// INFINITE PRACTICE
-// ════════════════════════════════════
-let pracQueue=[], pracCur=null, pracDone=0, pracCor=0, pracConsec=0, pracTimer=null, pracSec=0;
-
-function pracFilter(){
-  pracQueue=buildPracQueue();
-  setText('prac-pool-cnt', pracQueue.length+' problems');
-  renderPracQueue();
-  if(!pracCur) loadNextPrac();
-}
-
-function eloIn(elo,diff){ if(diff==='easy')return elo<800; if(diff==='med')return elo>=800&&elo<1200; if(diff==='hard')return elo>=1200&&elo<1700; if(diff==='expert')return elo>=1700; return true; }
-
-function buildPracQueue(){
-  const dom=document.getElementById('pf-domain').value;
-  const con=document.getElementById('pf-contest').value;
-  const diff=document.getElementById('pf-diff').value;
-  const adap=document.getElementById('pf-adaptive').checked;
-  let pool=ALL_PROBS.filter(p=>(dom==='all'||p.domain===dom)&&(con==='all'||p.contest===con)&&eloIn(p.elo,diff));
-  if(adap && pool.length>0){
-    const weakDom=Object.entries(S.domStats||{}).map(([d,v])=>({d,acc:v.c+v.w>0?v.c/(v.c+v.w):0.5})).sort((a,b)=>a.acc-b.acc)[0]?.d;
-    if(weakDom){ const wk=pool.filter(p=>p.domain===weakDom); if(wk.length>=5) pool=[...wk,...wk,...pool]; }
-  }
-  return pool.sort(()=>Math.random()-.5);
-}
-
-function initPractice(){
-  if(pracQueue.length===0) pracFilter();
-  if(!pracCur) loadNextPrac();
-  if(!pracTimer){ pracTimer=setInterval(()=>{ pracSec++; tickTimer(); },1000); }
-}
-
-function loadNextPrac(){
-  const ex=document.getElementById('prac-empty'), card=document.getElementById('prac-card');
-  document.getElementById('pc-ans').value='';
-  document.getElementById('pc-result').style.display='none';
-  document.getElementById('pc-explain').style.display='none';
-  const nBtn=document.getElementById('pc-next-btn'); if(nBtn)nBtn.style.display='none';
-  const sBtn=document.getElementById('pc-submit-btn'); if(sBtn)sBtn.style.display='inline-flex';
-  if(!pracQueue.length){ card.style.display='none'; ex.style.display='flex'; return; }
-  card.style.display='block'; ex.style.display='none';
-  pracCur=pracQueue.shift();
-  setText('pc-name',pracCur.display);
-  setText('pc-elo','Elo '+pracCur.elo);
-  const db=document.getElementById('pc-dom');
-  if(db){ db.textContent=pracCur.domain; db.style.background=getDomBg(pracCur.domain); db.style.color=getDomColor(pracCur.domain); }
-  document.getElementById('pc-link').href=pracCur.link;
-  renderPracQueue();
-}
-
-function renderPracQueue(){
-  const el=document.getElementById('prac-queue'); if(!el)return;
-  el.innerHTML=pracQueue.slice(0,4).map(p=>`
-    <div style="display:flex;align-items:center;gap:10px;padding:8px 14px;border:1px solid var(--border);border-radius:6px;background:var(--surface);font-size:.8375rem;margin-bottom:5px">
-      <span style="flex:1;font-weight:500">${p.display}</span>
-      <span class="rm-dom" style="background:${getDomBg(p.domain)};color:${getDomColor(p.domain)};font-size:.625rem">${p.domain}</span>
-      <span style="font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--ink3)">${p.elo}</span>
-    </div>`).join('');
-}
-
-function pracSubmit(){
-  if(!pracCur)return;
-  const inp=document.getElementById('pc-ans').value.trim();
-  if(!inp)return;
-  const correct=String(pracCur.answer||'').trim();
-  const ok=inp===correct||inp.toLowerCase()===correct.toLowerCase();
-  const res=document.getElementById('pc-result');
-  res.style.display='inline-block';
-  if(ok){ res.className='answer-result ar-correct'; res.textContent='✓ Correct! +Elo'; pracCor++; pracConsec++; }
-  else { res.className='answer-result ar-wrong'; res.textContent=`✗ Wrong — Answer: ${correct}`; pracConsec=0;
-    const exp=document.getElementById('pc-explain');
-    exp.style.display='block';
-    exp.innerHTML=`The correct answer is <strong>${correct}</strong>. <a href="${pracCur.link}" target="_blank" style="color:var(--blue);font-weight:600">Review on AoPS ↗</a>`; }
-  pracDone++;
-  logAttempt(pracCur, inp, ok?'correct':'wrong');
-  setText('ps-done',pracDone); setText('ps-cor',pracCor); setText('ps-streak',pracConsec+' 🔥');
-  // Show Next button instead of auto-advancing
-  document.getElementById('pc-submit-btn').style.display='none';
-  document.getElementById('pc-next-btn').style.display='inline-flex';
-}
-function pracNext(){
-  document.getElementById('pc-next-btn').style.display='none';
-  document.getElementById('pc-submit-btn').style.display='inline-flex';
-  pracCur=null;
-  loadNextPrac();
-}
-function pracSkip(){ if(!pracCur)return; logAttempt(pracCur,'','skip'); pracCur=null; loadNextPrac(); }
-
-// ════════════════════════════════════
-// 50-QUESTION DIAGNOSTIC
-// ════════════════════════════════════
-const DQS=[
-// ── ALGEBRA (10) ────────────────────────────────────────────────────
-{d:'Algebra',lv:1,q:'Evaluate: 3 + 5 × 2.',ch:['16','13','10','11'],a:1,exp:'Multiply first: 5×2=10, then 3+10=13.'},
-{d:'Algebra',lv:1,q:'If 2x + 4 = 14, what is x?',ch:['5','4','6','3'],a:0,exp:'2x=10, x=5.'},
-{d:'Algebra',lv:2,q:'If x + y = 9 and xy = 18, what is x² + y²?',ch:['45','27','63','81'],a:0,exp:'x²+y²=(x+y)²−2xy=81−36=45.'},
-{d:'Algebra',lv:2,q:'Simplify: (x²−9)/(x+3).',ch:['x−3','x+3','x²−3','x−9'],a:0,exp:'x²−9=(x+3)(x−3), so the answer is x−3.'},
-{d:'Algebra',lv:3,q:'The roots of x²−5x+3=0 are r and s. Find r²+s².',ch:['19','22','13','25'],a:0,exp:'r²+s²=(r+s)²−2rs=25−6=19.'},
-{d:'Algebra',lv:3,q:'If f(x)=x²+2x+1 and f(k)=16, find all possible k+1.',ch:['5 and −3','4 and −4','5 and −5','3 and −5'],a:1,exp:'(k+1)²=16, so k+1=±4. The two possible values of k+1 are 4 and −4.'},
-{d:'Algebra',lv:4,q:'For what values of k does x²+kx+16=0 have exactly one real solution?',ch:['8','±4','±8','4'],a:2,exp:'Discriminant=0: k²=64, k=±8.'},
-{d:'Algebra',lv:4,q:'An arithmetic sequence has first term 3 and common difference 4. Its sum is 136. How many terms?',ch:['6','7','8','9'],a:2,exp:'Sₙ=n(2·3+(n-1)·4)/2=n(2n+1)=120 → n=8.'},
-{d:'Algebra',lv:5,q:'If 2^a=5^b=10, what is 1/a+1/b?',ch:['1','log 2','1/log 2','log 10'],a:0,exp:'1/a=log₁₀2, 1/b=log₁₀5. Sum=log₁₀10=1.'},
-{d:'Algebra',lv:5,q:'Let p,q be roots of x²−3x+1=0. Find p⁴+q⁴.',ch:['47','50','41','38'],a:0,exp:'p²+q²=(p+q)²−2pq=7. p⁴+q⁴=(p²+q²)²−2(pq)²=49−2=47.'},
-// ── GEOMETRY (10) ───────────────────────────────────────────────────
-{d:'Geometry',lv:1,q:'Area of a rectangle with length 8 and width 5?',ch:['40','26','80','13'],a:0,exp:'8×5=40.'},
-{d:'Geometry',lv:1,q:'A right triangle has legs 6 and 8. Hypotenuse?',ch:['10','12','9','14'],a:0,exp:'6²+8²=100, √100=10.'},
-{d:'Geometry',lv:2,q:'Area of a triangle with base 12 and height 7?',ch:['42','84','24','36'],a:0,exp:'½×12×7=42.'},
-{d:'Geometry',lv:2,q:'Sum of interior angles of a hexagon?',ch:['720°','540°','900°','660°'],a:0,exp:'(6−2)×180°=720°.'},
-{d:'Geometry',lv:3,q:'A circle has area 36π. What is its circumference?',ch:['12π','6π','36π','18π'],a:0,exp:'r=6, circumference=2π·6=12π.'},
-{d:'Geometry',lv:3,q:'Two similar triangles have sides in ratio 3:5. Ratio of their areas?',ch:['9:25','3:5','6:10','27:125'],a:0,exp:'Area ratio=(side ratio)²=9:25.'},
-{d:'Geometry',lv:4,q:'Triangle ABC has AB=AC=5, BC=6. Altitude from A to BC?',ch:['4','3','5','7'],a:0,exp:'h²=5²−3²=16, h=4.'},
-{d:'Geometry',lv:4,q:'Cylinder with radius 3 and height 5. Total surface area?',ch:['48π','30π','33π','60π'],a:0,exp:'2πr²+2πrh=18π+30π=48π.'},
-{d:'Geometry',lv:5,q:'A chord of length 8 is 3 units from the center of a circle. The radius is:',ch:['5','4','√73','√41'],a:0,exp:'r²=4²+3²=25, r=5.'},
-{d:'Geometry',lv:5,q:'A rhombus has diagonals 10 and 24. Its perimeter is:',ch:['52','60','48','56'],a:0,exp:'Side=√(5²+12²)=13. Perimeter=52.'},
-// ── COUNTING (10) ───────────────────────────────────────────────────
-{d:'Counting',lv:1,q:'How many ways can 3 books be arranged on a shelf?',ch:['3','6','9','27'],a:1,exp:'3!=6.'},
-{d:'Counting',lv:1,q:'How many ways to choose 2 toppings from 5?',ch:['10','20','25','15'],a:0,exp:'C(5,2)=10.'},
-{d:'Counting',lv:2,q:'How many 4-digit numbers exist (no leading zeros)?',ch:['9000','8999','8100','9999'],a:0,exp:'1000–9999: 9000 numbers.'},
-{d:'Counting',lv:2,q:'In how many ways can 4 people line up so A is before B?',ch:['12','24','6','8'],a:0,exp:'4!/2=12 (half have A before B by symmetry).'},
-{d:'Counting',lv:3,q:'Distribute 7 identical cookies to 3 kids with each getting ≥1. How many ways?',ch:['15','21','28','10'],a:0,exp:'Stars and bars: C(6,2)=15.'},
-{d:'Counting',lv:3,q:'How many integers 1–30 are divisible by 2 or 3?',ch:['20','15','25','22'],a:0,exp:'15+10−5=20 by inclusion-exclusion.'},
-{d:'Counting',lv:4,q:'6 people seated in a circle, where two specific must be adjacent. How many arrangements?',ch:['48','120','24','96'],a:0,exp:'Treat pair as unit: 4!×2=48.'},
-{d:'Counting',lv:4,q:'Lattice paths from (0,0) to (4,4) passing through (2,2)?',ch:['36','70','56','42'],a:0,exp:'C(4,2)×C(4,2)=6×6=36.'},
-{d:'Counting',lv:5,q:'How many subsets of {1,...,10} have an even sum?',ch:['512','511','500','256'],a:0,exp:'Exactly half of 2¹⁰=1024 subsets have even sum: 512.'},
-{d:'Counting',lv:5,q:'How many ways to tile a 2×8 board with 1×2 dominoes?',ch:['55','34','89','21'],a:1,exp:'Fibonacci recurrence: f(1)=1,f(2)=2,...,f(8)=34. The 2x8 board has 34 tilings.'},
-// ── NUMBER THEORY (10) ──────────────────────────────────────────────
-{d:'Number Theory',lv:1,q:'GCD of 12 and 18?',ch:['6','3','9','12'],a:0,exp:'12=2²×3, 18=2×3². GCD=6.'},
-{d:'Number Theory',lv:1,q:'Is 97 prime?',ch:['Yes','No (÷7)','No (÷11)','No (÷13)'],a:0,exp:'97 is not divisible by any prime ≤√97≈9.8. Yes.'},
-{d:'Number Theory',lv:2,q:'How many positive divisors does 72 have?',ch:['12','9','8','18'],a:0,exp:'72=2³×3². τ=(3+1)(2+1)=12.'},
-{d:'Number Theory',lv:2,q:'Units digit of 3^47?',ch:['3','9','7','1'],a:2,exp:'Cycle 3,9,7,1 (period 4). 47 mod 4=3 → units digit 7.'},
-{d:'Number Theory',lv:3,q:'LCM of 12, 18, and 24?',ch:['72','36','48','144'],a:0,exp:'LCM=2³×3²=72.'},
-{d:'Number Theory',lv:3,q:'Remainder when 2^100 is divided by 7?',ch:['2','4','1','0'],a:0,exp:'2³=8≡1(mod 7). 100=3×33+1. So 2^100=(2³)^33×2≡1×2=2(mod 7).'},
-{d:'Number Theory',lv:4,q:'How many integers from 1–100 are coprime to 100?',ch:['40','36','50','45'],a:0,exp:'φ(100)=100·(1−1/2)·(1−1/5)=40.'},
-{d:'Number Theory',lv:4,q:'Solutions to x²≡1(mod 8): x≡?',ch:['1,3,5,7','1,7','1,−1','±1(mod4)'],a:0,exp:'All odd x satisfy x²≡1(mod8).'},
-{d:'Number Theory',lv:5,q:'Smallest positive integer n with n²≡−1(mod 13)?',ch:['5','6','4','7'],a:0,exp:'5²=25=2·13−1≡−1(mod13).'},
-{d:'Number Theory',lv:5,q:'How many trailing zeros does 100! have?',ch:['24','20','25','30'],a:0,exp:'⌊100/5⌋+⌊100/25⌋=20+4=24.'},
-// ── PROBABILITY (10) ────────────────────────────────────────────────
-{d:'Probability',lv:1,q:'A bag has 3 red, 2 blue, 5 green. P(drawing red)?',ch:['3/10','1/3','3/7','2/5'],a:0,exp:'3/10.'},
-{d:'Probability',lv:1,q:'Roll a fair die. P(result > 4)?',ch:['1/3','1/2','1/6','2/3'],a:0,exp:'{5,6}: P=2/6=1/3.'},
-{d:'Probability',lv:2,q:'Flip a coin 3 times. P(at least 2 heads)?',ch:['1/2','3/8','5/8','1/4'],a:0,exp:'P(2H)+P(3H)=3/8+1/8=4/8=1/2.'},
-{d:'Probability',lv:2,q:'Two dice rolled. P(sum is prime)?',ch:['5/12','7/18','15/36','1/2'],a:0,exp:'Prime sums (2,3,5,7,11)→15 outcomes. P=15/36=5/12.'},
-{d:'Probability',lv:3,q:'Box: 5 red, 3 blue. Draw 2 without replacement. P(both red)?',ch:['5/14','10/28','25/64','2/7'],a:0,exp:'(5/8)×(4/7)=20/56=5/14.'},
-{d:'Probability',lv:3,q:'P(A)=0.6, P(B)=0.4, independent. P(A or B)?',ch:['0.76','1.0','0.64','0.24'],a:0,exp:'0.6+0.4−0.24=0.76.'},
-{d:'Probability',lv:4,q:'Number from {1..20}, given it\'s even. P(it\'s > 12)?',ch:['2/5','3/10','4/10','3/8'],a:0,exp:'Even & >12: {14,16,18,20}=4. Total even=10. P=2/5.'},
-{d:'Probability',lv:4,q:'Win $4 (p=1/5) or lose $1 (p=4/5). Expected value?',ch:['$0','$0.25','−$0.20','$0.80'],a:0,exp:'E=4/5−4/5=0.'},
-{d:'Probability',lv:5,q:'Roll a die until getting a 6. Expected number of rolls?',ch:['6','5','7','4'],a:0,exp:'Geometric with p=1/6. E=1/p=6.'},
-{d:'Probability',lv:5,q:'Cards drawn until first ace appears. Expected number drawn?',ch:['10.6','9.8','10.2','11.5'],a:0,exp:'4 aces split 52 cards into 5 equal sections: E=53/5=10.6.'},
-];
-
-const DMAP_START={Algebra:'f1',Geometry:'f4',Counting:'f6','Number Theory':'f5',Probability:'c4'};
-const DMAP_MID={Algebra:'c1',Geometry:'c5',Counting:'c3','Number Theory':'c2',Probability:'c4'};
-const DMAP_ADV={Algebra:'a1',Geometry:'a4',Counting:'a2','Number Theory':'a5',Probability:'a6'};
-const DCOL={Algebra:'#4361ee',Geometry:'#7209b7',Counting:'#f77f00','Number Theory':'#2d9b50',Probability:'#e63946'};
-let dqi=0, dScores={}, dAnswers=[];
-
-function startDiag(){
-  dqi=0; dScores={}; dAnswers=[];
-  ['Algebra','Geometry','Counting','Number Theory','Probability'].forEach(d=>dScores[d]={c:0,w:0,t:0});
-  S.diagSave=null; save();
-  document.getElementById('diagIntro').style.display='none';
-  document.getElementById('diagQuiz').style.display='block';
-  document.getElementById('diagResults').style.display='none';
-  loadDQ();
-}
-function resumeDiag(){
-  if(!S.diagSave){startDiag();return;}
-  const sv=S.diagSave; dqi=sv.qi; dScores=sv.scores; dAnswers=sv.answers;
-  document.getElementById('diagIntro').style.display='none';
-  document.getElementById('diagQuiz').style.display='block';
-  document.getElementById('diagResults').style.display='none';
-  loadDQ();
-}
-
-
-function pickDQ(btn,idx){
-  const q=DQS[dqi];
-  document.querySelectorAll('.q-choice').forEach(b=>b.disabled=true);
-  const ok=idx===q.a;
-  btn.className=ok?'q-choice cor':'q-choice wrg';
-  if(!ok) document.querySelectorAll('.q-choice')[q.a].className='q-choice cor';
-  dScores[q.d].t++;
-  if(ok) dScores[q.d].c++; else dScores[q.d].w++;
-  dAnswers[dqi]={ok,chosen:idx};
-  const ex=document.getElementById('qexplain');
-  ex.style.display='block'; ex.innerHTML=(ok?'✅ ':'❌ ')+q.exp;
-  document.getElementById('qnext').classList.add('show');
-  S.diagSave={qi:dqi,scores:dScores,answers:dAnswers}; save();
-}
-
-function diagNext(){ dqi++; loadDQ(); }
-
-function showDiagResults(){
-  document.getElementById('diagQuiz').style.display='none';
-  document.getElementById('diagResults').style.display='block';
-  S.diagSave=null; save();
-  const tot=Object.values(dScores).reduce((s,v)=>s+v.c,0);
-  setText('rscore',`${tot}/${DQS.length}`);
-  document.getElementById('rdoms').innerHTML=['Algebra','Geometry','Counting','Number Theory','Probability'].map(d=>{
-    const sc=dScores[d]; const pct=sc.t>0?Math.round(sc.c/sc.t*100):0;
-    const color=DCOL[d];
-    const modId=pct>=70?DMAP_ADV[d]:pct>=40?DMAP_MID[d]:DMAP_START[d];
-    const lvLbl=pct>=70?'Advanced level':pct>=40?'Intermediate level':'Foundations';
-    return `<div style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px;flex-wrap:wrap">
-      <div style="width:120px;flex-shrink:0"><div style="font-size:.8125rem;font-weight:700;color:${color}">${d}</div><div style="font-size:.625rem;color:var(--ink3);margin-top:2px">Start: ${lvLbl}</div></div>
-      <div style="flex:1;min-width:120px"><div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${color};border-radius:4px;transition:width .5s"></div></div></div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.875rem;font-weight:700;color:${color};width:50px;text-align:right">${sc.c}/${sc.t}</div>
-      <button type="button" onclick="showModule('${modId}')" class="btn btn-p btn-sm" style="font-size:.75rem">Go →</button>
-    </div>`;
-  }).join('');
-  const weakDom=['Algebra','Geometry','Counting','Number Theory','Probability'].sort((a,b)=>{
-    const pa=dScores[a].t>0?dScores[a].c/dScores[a].t:0;
-    const pb=dScores[b].t>0?dScores[b].c/dScores[b].t:0;
-    return pa-pb;
-  })[0];
-  const wPct=dScores[weakDom].t>0?Math.round(dScores[weakDom].c/dScores[weakDom].t*100):0;
-  const wMod=wPct>=70?DMAP_ADV[weakDom]:wPct>=40?DMAP_MID[weakDom]:DMAP_START[weakDom];
-  document.getElementById('rrec').querySelector('div').innerHTML=
-    `<strong>Priority:</strong> Weakest area is <strong>${weakDom}</strong> (${wPct}%). Recommended module: <a onclick="showModule('${wMod}')" style="font-weight:700;cursor:pointer;color:var(--green)">${MOD_META[wMod]?.title||wMod}</a>`;
-  document.getElementById('rgoBtn').onclick=()=>showModule(wMod);
-  document.getElementById('rdetail').innerHTML=dAnswers.map((a,i)=>{
-    if(!a)return'';
-    const q=DQS[i]; const color=DCOL[q.d];
-    const tag=a.ok?'<span class="mc-tag tag-ok">✓</span>':'<span class="mc-tag tag-err">✗</span>';
-    return `<tr>
-      <td class="pt-num">${i+1}</td>
-      <td><span style="font-size:.625rem;padding:2px 6px;border-radius:3px;font-weight:700;background:${color}22;color:${color}">${q.d}</span></td>
-      <td style="font-size:.75rem;color:var(--ink3)">${q.lv}</td>
-      <td style="font-family:'JetBrains Mono',monospace;font-size:.8rem">${a?q.ch[a.chosen]:'—'}</td>
-      <td>${tag}</td>
-      <td style="font-size:.8rem;color:var(--ink2)">${q.exp}</td>
-    </tr>`;
-  }).join('');
-}
-
-// ════════════════════════════════════
-// INIT
-// ════════════════════════════════════
-window.addEventListener('DOMContentLoaded',()=>{
-  toggleLevel(1);
-  // Start levels 2-5 collapsed in sidebar for cleanliness
-  ['sb-lv2','sb-lv3','sb-lv4','sb-lv5'].forEach(id=>{
-    const sec=document.getElementById(id);
-    if(sec) sec.classList.add('collapsed');
-  });
-  refreshProgress();
-  if(S.diagSave){ const rb=document.getElementById('diagResumBtn'); if(rb)rb.style.display='inline-flex'; }
-  setInterval(tickTimer,1000);
-});
-// ── SIGN IN MODAL ──
-function openSignInModal(){
-  document.getElementById('signin-overlay').classList.add('open');
-}
-function closeSignInModal(){
-  document.getElementById('signin-overlay').classList.remove('open');
-  document.getElementById('signin-msg').style.display='none';
-}
-document.getElementById('signin-overlay').addEventListener('click',e=>{
-  if(e.target.id==='signin-overlay') closeSignInModal();
-});
-
-
-
+<!-- Google Sign-In Modal -->
 <div class="overlay" id="signin-overlay">
-  <div class="modal" style="max-width:400px">
-    <div class="mod-hd">
-      <h3>Sign In to MathAtlas</h3>
+  <div class="modal" style="max-width:400px;border-radius:16px">
+    <div class="mod-hd" style="padding:20px 24px 0">
+      <h3 style="font-size:1.125rem">Sign in to MathAtlas</h3>
       <button type="button" class="mod-x" onclick="closeSignInModal()">✕</button>
     </div>
-    <div class="mod-body" style="padding:32px 28px;text-align:center">
-      <div style="font-size:2.8rem;margin-bottom:14px">🧮</div>
-      <h4 style="font-size:1.1rem;margin:0 0 10px;color:var(--ink)">Cloud sync coming soon</h4>
-      <p style="font-size:.9rem;color:var(--ink2);line-height:1.6;margin:0 0 24px">Google sign-in is under development. In the meantime, <strong>all your progress, rating, and streak are automatically saved</strong> in this browser — no account needed.</p>
-      <div style="background:var(--surface2);border-radius:10px;padding:14px 16px;margin-bottom:20px">
-        <div style="display:flex;align-items:center;gap:10px;justify-content:center">
-          <span style="font-size:1.3rem">💾</span>
-          <span style="font-size:.85rem;color:var(--ink2)">Progress saved locally &amp; always available</span>
-        </div>
-      </div>
-      <div id="signin-msg" style="display:none"></div>
-      <button type="button" onclick="closeSignInModal()" style="width:100%;padding:11px;border:none;border-radius:8px;background:var(--blue);color:#fff;font-size:.9375rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">Got it</button>
+    <div class="mod-body" style="padding:24px 28px 28px;text-align:center">
+      <div style="font-size:2.5rem;margin-bottom:12px">🧮</div>
+      <p style="font-size:.9rem;color:var(--ink2);line-height:1.6;margin:0 0 22px">
+        Sign in to sync your <strong>progress, rating &amp; streak</strong> across all your devices.
+      </p>
+      <!-- Google renders its button here -->
+      <div id="g-btn-container" style="display:flex;justify-content:center;margin-bottom:16px;min-height:44px"></div>
+      <p style="font-size:.78rem;color:var(--ink3);margin:0">
+        💾 Your local progress is always saved automatically.<br>
+        Signing in just adds cloud backup.
+      </p>
     </div>
   </div>
 </div>
-</script>
+
 </body>
 </html>
