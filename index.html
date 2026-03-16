@@ -6268,36 +6268,52 @@ function setRowStatus(id, result) {
 
 // Map module ID -> {domain, eloMin, eloMax}
 const MODULE_SPECS = {
-  f1:{domain:'algebra',       eloMin:500,  eloMax:700},
-  f2:{domain:'algebra',       eloMin:580,  eloMax:780},
-  f3:{domain:'algebra',       eloMin:640,  eloMax:900},
-  f4:{domain:'geometry',      eloMin:580,  eloMax:860},
-  f5:{domain:'number theory', eloMin:600,  eloMax:900},
-  f6:{domain:'counting',      eloMin:620,  eloMax:920},
-  f7:{domain:'algebra',       eloMin:660,  eloMax:920},
-  f8:{domain:'algebra',       eloMin:680,  eloMax:940},
-  c1:{domain:'algebra',       eloMin:880,  eloMax:1050},
-  c2:{domain:'number theory', eloMin:980,  eloMax:1120},
-  c3:{domain:'counting',      eloMin:1000, eloMax:1140},
-  c4:{domain:'probability',   eloMin:980,  eloMax:1150},
-  c5:{domain:'geometry',      eloMin:1020, eloMax:1160},
-  c6:{domain:'algebra',       eloMin:1040, eloMax:1180},
-  c7:{domain:'geometry',      eloMin:1100, eloMax:1260},
-  c8:{domain:'geometry',      eloMin:1120, eloMax:1320},
-  a1:{domain:'algebra',       eloMin:1120, eloMax:1300},
-  a2:{domain:'counting',      eloMin:1220, eloMax:1400},
-  a3:{domain:'algebra',       eloMin:1280, eloMax:1440},
-  a4:{domain:'geometry',      eloMin:1290, eloMax:1460},
-  a5:{domain:'number theory', eloMin:1300, eloMax:1500},
-  a6:{domain:'probability',   eloMin:1320, eloMax:1520},
-  p1:{domain:'algebra',       eloMin:1450, eloMax:2000},
-  p2:{domain:'number theory', eloMin:1550, eloMax:2100},
-  p3:{domain:'counting',      eloMin:1650, eloMax:2200},
-  p4:{domain:'geometry',      eloMin:1500, eloMax:2300},
-  p5:{domain:'probability',   eloMin:1900, eloMax:2200},
-  e1:{domain:'algebra',       eloMin:2000, eloMax:2500},
-  e2:{domain:'counting',      eloMin:2000, eloMax:2500},
+  // Level 1 Foundations — AMC 8 only
+  f1:{contests:['amc8'], domain:'algebra',        eloMin:500, eloMax:660},
+  f2:{contests:['amc8'], domain:'algebra',        eloMin:560, eloMax:720},
+  f3:{contests:['amc8'], domain:'algebra',        eloMin:600, eloMax:780},
+  f4:{contests:['amc8'], domain:'geometry',       eloMin:560, eloMax:760},
+  f5:{contests:['amc8'], domain:'number theory',  eloMin:580, eloMax:800},
+  f6:{contests:['amc8'], domain:'counting',       eloMin:580, eloMax:820},
+  f7:{contests:['amc8'], domain:'algebra',        eloMin:640, eloMax:840},
+  f8:{contests:['amc8'], domain:'algebra',        eloMin:660, eloMax:880},
+  // Level 2 Core — AMC 10A/10B
+  c1:{contests:['amc10','amc10a','amc10b'], domain:'algebra',        eloMin:880, eloMax:1060},
+  c2:{contests:['amc10','amc10a','amc10b'], domain:'number theory',  eloMin:960, eloMax:1140},
+  c3:{contests:['amc10','amc10a','amc10b'], domain:'counting',       eloMin:980, eloMax:1160},
+  c4:{contests:['amc10','amc10a','amc10b'], domain:'probability',    eloMin:960, eloMax:1160},
+  c5:{contests:['amc10','amc10a','amc10b'], domain:'geometry',       eloMin:1000,eloMax:1180},
+  c6:{contests:['amc10','amc10a','amc10b'], domain:'algebra',        eloMin:1020,eloMax:1200},
+  c7:{contests:['amc10','amc10a','amc10b'], domain:'geometry',       eloMin:1080,eloMax:1280},
+  c8:{contests:['amc10','amc10a','amc10b'], domain:'geometry',       eloMin:1100,eloMax:1340},
+  // Level 3 Advanced — AMC 12A/12B
+  a1:{contests:['amc12','amc12a','amc12b'], domain:'algebra',        eloMin:1100,eloMax:1320},
+  a2:{contests:['amc12','amc12a','amc12b'], domain:'counting',       eloMin:1200,eloMax:1420},
+  a3:{contests:['amc12','amc12a','amc12b'], domain:'algebra',        eloMin:1260,eloMax:1480},
+  a4:{contests:['amc12','amc12a','amc12b'], domain:'geometry',       eloMin:1270,eloMax:1500},
+  a5:{contests:['amc12','amc12a','amc12b'], domain:'number theory',  eloMin:1280,eloMax:1520},
+  a6:{contests:['amc12','amc12a','amc12b'], domain:'probability',    eloMin:1300,eloMax:1540},
+  // Level 4 Platinum — AIME I/II
+  p1:{contests:['aime','aime1','aime2'], domain:'algebra',           eloMin:1420,eloMax:2000},
+  p2:{contests:['aime','aime1','aime2'], domain:'number theory',     eloMin:1520,eloMax:2100},
+  p3:{contests:['aime','aime1','aime2'], domain:'counting',          eloMin:1620,eloMax:2200},
+  p4:{contests:['aime','aime1','aime2'], domain:'geometry',          eloMin:1480,eloMax:2300},
+  p5:{contests:['aime','aime1','aime2'], domain:'probability',       eloMin:1880,eloMax:2200},
+  // Level 5 Elite — AIME hardest
+  e1:{contests:['aime','aime1','aime2'], domain:'algebra',           eloMin:1980,eloMax:2500},
+  e2:{contests:['aime','aime1','aime2'], domain:'counting',          eloMin:1980,eloMax:2500},
 };
+
+// Global set of problem IDs already placed in any module (prevents duplicates across modules)
+const _usedInModules = new Set();
+
+// Pre-populate with IDs already in the HTML
+document.querySelectorAll('.pt-solve').forEach(btn => {
+  try {
+    const raw = btn.getAttribute('onclick').replace(/^openModal\(/, '').replace(/\)$/, '');
+    _usedInModules.add(JSON.parse(raw).id);
+  } catch(e) {}
+});
 
 const _expandedModules = new Set();
 
@@ -6310,32 +6326,25 @@ function expandModuleTo50(moduleId) {
 
   const view = document.getElementById('view-module-' + moduleId);
   if (!view) return;
-
   const tbody = view.querySelector('tbody');
   if (!tbody) return;
 
-  // Get IDs already in this table
-  const existingIds = new Set();
-  view.querySelectorAll('.pt-solve').forEach(btn => {
-    try {
-      const raw = btn.getAttribute('onclick').replace(/^openModal\(/, '').replace(/\)$/, '');
-      const p = JSON.parse(raw);
-      existingIds.add(p.id);
-    } catch(e) {}
-  });
-
-  const currentCount = existingIds.size;
+  // Count existing rows
+  const currentCount = tbody.querySelectorAll('tr').length;
   const needed = 50 - currentCount;
   if (needed <= 0) return;
 
-  // Find matching problems from MA_PROBLEMS not already in table
-  const candidates = window.MA_PROBLEMS.filter(p =>
-    !existingIds.has(p.id) &&
-    p.domain === spec.domain &&
-    p.elo >= spec.eloMin &&
-    p.elo <= spec.eloMax &&
-    p.link
-  ).sort((a, b) => a.elo - b.elo);
+  // Normalize domain for matching (handle 'number-theory' vs 'number theory')
+  const normDomain = (d) => (d||'').replace('-',' ').toLowerCase();
+
+  // Filter candidates: correct contest type, domain, elo range, not already placed anywhere
+  const candidates = window.MA_PROBLEMS.filter(p => {
+    const cf = p.contestFull || p.contest || '';
+    const matchContest = spec.contests.some(c => cf === c || p.contest === c);
+    const matchDomain = normDomain(p.domain) === normDomain(spec.domain);
+    const matchElo = p.elo >= spec.eloMin && p.elo <= spec.eloMax;
+    return matchContest && matchDomain && matchElo && !_usedInModules.has(p.id) && p.link;
+  }).sort((a, b) => a.elo - b.elo);
 
   const toAdd = candidates.slice(0, needed);
   if (!toAdd.length) return;
@@ -6348,15 +6357,15 @@ function expandModuleTo50(moduleId) {
   (S.log||[]).forEach(e => { results[e.id] = e.result; });
 
   toAdd.forEach((p, i) => {
+    _usedInModules.add(p.id); // mark as used globally
     const rowNum = currentCount + i + 1;
     const result = results[p.id];
     const statusHtml = result === 'correct'
       ? '<span class="pts-correct">✓</span>'
       : result === 'wrong' ? '<span class="pts-wrong">✗</span>' : '';
-    const skillsHtml = (p.skills||[]).map(s =>
-      `<span class="pt-sk">${s}</span>`).join('') ||
-      `<span class="pt-sk" style="color:${DOMAIN_COLORS[p.domain]||'var(--ink2)'}">${p.domain}</span>`;
-    const answerNote = p.answer ? '' : ' <span style="font-size:.68rem;color:var(--ink3)">(answer pending)</span>';
+    const skillsHtml = (p.skills||[]).map(s => `<span class="pt-sk">${s}</span>`).join('')
+      || `<span class="pt-sk" style="color:${DOMAIN_COLORS[normDomain(p.domain)]||'var(--ink2)'}">${p.domain}</span>`;
+    const answerNote = p.answer ? '' : ' <span style="font-size:.68rem;color:var(--ink3)">(ans pending)</span>';
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td class="pt-num">${rowNum}</td>
@@ -6370,18 +6379,14 @@ function expandModuleTo50(moduleId) {
     tbody.appendChild(tr);
   });
 
-  // Update count display
+  // Update counts
+  const newCount = currentCount + toAdd.length;
   const cnt = view.querySelector('.pt-cnt');
-  if (cnt) cnt.textContent = `${currentCount + toAdd.length} problems`;
-
-  // Update module chips count
+  if (cnt) cnt.textContent = `${newCount} problems`;
   view.querySelectorAll('.mv-chips span').forEach(span => {
-    if (span.textContent.includes('problems')) {
-      span.textContent = `${currentCount + toAdd.length} problems`;
-    }
+    if (span.textContent.includes('problems')) span.textContent = `${newCount} problems`;
   });
 }
-
 // ════════════════════════════════════════════════════════
 // FIX SEARCH: Reset MASTER_PROBS when problems.js loads
 // ════════════════════════════════════════════════════════
