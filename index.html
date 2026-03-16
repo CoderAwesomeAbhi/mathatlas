@@ -5240,7 +5240,31 @@ function openModal(prob){
   }
   const contestMap = {amc8:'AMC 8',amc10:'AMC 10',amc12:'AMC 12',aime:'AIME'};
   const cName = contestMap[prob.contest] || prob.contest.toUpperCase();
-  attr.innerHTML = `<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> ${prob.year} ${cName} Problem ${prob.num} — © Mathematical Association of America`;
+  attr.innerHTML = `<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> ${prob.year} ${cName} Problem ${prob.num} — © Mathematical Association of America`;  _solveStartTime = Date.now();
+  // Remove old extras
+  document.getElementById('modal-note-btn')?.remove();
+  document.getElementById('similar-section')?.remove();
+  document.getElementById('note-editor-wrap')?.remove();
+  // Add note button
+  const notes = getNotes();
+  const hasNote = !!notes[prob.id];
+  const pbs = getPBs();
+  const pb = pbs[prob.id];
+  const noteBtn = document.createElement('button');
+  noteBtn.type = 'button';
+  noteBtn.id = 'modal-note-btn';
+  noteBtn.className = 'add-note-btn';
+  noteBtn.innerHTML = `📝 ${hasNote ? 'Edit Note' : 'Add Note'}`;
+  if (pb) noteBtn.title = `Your best time: ${pb}s`;
+  noteBtn.onclick = () => openNoteEditor(prob);
+  document.getElementById('aiBtn')?.after(noteBtn);
+  // Show PB if exists
+  if (pb) {
+    const pbEl = document.createElement('span');
+    pbEl.style.cssText = 'font-size:.75rem;color:var(--amber);font-weight:700;margin-left:10px';
+    pbEl.textContent = `⚡ Your best: ${pb}s`;
+    noteBtn.after(pbEl);
+  }
 }
 
 // ════════════════════════════════════
@@ -6166,35 +6190,6 @@ function checkPersonalBest(prob, correct) {
 // ════════════════════════════════════════════════════════
 // PATCH openModal — add note button, start timer, show PBs
 // ════════════════════════════════════════════════════════
-const _openModalOrig2 = openModal;
-function openModal(prob) {
-  _openModalOrig2(prob);
-  _solveStartTime = Date.now();
-  // Remove old extras
-  document.getElementById('modal-note-btn')?.remove();
-  document.getElementById('similar-section')?.remove();
-  document.getElementById('note-editor-wrap')?.remove();
-  // Add note button
-  const notes = getNotes();
-  const hasNote = !!notes[prob.id];
-  const pbs = getPBs();
-  const pb = pbs[prob.id];
-  const noteBtn = document.createElement('button');
-  noteBtn.type = 'button';
-  noteBtn.id = 'modal-note-btn';
-  noteBtn.className = 'add-note-btn';
-  noteBtn.innerHTML = `📝 ${hasNote ? 'Edit Note' : 'Add Note'}`;
-  if (pb) noteBtn.title = `Your best time: ${pb}s`;
-  noteBtn.onclick = () => openNoteEditor(prob);
-  document.getElementById('aiBtn')?.after(noteBtn);
-  // Show PB if exists
-  if (pb) {
-    const pbEl = document.createElement('span');
-    pbEl.style.cssText = 'font-size:.75rem;color:var(--amber);font-weight:700;margin-left:10px';
-    pbEl.textContent = `⚡ Your best: ${pb}s`;
-    noteBtn.after(pbEl);
-  }
-}
 
 // checkAnswer patched inline above
 
