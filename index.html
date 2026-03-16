@@ -342,7 +342,10 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
 .tool-tab-btn{padding:8px 18px;border:1.5px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--ink2);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.875rem;font-weight:600;transition:all .13s}
 .tool-tab-btn:hover{background:var(--surface2);color:var(--ink)}
 .tool-tab-btn.active-tool{background:var(--blue);border-color:var(--blue);color:#fff}
-.quick-btn{padding:5px 12px;border:1px solid var(--border2);border-radius:6px;background:var(--surface2);color:var(--ink2);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.8rem;transition:all .12s}
+.quick-btn{padding:5px 12px;border:1.5px solid var(--border2);border-radius:6px;background:var(--surface2);color:var(--ink2);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.8rem;transition:all .12s;font-weight:500}
+.quick-btn:hover{background:var(--surface3);color:var(--ink);border-color:var(--border2)}
+.quick-btn.active-filter{background:var(--blue);color:#fff;border-color:var(--blue);font-weight:700}
+.lb-filter-btn.active-filter{background:var(--blue);color:#fff;border-color:var(--blue);font-weight:700}
 .quick-btn:hover{background:var(--blue-l);color:var(--blue);border-color:var(--blue)}
 .concept-card{background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:18px;cursor:pointer;transition:all .13s;position:relative}
 .concept-card:hover{border-color:var(--blue);box-shadow:0 4px 16px rgba(61,90,254,.1);transform:translateY(-1px)}
@@ -502,7 +505,8 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
 
 
 /* ── SIDEBAR SEARCH ── */
-.sb-search-wrap{display:flex;align-items:center;gap:8px;margin:6px 12px;padding:7px 10px;background:var(--surface2);border:1.5px solid var(--border2);border-radius:9px;transition:border-color .13s}
+.sb-search-wrap{display:flex;align-items:center;gap:8px;margin:6px 12px;padding:7px 10px;background:var(--surface2);border:1.5px solid var(--border2);border-radius:9px;transition:all .13s}
+.sb-search-wrap.active{border-color:var(--blue);background:var(--blue-l)}
 .sb-search-wrap:focus-within{border-color:var(--blue);background:var(--surface)}
 .sb-search-wrap svg{flex-shrink:0;color:var(--ink3)}
 .sb-search-inp{flex:1;border:none;background:none;font-size:.8125rem;color:var(--ink);font-family:'DM Sans',sans-serif;outline:none;min-width:0}
@@ -567,6 +571,42 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
 .pts-correct{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;font-size:.75rem;font-weight:700}
 .pts-wrong{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;font-size:.75rem;font-weight:700}
 
+
+/* ── HAMBURGER BUTTON ── */
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:6px 8px;font-size:1.25rem;color:var(--ink2);line-height:1}
+.hamburger:hover{color:var(--ink)}
+
+/* ── MOBILE OVERLAY ── */
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:299}
+.sb-overlay.open{display:block}
+
+/* ── RESPONSIVE BREAKPOINTS ── */
+@media(max-width:900px){
+  :root{--sw:0px}
+  .sb{transform:translateX(-100%);transition:transform .22s cubic-bezier(.4,0,.2,1);width:268px;z-index:350;box-shadow:4px 0 24px rgba(0,0,0,.15)}
+  .sb.mobile-open{transform:translateX(0)}
+  .hamburger{display:flex;align-items:center;justify-content:center;margin-right:4px}
+  .tb-brand{width:auto;border-right:none;padding:0 12px}
+  .tb-center{display:none}
+  .main{margin-left:0}
+  .cal-layout{grid-template-columns:1fr !important}
+  .hero h1{font-size:1.8rem}
+  .hero-stats{grid-template-columns:repeat(2,1fr)}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .pv-body{padding:16px}
+}
+
+@media(max-width:600px){
+  .tb-right .btn{display:none}
+  .tb-right .btn:last-child{display:flex}
+  .hero h1{font-size:1.5rem}
+  .hero-stats{grid-template-columns:repeat(2,1fr)}
+  .mv-title{font-size:1.2rem}
+  .similar-grid{grid-template-columns:1fr 1fr}
+  .hm-table{font-size:.72rem}
+  .hm-cell{width:40px;height:30px;font-size:.7rem}
+}
+
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
@@ -577,6 +617,7 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
 <body>
 
 <header class="tb">
+  <button type="button" class="hamburger" id="hamburger-btn" onclick="toggleMobileSidebar()" title="Menu" aria-label="Toggle menu">☰</button>
   <a class="tb-brand" onclick="showGuide()">
     <div class="brand-mark"><svg fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
     <span class="brand-name">Math<em>Atlas</em></span>
@@ -707,7 +748,7 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
     <button type="button" class="btn btn-g btn-xl" onclick="showView('diag')">Take Diagnostic First</button>
   </div>
   <div class="hero-stats">
-    <div><div class="hs-n">869<em>+</em></div><div class="hs-l">Curated problems</div></div>
+    <div><div class="hs-n" id="hs-problems">2,170<em>+</em></div><div class="hs-l">Verified problems</div></div>
     <div><div class="hs-n">29</div><div class="hs-l">Topic modules</div></div>
     <div><div class="hs-n">5</div><div class="hs-l">Progression levels</div></div>
     <div><div class="hs-n">AoPS<em>↗</em></div><div class="hs-l">External problem links</div></div>
@@ -3381,6 +3422,9 @@ function _navCore(n){
   if(n==='search'){
     const el=document.getElementById('view-search');
     if(el){el.classList.add('show');el.style.display='';}
+    // Highlight search wrap
+    document.querySelectorAll('.sb-search-wrap').forEach(w=>w.classList.add('active'));
+    document.getElementById('sb-search-inp')?.focus();
     return;
   }
   if(n==='heatmap'){
@@ -4897,6 +4941,7 @@ function showView(n){
     v.classList.remove('show');
     v.style.display=''; // clear any lingering inline style
   });
+  document.querySelectorAll('.sb-search-wrap').forEach(w=>w.classList.remove('active'));
 
   if(n==='tools'){
     const el=document.getElementById('view-tools');
@@ -5283,12 +5328,18 @@ function openModal(prob){
 // DAILY CHALLENGE on hero
 // ════════════════════════════════════
 function openDailyChallenge(){
-  // Mark daily as done
+  // Get today's problem and open it
+  if(!ALL_PROBS || !ALL_PROBS.length) { setTimeout(openDailyChallenge, 400); return; }
+  const today = new Date();
+  const seed = today.getFullYear()*10000 + (today.getMonth()+1)*100 + today.getDate();
+  const prob = ALL_PROBS[seed % ALL_PROBS.length];
+  if(!prob) return;
+  // Mark as done
   try{
-    const today = new Date();
     const todayStr = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
     localStorage.setItem('ma_daily_date', todayStr);
   }catch{}
+  openModal(prob);
 }
 
 // ════════════════════════════════════
@@ -6407,6 +6458,7 @@ function onProblemsJsLoaded() {
 (function waitForProblems() {
   if (window.MA_PROBLEMS) {
     onProblemsJsLoaded();
+    updateHeroStats();
   } else {
     setTimeout(waitForProblems, 200);
   }
@@ -6423,6 +6475,56 @@ function onProblemsJsLoaded() {
 // Refresh statuses on page load
 document.addEventListener('DOMContentLoaded', () => {
   setTimeout(refreshModuleStatuses, 300);
+});
+
+// ════════════════════════════════════
+// MOBILE SIDEBAR
+// ════════════════════════════════════
+function toggleMobileSidebar(){
+  const sb = document.getElementById('sb');
+  const overlay = document.getElementById('sb-overlay');
+  const isOpen = sb?.classList.contains('mobile-open');
+  if(isOpen) closeMobileSidebar();
+  else openMobileSidebar();
+}
+function openMobileSidebar(){
+  document.getElementById('sb')?.classList.add('mobile-open');
+  document.getElementById('sb-overlay')?.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeMobileSidebar(){
+  document.getElementById('sb')?.classList.remove('mobile-open');
+  document.getElementById('sb-overlay')?.classList.remove('open');
+  document.body.style.overflow = '';
+}
+// Close sidebar on any navigation on mobile
+const _origShowView2 = showView;
+// Instead of wrapping, add close call at end of showView
+// We patch the sidebar items to auto-close
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.querySelectorAll('.sb-item, .sb-item-link').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(window.innerWidth <= 900) closeMobileSidebar();
+    });
+  });
+});
+
+// ════════════════════════════════════
+// UPDATE HERO STATS DYNAMICALLY
+// ════════════════════════════════════
+function updateHeroStats(){
+  const total = getMasterProbs().length;
+  const el = document.getElementById('hs-problems');
+  if(el) el.innerHTML = total.toLocaleString() + '<em>+</em>';
+}
+
+// ════════════════════════════════════
+// KEYBOARD SHORTCUT — M for mobile menu
+// ════════════════════════════════════
+document.addEventListener('keydown', e=>{
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA') return;
+  if(e.ctrlKey||e.metaKey||e.altKey) return;
+  if(e.key==='m'||e.key==='M') toggleMobileSidebar();
 });
 </script>
 
