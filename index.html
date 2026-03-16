@@ -364,6 +364,65 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
 .tool-panel,.nt-panel,.play-panel{animation:panelIn .18s ease}
 @keyframes panelIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
+
+/* ── CONTEST SIMULATOR ── */
+.sim-header{background:linear-gradient(135deg,#1a1a3e 0%,#3d5afe 100%);color:#fff;padding:28px 32px;border-radius:14px;margin-bottom:24px}
+.sim-header h2{font-size:1.4rem;margin:0 0 6px}
+.sim-header p{opacity:.8;font-size:.9rem;margin:0}
+.sim-timer{font-size:2rem;font-weight:700;font-family:'JetBrains Mono',monospace;letter-spacing:.05em}
+.sim-timer.urgent{color:#ff6b6b;animation:pulse .8s ease infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+.sim-prog{height:6px;background:rgba(255,255,255,.2);border-radius:3px;margin-top:14px}
+.sim-prog-fill{height:100%;background:#fff;border-radius:3px;transition:width .3s}
+.sim-q-card{background:var(--surface);border:1.5px solid var(--border2);border-radius:14px;padding:24px;margin-bottom:14px}
+.sim-q-num{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);margin-bottom:8px}
+.sim-q-link{display:flex;align-items:center;gap:12px;text-decoration:none;padding:14px 16px;background:var(--surface2);border-radius:10px;border:1.5px solid var(--border);transition:border-color .13s}
+.sim-q-link:hover{border-color:var(--blue)}
+.sim-q-link .sq-title{font-weight:700;color:var(--ink);font-size:.95rem}
+.sim-q-link .sq-sub{font-size:.8rem;color:var(--ink2);margin-top:2px}
+.sim-ans-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.sim-ans-inp{flex:1;min-width:120px;padding:10px 14px;border:1.5px solid var(--border2);border-radius:8px;font-size:.9375rem;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif}
+.sim-q-status{width:32px;height:32px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;cursor:pointer;transition:all .13s;flex-shrink:0}
+.sim-q-status.answered{background:var(--blue);border-color:var(--blue);color:#fff}
+.sim-q-status.correct{background:var(--green);border-color:var(--green);color:#fff}
+.sim-q-status.wrong{background:var(--red);border-color:var(--red);color:#fff}
+.sim-q-status.skipped{background:var(--surface3);color:var(--ink3)}
+.sim-result-card{background:var(--surface);border-radius:14px;border:1.5px solid var(--border2);padding:24px;margin-bottom:14px}
+.score-big{font-size:3rem;font-weight:700;color:var(--blue);font-family:'DM Serif Display',serif}
+.score-label{font-size:.875rem;color:var(--ink2);margin-top:4px}
+
+/* ── ROADMAP VIEW ── */
+.rm2-card{background:var(--surface);border:1.5px solid var(--border2);border-radius:14px;padding:22px 24px;margin-bottom:14px}
+.rm2-card.done{border-color:var(--green);background:var(--green-l)}
+.rm2-card.in-progress{border-color:var(--blue);background:var(--blue-l)}
+.rm2-card.soon{border-color:var(--amber);background:var(--amber-l)}
+.rm2-badge{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:3px 9px;border-radius:5px;margin-bottom:10px}
+.rm2-card.done .rm2-badge{background:var(--green);color:#fff}
+.rm2-card.in-progress .rm2-badge{background:var(--blue);color:#fff}
+.rm2-card.soon .rm2-badge{background:var(--amber);color:#fff}
+.rm2-card h3{font-size:1rem;font-weight:700;margin:0 0 6px;color:var(--ink)}
+.rm2-card p{font-size:.875rem;color:var(--ink2);line-height:1.6;margin:0}
+
+/* ── FEEDBACK MODAL ── */
+.feedback-modal{max-width:480px}
+
+/* ── SOLVE MODE BAR ── */
+.solve-mode-bar{position:fixed;bottom:0;left:var(--sw);right:0;background:var(--surface);border-top:2px solid var(--blue);padding:10px 24px;display:flex;align-items:center;gap:16px;z-index:350;transform:translateY(100%);transition:transform .25s}
+.solve-mode-bar.active{transform:translateY(0)}
+.solve-timer{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--blue);min-width:70px}
+.solve-timer.urgent{color:var(--red)}
+
+/* ── DAILY CHALLENGE ── */
+.daily-card{background:linear-gradient(135deg,var(--blue-l) 0%,var(--purple-l) 100%);border:1.5px solid var(--blue);border-radius:14px;padding:22px 24px;margin-bottom:24px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.daily-icon{font-size:2.2rem;flex-shrink:0}
+.daily-body{flex:1;min-width:0}
+.daily-badge{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:4px}
+.daily-title{font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:4px}
+.daily-meta{font-size:.82rem;color:var(--ink2)}
+
+/* ── ATTRIBUTION CHIP ── */
+.maa-credit{font-size:.72rem;color:var(--ink3);display:flex;align-items:center;gap:5px;margin-top:8px}
+
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
@@ -387,8 +446,12 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
     <button type="button" class="tb-tab" id="tab-tools" onclick="showView('tools')">🔧 Tools</button>
     <button type="button" class="tb-tab" id="tab-concepts" onclick="showView('concepts')">📖 Concepts</button>
     <button type="button" class="tb-tab" id="tab-playground" onclick="showView('playground')">🎮 Playground</button>
+    <button type="button" class="tb-tab" id="tab-simulator" onclick="showView('simulator')">🏆 Contest Sim</button>
+    <button type="button" class="tb-tab" id="tab-roadmap" onclick="showView('roadmap')">🗺️ Roadmap</button>
   </div>
   <div class="tb-right">
+    <button type="button" onclick="toggleSolveMode()" id="solveModeBtn" title="Enter Solve Mode — hide solutions & start timer" style="background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 10px;cursor:pointer;font-size:.78rem;font-weight:600;color:var(--ink2);font-family:'DM Sans',sans-serif;margin-right:4px">⏱ Solve Mode</button>
+    <button type="button" onclick="openFeedback()" title="Send feedback" style="background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 10px;cursor:pointer;font-size:.78rem;font-weight:600;color:var(--ink2);font-family:'DM Sans',sans-serif;margin-right:4px">💬 Feedback</button>
     <button type="button" id="darkToggle" onclick="toggleDark()" title="Toggle dark mode" style="background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 9px;cursor:pointer;font-size:1rem;margin-right:6px">🌙</button>
     <button type="button" class="btn btn-g btn-sm" id="signInBtn" onclick="openSignInModal()">Sign In</button>
     <button type="button" class="btn btn-p btn-sm" onclick="showView('diag')">Start Free →</button>
@@ -467,6 +530,17 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
   </div>
 </div>
 <div class="guide-body">
+  <!-- ── DAILY CHALLENGE ── -->
+  <div class="daily-card" id="daily-challenge-card">
+    <div class="daily-icon">⭐</div>
+    <div class="daily-body">
+      <div class="daily-badge">Daily Challenge</div>
+      <div class="daily-title" id="daily-title">Loading today's problem…</div>
+      <div class="daily-meta" id="daily-meta"></div>
+      <div class="maa-credit">© Mathematical Association of America — problems used for educational practice</div>
+    </div>
+    <button type="button" class="btn btn-p" id="daily-btn" onclick="openDailyChallenge()" style="white-space:nowrap;flex-shrink:0">Solve Now →</button>
+  </div>
   <div class="ib ib-blue"><span class="ib-icon">ℹ️</span><div><strong>How it works:</strong> Each module has a conceptual overview, key techniques, and worked examples — then a curated problem list that links externally to AoPS. No copyrighted problem text is hosted here. Solve problems externally, then return to submit your answer and step-by-step reasoning for AI analysis.</div></div>
   <div class="ib ib-green"><span class="ib-icon">🎯</span><div>New here? <a onclick="showView('diag')">Take the 15-minute diagnostic</a> to get your skill profile and a personalized starting point in the roadmap.</div></div>
   <h2 data-n="1">Five-Level Training Roadmap</h2>
@@ -2712,6 +2786,159 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
 </div>
 
 
+
+
+<!-- ══════ CONTEST SIMULATOR VIEW ══════ -->
+<div id="view-simulator" class="view">
+  <div style="max-width:860px;margin:0 auto;padding:28px 32px">
+    <!-- SETUP SCREEN -->
+    <div id="sim-setup">
+      <div class="sim-header">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+          <div>
+            <div style="font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;opacity:.7;margin-bottom:6px">Contest Simulator</div>
+            <h2 style="margin:0 0 6px">Practice Like It's the Real Contest</h2>
+            <p>25 questions · 75-minute timer · Official AMC scoring</p>
+          </div>
+          <div class="sim-timer" id="sim-setup-clock">75:00</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:24px">
+        <div onclick="startSimulator('amc10')" style="background:var(--surface);border:1.5px solid var(--border2);border-radius:12px;padding:20px;cursor:pointer;transition:all .14s" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--border2)'">
+          <div style="font-size:1.5rem;margin-bottom:8px">📘</div>
+          <div style="font-weight:700;color:var(--ink);margin-bottom:4px">AMC 10</div>
+          <div style="font-size:.82rem;color:var(--ink2)">25 questions · 75 min<br>Problems 1–25, AMC 10 level</div>
+        </div>
+        <div onclick="startSimulator('amc12')" style="background:var(--surface);border:1.5px solid var(--border2);border-radius:12px;padding:20px;cursor:pointer;transition:all .14s" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--border2)'">
+          <div style="font-size:1.5rem;margin-bottom:8px">📗</div>
+          <div style="font-weight:700;color:var(--ink);margin-bottom:4px">AMC 12</div>
+          <div style="font-size:.82rem;color:var(--ink2)">25 questions · 75 min<br>Problems 1–25, AMC 12 level</div>
+        </div>
+        <div onclick="startSimulator('aime')" style="background:var(--surface);border:1.5px solid var(--border2);border-radius:12px;padding:20px;cursor:pointer;transition:all .14s" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--border2)'">
+          <div style="font-size:1.5rem;margin-bottom:8px">🏆</div>
+          <div style="font-weight:700;color:var(--ink);margin-bottom:4px">AIME</div>
+          <div style="font-size:.82rem;color:var(--ink2)">15 questions · 180 min<br>Integer answers 000–999</div>
+        </div>
+        <div onclick="startSimulator('mixed')" style="background:var(--surface);border:1.5px solid var(--border2);border-radius:12px;padding:20px;cursor:pointer;transition:all .14s" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--border2)'">
+          <div style="font-size:1.5rem;margin-bottom:8px">🎯</div>
+          <div style="font-weight:700;color:var(--ink);margin-bottom:4px">Mixed Practice</div>
+          <div style="font-size:.82rem;color:var(--ink2)">20 questions · 60 min<br>All contest types</div>
+        </div>
+      </div>
+      <div style="background:var(--surface2);border-radius:10px;padding:16px 20px;border:1px solid var(--border)">
+        <div style="font-size:.8rem;font-weight:700;color:var(--ink2);margin-bottom:8px">📋 AMC SCORING RULES</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;font-size:.85rem;color:var(--ink2)">
+          <div>✅ Correct: <strong style="color:var(--green)">+6 points</strong></div>
+          <div>⬜ Blank: <strong style="color:var(--ink2)">+1.5 points</strong></div>
+          <div>❌ Wrong: <strong style="color:var(--red)">+0 points</strong></div>
+          <div>📊 Max score: <strong>150 points</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIVE EXAM SCREEN -->
+    <div id="sim-exam" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+        <div>
+          <div id="sim-exam-title" style="font-size:1.1rem;font-weight:700;color:var(--ink)">AMC 10 Practice</div>
+          <div id="sim-exam-sub" style="font-size:.82rem;color:var(--ink2)">25 problems · Click a problem to open it on AoPS, then enter your answer</div>
+        </div>
+        <div style="text-align:right">
+          <div class="sim-timer" id="sim-timer">75:00</div>
+          <div style="font-size:.75rem;color:var(--ink3);margin-top:2px" id="sim-score-live">Score: 0</div>
+        </div>
+      </div>
+      <!-- Question navigation dots -->
+      <div id="sim-qnav" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;padding:14px;background:var(--surface2);border-radius:10px;border:1px solid var(--border)"></div>
+      <!-- Questions list -->
+      <div id="sim-qlist"></div>
+      <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap">
+        <button type="button" onclick="submitSimulator()" class="btn btn-p" style="padding:11px 28px;font-size:.9375rem">Submit Exam →</button>
+        <button type="button" onclick="abandonSimulator()" class="btn" style="padding:11px 18px;background:var(--surface2);border:1px solid var(--border2);color:var(--ink2)">Abandon</button>
+      </div>
+    </div>
+
+    <!-- RESULTS SCREEN -->
+    <div id="sim-results" style="display:none">
+      <div style="text-align:center;padding:32px 0 24px">
+        <div style="font-size:2rem;margin-bottom:8px">🏆</div>
+        <div class="score-big" id="sim-final-score">0</div>
+        <div class="score-label">out of 150 points</div>
+        <div id="sim-percentile" style="font-size:.875rem;color:var(--ink2);margin-top:6px"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px">
+        <div class="sim-result-card" style="text-align:center">
+          <div style="font-size:1.6rem;font-weight:700;color:var(--green)" id="sim-r-correct">0</div>
+          <div style="font-size:.82rem;color:var(--ink2)">Correct</div>
+        </div>
+        <div class="sim-result-card" style="text-align:center">
+          <div style="font-size:1.6rem;font-weight:700;color:var(--ink2)" id="sim-r-blank">0</div>
+          <div style="font-size:.82rem;color:var(--ink2)">Blank</div>
+        </div>
+        <div class="sim-result-card" style="text-align:center">
+          <div style="font-size:1.6rem;font-weight:700;color:var(--red)" id="sim-r-wrong">0</div>
+          <div style="font-size:.82rem;color:var(--ink2)">Wrong</div>
+        </div>
+      </div>
+      <div id="sim-review-list" style="margin-bottom:24px"></div>
+      <button type="button" onclick="resetSimulator()" class="btn btn-p" style="padding:11px 28px">Try Another Contest →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ ROADMAP VIEW ══════ -->
+<div id="view-roadmap" class="view">
+  <div style="max-width:700px;margin:0 auto;padding:28px 32px">
+    <div style="margin-bottom:28px">
+      <h2 style="font-size:1.4rem;font-weight:700;margin:0 0 6px">🗺️ MathAtlas Roadmap</h2>
+      <p style="color:var(--ink2);font-size:.9rem">MathAtlas is currently in <strong>beta</strong>. Here's exactly what's live, what's being built, and what's coming next.</p>
+    </div>
+
+    <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);margin-bottom:10px">✅ Live Now</div>
+    <div class="rm2-card done"><div class="rm2-badge">✓ Live</div><h3>5-Level Training Roadmap</h3><p>29 modules covering AMC 8 through AIME prep, modeled on the USACO Guide progression system.</p></div>
+    <div class="rm2-card done"><div class="rm2-badge">✓ Live</div><h3>869+ Verified Problems</h3><p>AMC 8, AMC 10A/B, AMC 12A/B, AIME I/II — all with correct official answer keys fetched directly from AoPS.</p></div>
+    <div class="rm2-card done"><div class="rm2-badge">✓ Live</div><h3>50-Question Skill Diagnostic</h3><p>Real AMC problems across all 5 domains. Get routed to the right starting module based on your results.</p></div>
+    <div class="rm2-card done"><div class="rm2-badge">✓ Live</div><h3>Infinite Practice Mode</h3><p>Adaptive practice with domain filters, difficulty levels, Elo rating, and session stats.</p></div>
+    <div class="rm2-card done"><div class="rm2-badge">✓ Live</div><h3>Interactive Math Tools</h3><p>Graph visualizer, equation solver, interactive geometry, number theory tools — all in-browser.</p></div>
+    <div class="rm2-card done"><div class="rm2-badge">✓ Live</div><h3>Concept Pages</h3><p>12 core concepts with definitions, derivations, worked examples, and common mistakes.</p></div>
+    <div class="rm2-card done"><div class="rm2-badge">✓ Live</div><h3>Math Playground</h3><p>Prime sieve, fractal generator, probability simulator, Pascal's triangle.</p></div>
+    <div class="rm2-card done"><div class="rm2-badge">✓ Live</div><h3>Contest Simulator</h3><p>Full AMC 10/12 and AIME practice exams with official scoring (+6/+1.5/+0) and timer.</p></div>
+
+    <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);margin:24px 0 10px">🔨 In Progress</div>
+    <div class="rm2-card in-progress"><div class="rm2-badge">In Progress</div><h3>Full Problem Database (5,500+)</h3><p>Expanding from 869 to all AMC/AIME problems from 2000 onwards with topic tags and difficulty ratings.</p></div>
+    <div class="rm2-card in-progress"><div class="rm2-badge">In Progress</div><h3>Google Sign-In & Cloud Sync</h3><p>OAuth integration to sync your rating, streaks, and progress across all devices.</p></div>
+    <div class="rm2-card in-progress"><div class="rm2-badge">In Progress</div><h3>Solve Mode</h3><p>Timed contest-style mode with solutions hidden, hints gated, and a 75-minute countdown.</p></div>
+
+    <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);margin:24px 0 10px">🔜 Coming Soon</div>
+    <div class="rm2-card soon"><div class="rm2-badge">Soon</div><h3>Similar Problems Engine</h3><p>After each problem, see 3–5 similar problems by topic, difficulty, and technique.</p></div>
+    <div class="rm2-card soon"><div class="rm2-badge">Soon</div><h3>Community Solutions</h3><p>Multiple solution approaches per problem — algebraic, geometric, elegant. Submit your own.</p></div>
+    <div class="rm2-card soon"><div class="rm2-badge">Soon</div><h3>Daily Problem</h3><p>A new featured AMC/AIME problem every day on the homepage. Rotating difficulty levels.</p></div>
+    <div class="rm2-card soon"><div class="rm2-badge">Soon</div><h3>Strategy Guides</h3><p>How to approach geometry, common number theory tricks, counting shortcuts, AMC strategy.</p></div>
+    <div class="rm2-card soon"><div class="rm2-badge">Soon</div><h3>Olympiad Lab</h3><p>USAMO and olympiad-level problems with number theory tools, geometry visualizer, and proof assistance.</p></div>
+    <div class="rm2-card soon"><div class="rm2-badge">Soon</div><h3>MAA Official Licensing</h3><p>Working toward showing full problem text on-site. Currently linking to AoPS for problem statements.</p></div>
+
+    <div style="margin-top:28px;background:var(--surface2);border-radius:12px;padding:18px 20px;border:1px solid var(--border)">
+      <div style="font-weight:700;color:var(--ink);margin-bottom:6px">💬 Have feedback or suggestions?</div>
+      <div style="font-size:.875rem;color:var(--ink2);margin-bottom:12px">MathAtlas is in active beta development. Your feedback directly shapes what gets built next.</div>
+      <button type="button" onclick="openFeedback()" class="btn btn-p" style="padding:9px 20px">Send Feedback →</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ── SOLVE MODE BAR ── -->
+<div class="solve-mode-bar" id="solve-mode-bar">
+  <div style="display:flex;align-items:center;gap:8px">
+    <span style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3)">Solve Mode</span>
+    <span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block"></span>
+  </div>
+  <div class="solve-timer" id="solve-timer">75:00</div>
+  <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+    <div id="solve-timer-bar" style="height:100%;background:var(--blue);border-radius:2px;transition:width 1s linear;width:100%"></div>
+  </div>
+  <div style="font-size:.82rem;color:var(--ink2)" id="solve-mode-label">Practice Mode · Solutions hidden</div>
+  <button type="button" onclick="exitSolveMode()" style="padding:6px 14px;border:1px solid var(--border2);border-radius:6px;background:var(--surface2);color:var(--ink2);cursor:pointer;font-size:.8rem;font-weight:600;font-family:'DM Sans',sans-serif">Exit</button>
+</div>
 </main>
 </div>
 
@@ -2764,8 +2991,6 @@ const MOD_ORDER=["f1","f2","f3","f4","f5","f6","f7","f8","c1","c2","c3","c4","c5
 const MOD_META={"f1":{"title":"Algebraic Manipulation","level":1},"f2":{"title":"Ratios, Proportions & Percentages","level":1},"f3":{"title":"Exponents & Polynomials","level":1},"f4":{"title":"Introductory Geometry","level":1},"f5":{"title":"Basic Number Theory","level":1},"f6":{"title":"Elementary Counting","level":1},"f7":{"title":"Sequences & Series","level":1},"f8":{"title":"Introductory Inequalities","level":1},"c1":{"title":"Quadratics & Vieta's Formulas","level":2},"c2":{"title":"Modular Arithmetic","level":2},"c3":{"title":"Intermediate Combinatorics","level":2},"c4":{"title":"Probability","level":2},"c5":{"title":"Circle Geometry","level":2},"c6":{"title":"Functional Equations & Systems","level":2},"c7":{"title":"Coordinate & Analytic Geometry","level":2},"c8":{"title":"Triangle Theorems & Advanced Geometry","level":2},"a1":{"title":"Advanced Algebraic Techniques","level":3},"a2":{"title":"Advanced Combinatorics","level":3},"a3":{"title":"Complex Numbers & Polynomials","level":3},"a4":{"title":"3D Geometry & Trigonometry","level":3},"a5":{"title":"Advanced Number Theory","level":3},"a6":{"title":"Advanced Probability","level":3},"p1":{"title":"AIME Algebra","level":4},"p2":{"title":"AIME Number Theory","level":4},"p3":{"title":"AIME Combinatorics","level":4},"p4":{"title":"AIME Geometry","level":4},"p5":{"title":"AIME Probability & Recursion","level":4},"e1":{"title":"Hard AIME: Algebra & Number Theory","level":5},"e2":{"title":"Hard AIME: Combinatorics & Geometry","level":5}};
 const DCOLORS={algebra:'#4361ee',geometry:'#7209b7',counting:'#f77f00','number-theory':'#2d9b50',probability:'#e63946',mixed:'#6c757d'};
 const DBGS={algebra:'#eef0ff',geometry:'#f8e8ff',counting:'#fff3e0','number-theory':'#e8f8ee',probability:'#ffe8ea',mixed:'#f1f3f5'};
-function getDomColor(d){return DCOLORS[d]||'#333';}
-function getDomBg(d){return DBGS[d]||'#f5f5f5';}
 
 // ════════════════════════════════════
 // PERSISTENT STATE (localStorage)
@@ -2917,22 +3142,6 @@ function clearLog(){
 // SOLVE MODAL
 // ════════════════════════════════════
 let _curProb=null;
-function openModal(prob){
-  _curProb=prob;
-  setText('modTitle',prob.display); setText('modProbName',prob.display);
-  document.getElementById('modAops').href=prob.link;
-  document.getElementById('modTags').innerHTML=
-    `<span class="mv-chip" style="background:${getDomBg(prob.domain)};color:${getDomColor(prob.domain)}">${prob.domain}</span>`+
-    (prob.skills||[]).map(s=>`<span class="pt-sk">${s}</span>`).join('')+
-    `<span class="pt-sk" style="font-family:'JetBrains Mono',monospace">Elo ${prob.elo}</span>`;
-  document.getElementById('stepsList').innerHTML=`<div class="step-row"><div class="snum sn-n">1</div><textarea class="sinput" rows="1" placeholder="Describe your first step..."></textarea><button type="button" class="btn-rm" onclick="rmStep(this)">✕</button></div>`;
-  document.getElementById('ansInp').value='';
-  document.getElementById('ansResult').style.display='none';
-  document.getElementById('aiResult').innerHTML='';
-  document.getElementById('aiBtn').disabled=false;
-  document.getElementById('aiBtn').innerHTML='<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Analyze Reasoning';
-  document.getElementById('overlay').classList.add('open');
-}
 function closeModal(){ document.getElementById('overlay').classList.remove('open'); }
 // overlay listener added in DOMContentLoaded
 
@@ -4309,6 +4518,19 @@ function showView(n){
     setTimeout(()=>runSieve(),100);
     return;
   }
+  // New extension tabs
+  if(n==='simulator'){
+    const el=document.getElementById('view-simulator');
+    if(el){el.classList.add('show');el.style.display='';}
+    const tb=document.getElementById('tab-simulator'); if(tb)tb.classList.add('on');
+    return;
+  }
+  if(n==='roadmap'){
+    const el=document.getElementById('view-roadmap');
+    if(el){el.classList.add('show');el.style.display='';}
+    const tb=document.getElementById('tab-roadmap'); if(tb)tb.classList.add('on');
+    return;
+  }
   // Core built-in views — nav() uses classList.add('show') correctly
   _navCore(n);
 }
@@ -4320,7 +4542,498 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
 });
 
+
+
+// ════════════════════════════════════
+// CONTEST SIMULATOR
+// ════════════════════════════════════
+let simState = null;
+let simTimerInterval = null;
+
+function startSimulator(type){
+  const configs = {
+    amc10: {title:'AMC 10 Practice',questions:25,minutes:75,scoring:'amc',contest:'amc10'},
+    amc12: {title:'AMC 12 Practice',questions:25,minutes:75,scoring:'amc',contest:'amc12'},
+    aime:  {title:'AIME Practice',questions:15,minutes:180,scoring:'aime',contest:'aime'},
+    mixed: {title:'Mixed Practice Exam',questions:20,minutes:60,scoring:'amc',contest:'mixed'},
+  };
+  const cfg = configs[type];
+
+  // Pick random problems from ALL_PROBS matching contest type
+  let pool = ALL_PROBS.filter(p => {
+    if(type==='amc10') return p.contest==='amc10';
+    if(type==='amc12') return p.contest==='amc12';
+    if(type==='aime')  return p.contest==='aime';
+    return true; // mixed
+  });
+  // Shuffle
+  pool = pool.sort(()=>Math.random()-.5).slice(0, cfg.questions);
+  if(pool.length < cfg.questions){
+    // fill with anything if not enough
+    const extra = ALL_PROBS.filter(p=>!pool.includes(p)).sort(()=>Math.random()-.5);
+    pool = [...pool, ...extra].slice(0, cfg.questions);
+  }
+
+  simState = {
+    type, cfg, problems: pool,
+    answers: new Array(pool.length).fill(''),
+    startTime: Date.now(),
+    secondsLeft: cfg.minutes * 60,
+    submitted: false,
+  };
+
+  document.getElementById('sim-setup').style.display='none';
+  document.getElementById('sim-results').style.display='none';
+  document.getElementById('sim-exam').style.display='block';
+
+  document.getElementById('sim-exam-title').textContent = cfg.title;
+  document.getElementById('sim-exam-sub').textContent = `${cfg.questions} problems · Open each on AoPS, solve on paper, enter your answer`;
+
+  renderSimExam();
+  startSimTimer();
+}
+
+function renderSimExam(){
+  if(!simState) return;
+  const {problems, answers, cfg} = simState;
+
+  // Nav dots
+  const nav = document.getElementById('sim-qnav');
+  nav.innerHTML = problems.map((p,i)=>{
+    const ans = answers[i];
+    const cls = ans ? 'answered' : '';
+    return `<div class="sim-q-status ${cls}" onclick="document.getElementById('sim-q-${i}').scrollIntoView({behavior:'smooth',block:'center'})" title="Q${i+1}">${i+1}</div>`;
+  }).join('');
+
+  // Questions
+  const list = document.getElementById('sim-qlist');
+  list.innerHTML = problems.map((p,i)=>`
+    <div class="sim-q-card" id="sim-q-${i}">
+      <div class="sim-q-num">Question ${i+1} of ${problems.length}</div>
+      <a href="${p.link}" target="_blank" rel="noopener" class="sim-q-link">
+        <div style="flex:1">
+          <div class="sq-title">${p.display}</div>
+          <div class="sq-sub">${p.domain} · Elo ${p.elo} · Opens on AoPS ↗</div>
+        </div>
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+      <div class="sim-ans-row">
+        <input class="sim-ans-inp" type="text" placeholder="${cfg.scoring==='aime'?'Integer 000–999':'A, B, C, D, or E'}" value="${answers[i]}" oninput="simUpdateAnswer(${i},this.value)" onkeydown="if(event.key==='Enter'){const next=document.getElementById('sim-q-${i+1}');if(next)next.scrollIntoView({behavior:'smooth',block:'center'});}">
+        <button type="button" onclick="simClearAnswer(${i})" style="padding:10px 12px;border:1px solid var(--border2);border-radius:8px;background:none;cursor:pointer;color:var(--ink3);font-size:.8rem">Clear</button>
+      </div>
+      <div style="font-size:.75rem;color:var(--ink3);margin-top:6px">Tip: Open the link, solve on paper, then type your answer above.</div>
+    </div>`).join('');
+}
+
+function simUpdateAnswer(i, val){
+  if(!simState) return;
+  simState.answers[i] = val.trim();
+  // Update nav dot
+  const dot = document.getElementById('sim-qnav')?.children[i];
+  if(dot) dot.className = 'sim-q-status ' + (val.trim() ? 'answered' : '');
+  updateSimScore();
+}
+
+function simClearAnswer(i){
+  if(!simState) return;
+  simState.answers[i] = '';
+  const inp = document.querySelector(`#sim-q-${i} .sim-ans-inp`);
+  if(inp) inp.value = '';
+  const dot = document.getElementById('sim-qnav')?.children[i];
+  if(dot) dot.className = 'sim-q-status';
+  updateSimScore();
+}
+
+function updateSimScore(){
+  if(!simState) return;
+  const answered = simState.answers.filter(a=>a).length;
+  document.getElementById('sim-score-live').textContent = `${answered} / ${simState.problems.length} answered`;
+}
+
+function startSimTimer(){
+  clearInterval(simTimerInterval);
+  simTimerInterval = setInterval(()=>{
+    if(!simState || simState.submitted){ clearInterval(simTimerInterval); return; }
+    simState.secondsLeft--;
+    const m = Math.floor(simState.secondsLeft/60);
+    const s = simState.secondsLeft%60;
+    const str = `${m}:${String(s).padStart(2,'0')}`;
+    const el = document.getElementById('sim-timer');
+    if(el){ el.textContent=str; el.className='sim-timer'+(simState.secondsLeft<300?' urgent':''); }
+    if(simState.secondsLeft <= 0){ submitSimulator(); }
+  }, 1000);
+}
+
+function submitSimulator(){
+  if(!simState) return;
+  clearInterval(simTimerInterval);
+  simState.submitted = true;
+
+  const {problems, answers, cfg} = simState;
+  let correct=0, wrong=0, blank=0;
+
+  const reviewItems = problems.map((p,i)=>{
+    const userAns = answers[i].trim();
+    const correctAns = String(p.answer||'').trim();
+    const isBlank = !userAns;
+    const isRight = !isBlank && (userAns===correctAns || userAns.toLowerCase()===correctAns.toLowerCase());
+    const isWrong = !isBlank && !isRight;
+    if(isRight) correct++;
+    else if(isWrong) wrong++;
+    else blank++;
+    return {p, userAns, correctAns, isRight, isWrong, isBlank};
+  });
+
+  // AMC scoring: correct=6, blank=1.5, wrong=0
+  const score = cfg.scoring==='aime'
+    ? correct * 1  // AIME: 1 point each
+    : correct * 6 + blank * 1.5;
+
+  document.getElementById('sim-exam').style.display='none';
+  document.getElementById('sim-results').style.display='block';
+  document.getElementById('sim-final-score').textContent = cfg.scoring==='aime' ? `${correct}/15` : score.toFixed(1);
+  document.getElementById('sim-r-correct').textContent = correct;
+  document.getElementById('sim-r-blank').textContent = blank;
+  document.getElementById('sim-r-wrong').textContent = wrong;
+
+  // Percentile estimate
+  const pct = cfg.scoring==='aime' ? Math.round(correct/15*100) : Math.round(score/150*100);
+  document.getElementById('sim-percentile').textContent =
+    score >= 120 ? '🌟 AIME Qualifying range!' :
+    score >= 90  ? '🎯 Strong AMC performance' :
+    score >= 60  ? '📈 Good — keep practicing' : '💪 Keep working — you\'ll get there';
+
+  // Review list
+  const reviewEl = document.getElementById('sim-review-list');
+  reviewEl.innerHTML = '<div style="font-size:.85rem;font-weight:700;color:var(--ink2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Problem Review</div>' +
+    reviewItems.map((item,i)=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;margin-bottom:6px;background:${item.isRight?'var(--green-l)':item.isWrong?'var(--red-l)':'var(--surface2)'}">
+      <div class="sim-q-status ${item.isRight?'correct':item.isWrong?'wrong':'skipped'}" style="cursor:default">${i+1}</div>
+      <div style="flex:1">
+        <div style="font-size:.875rem;font-weight:600;color:var(--ink)">${item.p.display}</div>
+        <div style="font-size:.78rem;color:var(--ink2)">${item.isBlank?'Skipped':item.isRight?'Correct ✓':`Wrong — you: ${item.userAns}, correct: ${item.correctAns}`}</div>
+      </div>
+      <a href="${item.p.link}" target="_blank" style="font-size:.78rem;color:var(--blue);text-decoration:none;white-space:nowrap">View ↗</a>
+    </div>`).join('');
+}
+
+function abandonSimulator(){
+  if(!confirm('Abandon this exam? Progress will be lost.')) return;
+  resetSimulator();
+}
+
+function resetSimulator(){
+  clearInterval(simTimerInterval);
+  simState = null;
+  document.getElementById('sim-setup').style.display='block';
+  document.getElementById('sim-exam').style.display='none';
+  document.getElementById('sim-results').style.display='none';
+}
+
+// ════════════════════════════════════
+// FEEDBACK
+// ════════════════════════════════════
+let fbType = 'other';
+function openFeedback(){
+  document.getElementById('feedback-overlay').classList.add('open');
+  document.getElementById('fb-result').style.display='none';
+  document.getElementById('fb-message').value='';
+  document.getElementById('fb-email').value='';
+}
+function closeFeedback(){
+  document.getElementById('feedback-overlay').classList.remove('open');
+}
+function selectFBType(btn, type){
+  fbType = type;
+  document.querySelectorAll('.fb-type-btn').forEach(b=>b.style.background='');
+  btn.style.background='var(--blue-l)';
+  btn.style.color='var(--blue)';
+  btn.style.borderColor='var(--blue)';
+}
+function submitFeedback(){
+  const msg = document.getElementById('fb-message').value.trim();
+  const email = document.getElementById('fb-email').value.trim();
+  const res = document.getElementById('fb-result');
+  if(!msg){ res.style.display='block'; res.style.background='var(--red-l)'; res.style.color='var(--red)'; res.textContent='Please enter a message.'; return; }
+  // Build mailto fallback (works without a backend)
+  const subject = encodeURIComponent(`MathAtlas Feedback — ${fbType}`);
+  const body = encodeURIComponent(`Type: ${fbType}\n\nMessage:\n${msg}\n\nFrom: ${email||'anonymous'}\n\n---\nSent from MathAtlas beta`);
+  window.open(`mailto:feedback@mathatlas.app?subject=${subject}&body=${body}`,'_blank');
+  res.style.display='block'; res.style.background='var(--green-l)'; res.style.color='var(--green)';
+  res.textContent='✓ Opening your mail app… Thank you for the feedback!';
+  setTimeout(()=>closeFeedback(), 2000);
+}
+
+// ════════════════════════════════════
+// KEYBOARD SHORTCUTS
+// ════════════════════════════════════
+document.addEventListener('keydown', e => {
+  // Don't fire if typing in an input
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.isContentEditable) return;
+  // Don't fire if modifier keys
+  if(e.ctrlKey||e.metaKey||e.altKey) return;
+
+  if(e.key==='g'||e.key==='G') { showGuide(); showNotification('📚 Training Guide'); }
+  if(e.key==='p'||e.key==='P') { showView('practice'); showNotification('⚡ Infinite Practice'); }
+  if(e.key==='d'||e.key==='D') { showView('diag'); showNotification('🎯 Diagnostic'); }
+  if(e.key==='t'||e.key==='T') { showView('tools'); showNotification('🔧 Tools'); }
+  if(e.key==='c'||e.key==='C') { showView('concepts'); showNotification('📖 Concepts'); }
+  if(e.key==='s'||e.key==='S') { showView('simulator'); showNotification('🏆 Contest Sim'); }
+  if(e.key==='?') { showKeyboardHelp(); }
+  if(e.key==='Escape') {
+    document.querySelectorAll('.overlay').forEach(o=>o.classList.remove('open'));
+    document.getElementById('kb-help')?.remove();
+  }
+});
+
+function showNotification(msg){
+  let el = document.getElementById('kb-notif');
+  if(!el){ el=document.createElement('div'); el.id='kb-notif'; el.style.cssText='position:fixed;bottom:24px;right:24px;background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:9px;font-size:.875rem;font-weight:600;z-index:9999;pointer-events:none;transition:opacity .3s;font-family:"DM Sans",sans-serif'; document.body.appendChild(el); }
+  el.textContent=msg; el.style.opacity='1';
+  clearTimeout(el._t);
+  el._t=setTimeout(()=>el.style.opacity='0', 1800);
+}
+
+
+// ════════════════════════════════════
+// EXTEND showView for new tabs
+// ════════════════════════════════════
+
+// ════════════════════════════════════
+// MAA ATTRIBUTION in problem modal
+// ════════════════════════════════════
+function openModal(prob){
+  // Set up modal content
+  _curProb=prob;
+  setText('modTitle',prob.display); setText('modProbName',prob.display);
+  document.getElementById('modAops').href=prob.link;
+  document.getElementById('modTags').innerHTML=
+    `<span class="mv-chip" style="background:${getDomBg(prob.domain)};color:${getDomColor(prob.domain)}">${prob.domain}</span>`+
+    (prob.skills||[]).map(s=>`<span class="pt-sk">${s}</span>`).join('')+
+    `<span class="pt-sk" style="font-family:'JetBrains Mono',monospace">Elo ${prob.elo}</span>`;
+  document.getElementById('stepsList').innerHTML=`<div class="step-row"><div class="snum sn-n">1</div><textarea class="sinput" rows="1" placeholder="Describe your first step..."></textarea><button type="button" class="btn-rm" onclick="rmStep(this)">✕</button></div>`;
+  document.getElementById('ansInp').value='';
+  document.getElementById('ansResult').style.display='none';
+  document.getElementById('aiResult').innerHTML='';
+  document.getElementById('aiBtn').disabled=false;
+  document.getElementById('aiBtn').innerHTML='<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Analyze Reasoning';
+  document.getElementById('overlay').classList.add('open');
+  // MAA attribution
+  let attr = document.getElementById('mod-attribution');
+  if(!attr){
+    attr = document.createElement('div');
+    attr.id='mod-attribution';
+    attr.className='maa-credit';
+    const tags = document.getElementById('modTags');
+    if(tags) tags.after(attr);
+  }
+  const contestMap = {amc8:'AMC 8',amc10:'AMC 10',amc12:'AMC 12',aime:'AIME'};
+  const cName = contestMap[prob.contest] || prob.contest.toUpperCase();
+  attr.innerHTML = `<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> ${prob.year} ${cName} Problem ${prob.num} — © Mathematical Association of America`;
+}
+
+// ════════════════════════════════════
+// DAILY CHALLENGE on hero
+// ════════════════════════════════════
+function openDailyChallenge(){
+  // Mark daily as done
+  try{
+    const today = new Date();
+    const todayStr = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+    localStorage.setItem('ma_daily_date', todayStr);
+  }catch{}
+}
+
+// ════════════════════════════════════
+// SOLVE MODE
+// ════════════════════════════════════
+let solveModeActive = false;
+let solveTimerInterval = null;
+let solveSecondsLeft = 75*60;
+let solveTotalSeconds = 75*60;
+
+function toggleSolveMode(){
+  if(solveModeActive) exitSolveMode();
+  else enterSolveMode();
+}
+
+function enterSolveMode(){
+  solveModeActive = true;
+  solveSecondsLeft = 75*60;
+  solveTotalSeconds = 75*60;
+  const bar = document.getElementById('solve-mode-bar');
+  const btn = document.getElementById('solveModeBtn');
+  if(bar) bar.classList.add('active');
+  if(btn){ btn.textContent = '⏱ Active'; btn.style.color='var(--blue)'; btn.style.borderColor='var(--blue)'; }
+  updateSolveTimer();
+  solveTimerInterval = setInterval(()=>{
+    if(!solveModeActive){ clearInterval(solveTimerInterval); return; }
+    solveSecondsLeft--;
+    updateSolveTimer();
+    if(solveSecondsLeft <= 0){ exitSolveMode(); alert('⏰ Time is up! 75 minutes elapsed.'); }
+  }, 1000);
+}
+
+function exitSolveMode(){
+  solveModeActive = false;
+  clearInterval(solveTimerInterval);
+  const bar = document.getElementById('solve-mode-bar');
+  const btn = document.getElementById('solveModeBtn');
+  if(bar) bar.classList.remove('active');
+  if(btn){ btn.textContent = '⏱ Solve Mode'; btn.style.color=''; btn.style.borderColor=''; }
+}
+
+function updateSolveTimer(){
+  const m = Math.floor(solveSecondsLeft/60);
+  const s = solveSecondsLeft%60;
+  const str = `${m}:${String(s).padStart(2,'0')}`;
+  const timerEl = document.getElementById('solve-timer');
+  const barEl   = document.getElementById('solve-timer-bar');
+  const labelEl = document.getElementById('solve-mode-label');
+  if(timerEl){
+    timerEl.textContent = str;
+    if(solveSecondsLeft <= 600) timerEl.classList.add('urgent');
+    else timerEl.classList.remove('urgent');
+  }
+  if(barEl) barEl.style.width = (solveSecondsLeft/solveTotalSeconds*100)+'%';
+  if(labelEl) labelEl.textContent = solveSecondsLeft<=600 ? '⚠️ Time running out!' : 'Practice Mode · Solutions hidden';
+}
+
+// ════════════════════════════════════
+// KEYBOARD SHORTCUTS
+// ════════════════════════════════════
+document.addEventListener('keydown', e => {
+  // Don't fire if user is typing in an input
+  const tag = document.activeElement?.tagName;
+  if(tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+  if(e.metaKey || e.ctrlKey) return;
+
+  switch(e.key){
+    case 'g': showGuide();           break; // G = guide
+    case 'p': showView('practice');  break; // P = practice
+    case 'd': showView('diag');      break; // D = diagnostic
+    case 's': showView('simulator'); break; // S = simulator
+    case 'l': showView('log');       break; // L = log
+    case 'm': showView('progress');  break; // M = my progress
+    case 't': showView('tools');     break; // T = tools
+    case 'r': showView('roadmap');   break; // R = roadmap
+    case 'Escape': {
+      // Close any open modal
+      document.querySelectorAll('.overlay.open').forEach(o=>o.classList.remove('open'));
+      break;
+    }
+  }
+});
+
+// Show keyboard shortcut hint
+function showKeyboardHelp(){
+  const shortcuts = [
+    ['G','Training Guide'],['P','Infinite Practice'],['D','Diagnostic'],
+    ['S','Contest Simulator'],['L','Question Log'],['M','My Progress'],
+    ['T','Tools'],['R','Roadmap'],['Esc','Close modal'],
+  ];
+  alert('⌨️ Keyboard Shortcuts\n\n' + shortcuts.map(([k,v])=>`  ${k}  →  ${v}`).join('\n'));
+}
+
+// ════════════════════════════════════
+// SOLVE MODE: hide answer after submitting in practice mode
+// ════════════════════════════════════
+// checkAnswer tracking (non-destructive)
+// openDailyChallenge() called when user opens modal via daily btn onclick
+
+// ════════════════════════════════════
+// LOADING STATE FOR AI
+// ════════════════════════════════════
+// Already handled by existing spinner logic
+
+// ════════════════════════════════════
+// DAILY CHALLENGE
+// ════════════════════════════════════
+function initDailyChallenge(){
+  if(!ALL_PROBS || !ALL_PROBS.length) { setTimeout(initDailyChallenge, 500); return; }
+  const today = new Date();
+  const seed = today.getFullYear()*10000 + (today.getMonth()+1)*100 + today.getDate();
+  const prob = ALL_PROBS[seed % ALL_PROBS.length];
+  if(!prob) return;
+  const titleEl = document.getElementById('daily-title');
+  const metaEl  = document.getElementById('daily-meta');
+  const btnEl   = document.getElementById('daily-btn');
+  if(titleEl) titleEl.textContent = prob.display;
+  if(metaEl)  metaEl.textContent  = `${prob.domain.charAt(0).toUpperCase()+prob.domain.slice(1)} · Elo ${prob.elo} · ${today.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}`;
+  if(btnEl)   btnEl.onclick = ()=> openModal(prob);
+  // Mark done if solved today
+  try {
+    const todayStr = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+    if(localStorage.getItem('ma_daily_date') === todayStr){
+      const card = document.getElementById('daily-challenge-card');
+      if(card){ card.style.borderColor='var(--green)'; if(btnEl){btnEl.textContent='✓ Done';btnEl.style.background='var(--green)';} }
+    }
+  } catch(e){}
+}
+
+
+// ════════════════════════════════════
+// INIT ALL NEW FEATURES ON DOM READY
+// ════════════════════════════════════
+document.addEventListener('DOMContentLoaded', ()=>{
+  // Wait for ALL_PROBS to be populated then init daily challenge
+  setTimeout(initDailyChallenge, 600);
+
+  // Add keyboard hint to topbar
+  const hint = document.createElement('button');
+  hint.type='button';
+  hint.title='Keyboard shortcuts';
+  hint.textContent='⌨️';
+  hint.style.cssText='background:none;border:1px solid var(--border2);border-radius:7px;padding:5px 9px;cursor:pointer;font-size:.85rem;color:var(--ink2);margin-right:4px';
+  hint.onclick = showKeyboardHelp;
+  const tbRight = document.querySelector('.tb-right');
+  if(tbRight) tbRight.insertBefore(hint, tbRight.firstChild);
+});
+
 </script>
+
+
+<!-- Feedback Modal -->
+<div class="overlay" id="feedback-overlay">
+  <div class="modal feedback-modal">
+    <div class="mod-hd">
+      <h3>💬 Send Feedback</h3>
+      <button type="button" class="mod-x" onclick="closeFeedback()">✕</button>
+    </div>
+    <div class="mod-body" style="padding:20px 24px">
+      <p style="font-size:.875rem;color:var(--ink2);margin:0 0 16px">You're using MathAtlas in beta. Your feedback helps fix bugs and prioritize features.</p>
+      <div style="margin-bottom:12px">
+        <div style="font-size:.8rem;font-weight:600;color:var(--ink2);margin-bottom:6px">Category</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button type="button" onclick="selectFBType(this,'bug')" class="fb-type-btn quick-btn" style="padding:6px 14px">🐛 Bug</button>
+          <button type="button" onclick="selectFBType(this,'feature')" class="fb-type-btn quick-btn" style="padding:6px 14px">💡 Feature idea</button>
+          <button type="button" onclick="selectFBType(this,'answer')" class="fb-type-btn quick-btn" style="padding:6px 14px">❓ Wrong answer</button>
+          <button type="button" onclick="selectFBType(this,'other')" class="fb-type-btn quick-btn" style="padding:6px 14px">💬 Other</button>
+        </div>
+      </div>
+      <div style="margin-bottom:14px">
+        <div style="font-size:.8rem;font-weight:600;color:var(--ink2);margin-bottom:6px">Message</div>
+        <textarea id="fb-message" rows="4" placeholder="Describe what happened, or what you'd like to see…" style="width:100%;padding:10px 12px;border:1.5px solid var(--border2);border-radius:8px;font-size:.9rem;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif;resize:vertical"></textarea>
+      </div>
+      <div style="margin-bottom:16px">
+        <div style="font-size:.8rem;font-weight:600;color:var(--ink2);margin-bottom:6px">Email (optional — for follow-up)</div>
+        <input type="email" id="fb-email" placeholder="your@email.com" style="width:100%;padding:9px 12px;border:1.5px solid var(--border2);border-radius:8px;font-size:.9rem;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif">
+      </div>
+      <div id="fb-result" style="display:none;margin-bottom:12px;padding:10px 14px;border-radius:8px;font-size:.875rem"></div>
+      <button type="button" onclick="submitFeedback()" class="btn btn-p" style="width:100%;padding:11px">Send Feedback →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Solve Mode Bar -->
+<div class="solve-mode-bar" id="solve-bar">
+  <div style="font-size:.78rem;font-weight:700;color:var(--ink2);text-transform:uppercase;letter-spacing:.05em">⏱ Solve Mode</div>
+  <div class="solve-timer" id="solve-bar-timer">75:00</div>
+  <div style="flex:1;background:var(--border);border-radius:3px;height:4px">
+    <div id="solve-bar-prog" style="height:100%;background:var(--blue);border-radius:3px;transition:width 1s;width:100%"></div>
+  </div>
+  <button type="button" onclick="toggleSolveMode()" class="btn" style="padding:6px 14px;background:var(--surface2);border:1px solid var(--border2);font-size:.82rem">End Mode</button>
+</div>
 
 <!-- Google Sign-In Modal -->
 <div class="overlay" id="signin-overlay">
