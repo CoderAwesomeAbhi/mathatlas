@@ -6341,9 +6341,9 @@ function expandModuleTo50(moduleId) {
   const candidates = window.MA_PROBLEMS.filter(p => {
     const cf = p.contestFull || p.contest || '';
     const matchContest = spec.contests.some(c => cf === c || p.contest === c);
-    const matchDomain = normDomain(p.domain) === normDomain(spec.domain);
+    const matchDomain = normDomain(p.domain) === normDomain(spec.domain) || (normDomain(p.domain)==='number-theory' && normDomain(spec.domain)==='number theory');
     const matchElo = p.elo >= spec.eloMin && p.elo <= spec.eloMax;
-    return matchContest && matchDomain && matchElo && !_usedInModules.has(p.id) && p.link;
+    return matchContest && matchDomain && matchElo && !_usedInModules.has(p.id) && p.link && p.domain !== 'mixed';
   }).sort((a, b) => a.elo - b.elo);
 
   const toAdd = candidates.slice(0, needed);
