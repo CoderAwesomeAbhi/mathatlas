@@ -4,7 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>MathAtlas — AMC & AIME Training Guide</title>
-<script src="./problems.js" defer></script>
+<script>
+// Load problem database asynchronously
+(function(){
+  var s = document.createElement('script');
+  s.src = './problems.js';
+  s.async = true;
+  s.onerror = function(){ console.warn('problems.js not found — using DOM problems only'); };
+  document.head.appendChild(s);
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -3362,7 +3371,27 @@ function save(){ try{ localStorage.setItem('ma2_state', JSON.stringify(S)); }cat
 // NAVIGATION
 // ════════════════════════════════════
 function showGuide(){ nav('guide'); }
-function _navCore(n){ nav(n); if(n==='progress')refreshProgress(); if(n==='log')renderLog(); if(n==='practice')initPractice(); }
+function _navCore(n){
+  if(n==='search'){
+    const el=document.getElementById('view-search');
+    if(el){el.classList.add('show');el.style.display='';}
+    return;
+  }
+  if(n==='heatmap'){
+    const el=document.getElementById('view-heatmap');
+    if(el){el.classList.add('show');el.style.display='';}
+    renderHeatmap(); return;
+  }
+  if(n==='notes'){
+    const el=document.getElementById('view-notes');
+    if(el){el.classList.add('show');el.style.display='';}
+    renderNotes(); return;
+  }
+  nav(n);
+  if(n==='progress')refreshProgress();
+  if(n==='log')renderLog();
+  if(n==='practice')initPractice();
+}
 function showModule(id){ nav('module-'+id); _setTab('guide'); _setSb(id); _expandSbLevel(id); window.scrollTo(0,0); }
 function _expandSbLevel(modId){
   const lvMap={f1:'sb-lv1',f2:'sb-lv1',f3:'sb-lv1',f4:'sb-lv1',f5:'sb-lv1',f6:'sb-lv1',f7:'sb-lv1',f8:'sb-lv1',
@@ -6178,27 +6207,6 @@ const _svOrig3 = showView;
 // instead of wrapping, patch _navCore fallthrough
 // Add a hook by patching the existing showView cases indirectly
 // via overriding _navCore to handle extra views
-const _navCoreOrig = _navCore;
-function _navCore(n) {
-  if (n === 'search') {
-    const el = document.getElementById('view-search');
-    if (el) { el.classList.add('show'); el.style.display = ''; }
-    return;
-  }
-  if (n === 'heatmap') {
-    const el = document.getElementById('view-heatmap');
-    if (el) { el.classList.add('show'); el.style.display = ''; }
-    renderHeatmap();
-    return;
-  }
-  if (n === 'notes') {
-    const el = document.getElementById('view-notes');
-    if (el) { el.classList.add('show'); el.style.display = ''; }
-    renderNotes();
-    return;
-  }
-  _navCoreOrig(n);
-}
 
 // ════════════════════════════════════════════════════════
 // INIT
