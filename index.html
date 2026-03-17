@@ -5031,6 +5031,17 @@ function showView(n){
     renderFlashcard(); renderFcMiniGrid(); return;
   }
 
+  // Review + Bookmarks
+  if(n==='review'){
+    const el=document.getElementById('view-review');
+    if(el){el.classList.add('show');el.style.display='';}
+    renderReview(); return;
+  }
+  if(n==='bookmarks'){
+    const el=document.getElementById('view-bookmarks');
+    if(el){el.classList.add('show');el.style.display='';}
+    renderBookmarks(); return;
+  }
   // Core built-in views — nav() uses classList.add('show') correctly
   _navCore(n);
 }
