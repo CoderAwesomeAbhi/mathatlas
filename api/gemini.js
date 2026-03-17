@@ -1,60 +1,86 @@
-module.exports = async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) return res.status(500).json({ error: 'GEMINI_API_KEY not set in environment variables' });
-  const { problem, steps } = req.body || {};
-  if (!problem || !steps || !Array.isArray(steps) || steps.length === 0) {
+export default async function handler(req, res) {
+  // Only allow POST
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const { problem, steps } = req.body;
+
+  if (!problem || !steps || !Array.isArray(steps)) {
     return res.status(400).json({ error: 'Missing problem or steps' });
   }
-  const prompt = `You are an expert AMC/AIME math competition tutor analyzing a student's solution.
+
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    return res.status(500).json({ error: 'API key not configured' });
+  }
+
+  const prompt = `You are an expert AMC/AIME mathematics tutor. A student has submitted a solution to the following problem.
+
 PROBLEM:
 ${problem}
-STUDENT STEPS:
+
+STUDENT'S SOLUTION STEPS:
 ${steps.map((s, i) => `Step ${i + 1}: ${s}`).join('\n')}
-Carefully analyze each step. Find the FIRST step that contains any error (logical mistake, wrong arithmetic, bad assumption, or incomplete casework).
-You MUST respond with ONLY this JSON object and absolutely nothing else - no explanation, no markdown, no backticks:
-{"firstErrorStep":1,"errorType":"Overcounting Error","errorCode":"C-2","stepFeedback":[{"step":1,"status":"ok","comment":null},{"step":2,"status":"error","comment":"Error explanation here"}],"mainFeedback":"2-3 sentence explanation of the main error","hint":"1-2 sentence hint toward the right approach","moduleLink":"Inclusion-Exclusion"}
-If all steps are correct use: {"firstErrorStep":null,"errorType":"Correct","errorCode":null,"stepFeedback":[{"step":1,"status":"ok","comment":null}],"mainFeedback":"All steps are correct.","hint":"Double check your final arithmetic.","moduleLink":""}`;
+
+Analyze the student's reasoning carefully. Your job is to:
+1. Identify which step (if any) first contains a logical error, unjustified assumption, arithmetic mistake, or incomplete casework
+2. Classify the error type
+3. Provide targeted feedback
+
+Respond ONLY with a valid JSON object in this exact format (no markdown, no backticks):
+{
+  "firstErrorStep": <step number as integer, or null if all steps are correct>,
+  "errorType": "<one of: Arithmetic Error | Overcounting Error | Undercounting Error | Unjustified Assumption | Incomplete Casework | Setup Error | Correct>",
+  "errorCode": "<e.g. C-2 for counting errors, A-1 for algebra, G-3 for geometry, or null if correct>",
+  "stepFeedback": [
+    {
+      "step": <step number>,
+      "status": "<ok | error | warning>",
+      "comment": "<brief comment on this step, or null if no comment needed>"
+    }
+  ],
+  "mainFeedback": "<2-3 sentence explanation of the primary error, specific to the student's reasoning>",
+  "hint": "<1-2 sentence hint toward the correct approach without giving the answer away>",
+  "moduleLink": "<name of the relevant topic module to review, e.g. 'Inclusion-Exclusion' or 'Polynomial Roots'>"
+}`;
+
   try {
-    const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`,
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${AIzaSyAQidovR1Hv5LQIPqqD1PDnYIWEFGR9_3M}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
           generationConfig: {
-            temperature: 0.1,
-            maxOutputTokens: 1024
+            temperature: 0.2,
+            maxOutputTokens: 1024,
           }
         })
       }
     );
-    const rawText = await geminiRes.text();
-    if (!geminiRes.ok) {
-      console.error('Gemini rejected:', rawText);
-      return res.status(502).json({
-        error: 'Gemini API rejected the request',
-        detail: rawText
-      });
+
+    if (!response.ok) {
+      const err = await response.text();
+      console.error('Gemini error:', err);
+      return res.status(502).json({ error: 'Gemini API error' });
     }
-    let data;
-    try { data = JSON.parse(rawText); }
-    catch (e) { return res.status(502).json({ error: 'Could not parse Gemini response', detail: rawText }); }
-    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!text) return res.status(502).json({ error: 'Gemini returned no text', detail: JSON.stringify(data).substring(0, 500) });
-    const match = text.match(/\{[\s\S]*\}/);
-    if (!match) return res.status(502).json({ error: 'No JSON found in response', detail: text });
-    let parsed;
-    try { parsed = JSON.parse(match[0]); }
-    catch (e) { return res.status(502).json({ error: 'Could not parse JSON from Gemini', detail: match[0] }); }
+
+    const data = await response.json();
+    const raw = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+    if (!raw) {
+      return res.status(502).json({ error: 'Empty response from Gemini' });
+    }
+
+    // Strip any accidental markdown fences
+    const cleaned = raw.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(cleaned);
+
     return res.status(200).json(parsed);
   } catch (err) {
-    console.error('Fetch error:', err);
-    return res.status(500).json({ error: 'Network error calling Gemini', detail: err.message });
+    console.error('Handler error:', err);
+    return res.status(500).json({ error: 'Internal server error' });
   }
-};
+}
