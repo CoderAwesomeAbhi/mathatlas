@@ -1,15 +1,6 @@
-{
-  "version": 2,
-  "builds": [
-    { "src": "api/*.js", "use": "@vercel/node" },
-    { "src": "index.html", "use": "@vercel/static" },
-    { "src": "problems.js", "use": "@vercel/static" },
-    { "src": "problems-base.json", "use": "@vercel/static" }
-  ],
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/problems.js", "dest": "/problems.js" },
-    { "src": "/problems-base.json", "dest": "/problems-base.json" },
-    { "src": "/(.*)", "dest": "/index.html" }
+Set-Content C:\Users\abhij\mathatlas\vercel.json '{
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/((?!problems\\.js|problems-base\\.json).*)", "destination": "/index.html" }
   ]
-}
+}'
