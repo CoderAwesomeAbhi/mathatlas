@@ -1,6 +1,5 @@
-Set-Content C:\Users\abhij\mathatlas\vercel.json '{
+{
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/((?!problems\\.js|problems-base\\.json).*)", "destination": "/index.html" }
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
-}'
+}
