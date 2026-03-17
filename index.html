@@ -4,6 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>MathAtlas — AMC & AIME Training Guide</title>
+<meta name="description" content="The structured AMC and AIME competition math training platform. 2,170+ verified problems, adaptive practice, skill diagnostic, and AI-powered feedback. Free for all students.">
+<meta name="keywords" content="AMC, AIME, competition math, math olympiad, AMC 10, AMC 12, AIME prep, math practice">
+<meta name="author" content="MathAtlas">
+<meta name="theme-color" content="#3d5afe">
+<meta property="og:title" content="MathAtlas — AMC & AIME Training">
+<meta property="og:description" content="Structured competition math training. 2,170+ AMC/AIME problems, adaptive practice, and AI feedback. Free.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mathatlas.vercel.app">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MathAtlas — AMC & AIME Training">
+<meta name="twitter:description" content="2,170+ verified AMC/AIME problems with adaptive practice and AI feedback.">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./icon-192.png">
 <script>
 // Load problem database asynchronously
 (function(){
@@ -607,6 +620,11 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
   .hm-cell{width:40px;height:30px;font-size:.7rem}
 }
 
+
+/* ── HINT SYSTEM ── */
+.hint-btn{padding:6px 12px;border:1.5px solid var(--amber);border-radius:7px;background:none;cursor:pointer;font-size:.8rem;font-weight:600;color:var(--amber);font-family:'DM Sans',sans-serif;transition:all .13s}
+.hint-btn:hover{background:var(--amber-l)}
+
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
@@ -678,6 +696,8 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
   <div class="sb-group-lbl">Track</div>
   <button type="button" class="sb-item" id="sbg-progress" onclick="showView('progress')"><span class="sb-icon">📊</span><span class="sb-lbl">My Progress</span></button>
   <button type="button" class="sb-item" id="sbg-heatmap" onclick="showView('heatmap')"><span class="sb-icon">🌡️</span><span class="sb-lbl">Weakness Heatmap</span></button>
+  <button type="button" class="sb-item" id="sbg-review" onclick="showView('review')"><span class="sb-icon">❌</span><span class="sb-lbl">Wrong Answers <span id="sb-wrong-count" style="font-size:.7rem;background:var(--red);color:#fff;border-radius:10px;padding:1px 5px;margin-left:3px;display:none"></span></span></button>
+  <button type="button" class="sb-item" id="sbg-bookmarks" onclick="showView('bookmarks')"><span class="sb-icon">🔖</span><span class="sb-lbl">Bookmarks</span></button>
   <button type="button" class="sb-item" id="sbg-notes" onclick="showView('notes')"><span class="sb-icon">📝</span><span class="sb-lbl">Problem Notes</span></button>
   <button type="button" class="sb-item" id="sbg-calendar" onclick="showView('calendar')"><span class="sb-icon">📅</span><span class="sb-lbl">Study Calendar</span></button>
   <button type="button" class="sb-item" id="sbg-leaderboard" onclick="showView('leaderboard')"><span class="sb-icon">🏅</span><span class="sb-lbl">Leaderboard</span></button>
@@ -3364,6 +3384,7 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
   <div class="modal">
     <div class="mod-hd">
       <h3 id="modTitle">Solve Problem</h3>
+      <button type="button" id="bookmark-btn" onclick="toggleBookmark()" title="Bookmark this problem" style="background:none;border:none;cursor:pointer;font-size:1.1rem;padding:4px 8px;transition:transform .15s" title="Bookmark">🔖</button>
       <button type="button" class="mod-x" onclick="closeModal()">✕</button>
     </div>
     <div class="mod-body">
@@ -3372,6 +3393,16 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
         <a id="modAops" href="#" target="_blank" class="pcl-aops">View on AoPS ↗</a>
       </div>
       <div id="modTags" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px"></div>
+      <!-- Hint system -->
+      <div id="hint-section" style="margin-bottom:12px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <button type="button" class="hint-btn" id="hint-btn-1" onclick="showHint(1)">💡 Hint 1</button>
+          <button type="button" class="hint-btn" id="hint-btn-2" onclick="showHint(2)" style="opacity:.45">💡 Hint 2</button>
+          <button type="button" class="hint-btn" id="hint-btn-3" onclick="showHint(3)" style="opacity:.45">💡 Hint 3</button>
+          <a id="hint-aops-link" href="#" target="_blank" rel="noopener" class="hint-btn" style="text-decoration:none;margin-left:auto">📖 Full Solution ↗</a>
+        </div>
+        <div id="hint-box" style="display:none;margin-top:10px;padding:12px 16px;background:var(--amber-l);border:1.5px solid var(--amber);border-radius:9px;font-size:.875rem;color:var(--ink);line-height:1.6"></div>
+      </div>
       <div class="answer-sec">
         <span class="answer-lbl">Your answer:</span>
         <input class="answer-inp" id="ansInp" type="text" autocomplete="off" placeholder="e.g. 47" onkeydown="if(event.key==='Enter')checkAnswer()">
@@ -3690,6 +3721,7 @@ function initPractice(){
 }
 
 function loadNextPrac(){
+  startPracTimer();
   const ex=document.getElementById('prac-empty'), card=document.getElementById('prac-card');
   document.getElementById('pc-ans').value='';
   document.getElementById('pc-result').style.display='none';
@@ -5322,6 +5354,17 @@ function openModal(prob){
     pbEl.textContent = `⚡ Your best: ${pb}s`;
     noteBtn.after(pbEl);
   }
+  // Reset hints and update bookmark state
+  resetHints();
+  const _aopsLink = document.getElementById('hint-aops-link');
+  if (_aopsLink && prob?.link) _aopsLink.href = prob.link;
+  const _bm = getBookmarks();
+  const _bmBtn = document.getElementById('bookmark-btn');
+  if (_bmBtn) {
+    if (_bm[prob?.id]) { _bmBtn.textContent = '⭐'; _bmBtn.style.filter = 'hue-rotate(30deg)'; }
+    else { _bmBtn.textContent = '🔖'; _bmBtn.style.filter = ''; }
+  }
+  updateWrongCount();
 }
 
 // ════════════════════════════════════
@@ -6526,6 +6569,357 @@ document.addEventListener('keydown', e=>{
   if(e.ctrlKey||e.metaKey||e.altKey) return;
   if(e.key==='m'||e.key==='M') toggleMobileSidebar();
 });
+
+// ════════════════════════════════════════════════════════
+// HINT SYSTEM
+// ════════════════════════════════════════════════════════
+let _hintLevel = 0;
+const _HINTS = {
+  // Generic hints based on domain + elo range
+  // These show progressively — each hint unlocks the next
+  getHints(prob) {
+    if (!prob) return ['Open the problem on AoPS to read it.', 'Try drawing a diagram or writing out variables.', 'Check the AoPS solution page for a full walkthrough.'];
+    const domain = (prob.domain || '').replace('-', ' ').toLowerCase();
+    const elo = prob.elo || 1000;
+    const isAime = prob.contest === 'aime';
+
+    // Hint 1 — what approach to try
+    const h1 = {
+      algebra: elo < 900 ? 'Try setting up a variable for the unknown and writing an equation.' :
+                elo < 1300 ? 'Look for a substitution or algebraic identity that simplifies the expression.' :
+                'Consider symmetric functions, generating functions, or a clever substitution.',
+      geometry: elo < 900 ? 'Draw a careful diagram and label all given lengths and angles.' :
+                 elo < 1300 ? 'Look for similar triangles, the Pythagorean theorem, or a useful auxiliary line.' :
+                 'Consider using coordinates, trigonometry, or a projective/inversion approach.',
+      counting: elo < 900 ? 'Try listing small cases to find a pattern before generalizing.' :
+                 elo < 1300 ? 'Consider whether to use combinations, permutations, or complementary counting.' :
+                 'Think about bijections, generating functions, or the Principle of Inclusion-Exclusion.',
+      'number theory': elo < 900 ? 'Try checking small values and look for a pattern modulo a small number.' :
+                       elo < 1300 ? 'Consider factoring, finding prime factorizations, or working mod a small prime.' :
+                       'Think about Euler\'s theorem, CRT, or lifting the exponent lemma.',
+      probability: elo < 900 ? 'List all equally likely outcomes and count favorable ones.' :
+                   elo < 1300 ? 'Consider conditioning on the first event or using complementary probability.' :
+                   'Think about expected value linearity or a recursive probability setup.',
+    }[domain] || 'Carefully re-read the problem and identify exactly what is being asked.';
+
+    // Hint 2 — key observation
+    const h2 = isAime ?
+      'For AIME problems, the answer is an integer 000–999. Use this to check your work.' :
+      'The answer choices on AMC problems can help — try eliminating clearly wrong options first.';
+
+    // Hint 3 — link to solution
+    const h3 = `The full solution with multiple approaches is available on AoPS. Click "Full Solution ↗" above.`;
+
+    return [h1, h2, h3];
+  }
+};
+
+function showHint(level) {
+  if (!_curProb) return;
+  const hints = _HINTS.getHints(_curProb);
+  const box = document.getElementById('hint-box');
+  const btn1 = document.getElementById('hint-btn-1');
+  const btn2 = document.getElementById('hint-btn-2');
+  const btn3 = document.getElementById('hint-btn-3');
+  if (!box) return;
+
+  _hintLevel = Math.max(_hintLevel, level);
+
+  // Build progressive hints
+  let content = '';
+  for (let i = 0; i < _hintLevel && i < hints.length; i++) {
+    content += `<div style="margin-bottom:${i < _hintLevel-1 ? '10px' : '0'};${i < _hintLevel-1 ? 'opacity:.7' : ''}">
+      <strong style="font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--amber)">Hint ${i+1}</strong><br>
+      ${hints[i]}
+    </div>`;
+  }
+  box.innerHTML = content;
+  box.style.display = 'block';
+
+  // Unlock next hint button
+  if (btn2 && _hintLevel >= 1) btn2.style.opacity = '1';
+  if (btn3 && _hintLevel >= 2) btn3.style.opacity = '1';
+}
+
+function resetHints() {
+  _hintLevel = 0;
+  const box = document.getElementById('hint-box');
+  if (box) { box.style.display = 'none'; box.innerHTML = ''; }
+  const btn2 = document.getElementById('hint-btn-2');
+  const btn3 = document.getElementById('hint-btn-3');
+  if (btn2) btn2.style.opacity = '.45';
+  if (btn3) btn3.style.opacity = '.45';
+}
+
+// ════════════════════════════════════════════════════════
+// BOOKMARKS
+// ════════════════════════════════════════════════════════
+function getBookmarks() {
+  try { return JSON.parse(localStorage.getItem('ma_bookmarks') || '{}'); } catch { return {}; }
+}
+function saveBookmarks(bm) {
+  try { localStorage.setItem('ma_bookmarks', JSON.stringify(bm)); } catch {}
+}
+
+function toggleBookmark() {
+  if (!_curProb) return;
+  const bm = getBookmarks();
+  const btn = document.getElementById('bookmark-btn');
+  if (bm[_curProb.id]) {
+    delete bm[_curProb.id];
+    if (btn) { btn.textContent = '🔖'; btn.title = 'Bookmark this problem'; btn.style.filter = ''; }
+    showNotification('Bookmark removed');
+  } else {
+    bm[_curProb.id] = { prob: _curProb, ts: Date.now() };
+    if (btn) { btn.textContent = '⭐'; btn.title = 'Bookmarked!'; btn.style.filter = 'hue-rotate(30deg)'; }
+    showNotification('⭐ Bookmarked!');
+  }
+  saveBookmarks(bm);
+  updateBookmarkCount();
+}
+
+function updateBookmarkCount() {
+  const bm = getBookmarks();
+  const count = Object.keys(bm).length;
+  // Could add a count badge to sidebar if needed
+}
+
+function renderBookmarks() {
+  const bm = getBookmarks();
+  const el = document.getElementById('bookmarks-list');
+  const empty = document.getElementById('bookmarks-empty');
+  if (!el) return;
+  const entries = Object.values(bm).sort((a, b) => b.ts - a.ts);
+  if (!entries.length) {
+    el.innerHTML = '';
+    if (empty) empty.style.display = 'block';
+    return;
+  }
+  if (empty) empty.style.display = 'none';
+  const DCOL = { algebra:'var(--blue)', geometry:'var(--purple)', counting:'var(--amber)', 'number theory':'var(--green)', probability:'var(--red)' };
+  el.innerHTML = entries.map(e => {
+    const p = e.prob;
+    const col = DCOL[p?.domain] || 'var(--ink2)';
+    return `<div style="display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);margin-bottom:8px;transition:all .13s;cursor:pointer" onclick='openModal(${JSON.stringify(p)})' onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--border)'">
+      <div style="width:8px;height:8px;border-radius:50%;background:${col};flex-shrink:0"></div>
+      <div style="flex:1">
+        <div style="font-weight:600;font-size:.9rem;color:var(--ink)">${p?.display}</div>
+        <div style="font-size:.78rem;color:var(--ink2);margin-top:2px">Elo ${p?.elo} · ${p?.domain} · Saved ${new Date(e.ts).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div>
+      </div>
+      <button onclick="event.stopPropagation();removeBookmark('${p?.id}')" style="padding:4px 8px;border:1px solid var(--border2);border-radius:5px;background:none;cursor:pointer;font-size:.75rem;color:var(--ink3)">Remove</button>
+    </div>`;
+  }).join('');
+}
+
+function removeBookmark(id) {
+  const bm = getBookmarks();
+  delete bm[id];
+  saveBookmarks(bm);
+  renderBookmarks();
+}
+
+function clearBookmarks() {
+  if (!confirm('Clear all bookmarks?')) return;
+  localStorage.removeItem('ma_bookmarks');
+  renderBookmarks();
+  showNotification('Bookmarks cleared');
+}
+
+// ════════════════════════════════════════════════════════
+// WRONG ANSWERS REVIEW
+// ════════════════════════════════════════════════════════
+function renderReview() {
+  const el = document.getElementById('review-list');
+  const empty = document.getElementById('review-empty');
+  const statsEl = document.getElementById('review-stats');
+  if (!el) return;
+
+  // Get all wrong attempts (latest per problem)
+  const log = S.log || [];
+  const latest = {};
+  log.forEach(e => {
+    if (!latest[e.id] || e.ts > latest[e.id].ts) latest[e.id] = e;
+  });
+  const wrong = Object.values(latest).filter(e => e.result === 'wrong').sort((a,b) => b.ts - a.ts);
+  const fixed = Object.values(latest).filter(e => {
+    const allAttempts = log.filter(l => l.id === e.id);
+    return allAttempts.some(a => a.result === 'wrong') && allAttempts.some(a => a.result === 'correct');
+  }).length;
+
+  if (statsEl) {
+    statsEl.innerHTML = `
+      <div style="padding:12px 18px;background:var(--red-l);border:1.5px solid var(--red);border-radius:10px;text-align:center;flex:1">
+        <div style="font-size:1.6rem;font-weight:700;color:var(--red)">${wrong.length}</div>
+        <div style="font-size:.8rem;color:var(--ink2)">Need practice</div>
+      </div>
+      <div style="padding:12px 18px;background:var(--green-l);border:1.5px solid var(--green);border-radius:10px;text-align:center;flex:1">
+        <div style="font-size:1.6rem;font-weight:700;color:var(--green)">${fixed}</div>
+        <div style="font-size:.8rem;color:var(--ink2)">Fixed ✓</div>
+      </div>
+      <div style="padding:12px 18px;background:var(--surface2);border:1.5px solid var(--border2);border-radius:10px;text-align:center;flex:1">
+        <div style="font-size:1.6rem;font-weight:700;color:var(--ink)">${log.length}</div>
+        <div style="font-size:.8rem;color:var(--ink2)">Total attempts</div>
+      </div>`;
+  }
+
+  if (!wrong.length) {
+    el.innerHTML = '';
+    if (empty) empty.style.display = 'block';
+    return;
+  }
+  if (empty) empty.style.display = 'none';
+
+  // Group by domain
+  const byDomain = {};
+  wrong.forEach(e => {
+    const d = e.domain || 'other';
+    byDomain[d] = byDomain[d] || [];
+    byDomain[d].push(e);
+  });
+
+  const DCOL = { algebra:'var(--blue)', geometry:'var(--purple)', counting:'var(--amber)', 'number theory':'var(--green)', probability:'var(--red)' };
+
+  el.innerHTML = Object.entries(byDomain).map(([domain, probs]) => `
+    <div style="margin-bottom:20px">
+      <div style="font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:${DCOL[domain]||'var(--ink3)'};margin-bottom:8px">${domain} (${probs.length})</div>
+      ${probs.map(e => {
+        const pool = getMasterProbs();
+        const prob = pool.find(p => p.id === e.id) || { id: e.id, display: e.display, link: e.link, domain: e.domain, elo: e.elo, answer: e.answer };
+        return `<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;border:1.5px solid var(--red-l);background:var(--surface);margin-bottom:6px;transition:all .13s" onmouseover="this.style.borderColor='var(--red)'" onmouseout="this.style.borderColor='var(--red-l)'">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--red);flex-shrink:0"></div>
+          <div style="flex:1">
+            <div style="font-weight:600;font-size:.875rem;color:var(--ink)">${e.display}</div>
+            <div style="font-size:.75rem;color:var(--ink2);margin-top:2px">Your answer: <span style="color:var(--red);font-weight:700">${e.userAns}</span> · Correct: <span style="color:var(--green);font-weight:700">${e.answer}</span></div>
+          </div>
+          <button type="button" onclick='openModal(${JSON.stringify(prob)})' style="padding:6px 12px;border:1.5px solid var(--blue);border-radius:7px;background:var(--blue-l);color:var(--blue);cursor:pointer;font-size:.78rem;font-weight:700;font-family:&quot;DM Sans&quot;,sans-serif;white-space:nowrap">Try Again →</button>
+        </div>`;
+      }).join('')}
+    </div>`).join('');
+}
+
+function practiceWrongAnswers() {
+  const log = S.log || [];
+  const latest = {};
+  log.forEach(e => { if (!latest[e.id] || e.ts > latest[e.id].ts) latest[e.id] = e; });
+  const wrong = Object.values(latest).filter(e => e.result === 'wrong');
+  if (!wrong.length) { showNotification('No wrong answers to practice!'); return; }
+  // Load wrong problems into practice queue
+  const pool = getMasterProbs();
+  pracQueue = wrong.map(e => pool.find(p => p.id === e.id)).filter(Boolean);
+  pracQueue.sort(() => Math.random() - 0.5);
+  showView('practice');
+  setTimeout(() => { pracCur = pracQueue[0]; if (pracCur) loadNextPrac(); }, 100);
+  showNotification(`📚 Loaded ${pracQueue.length} wrong problems to practice`);
+}
+
+function clearWrongAnswers() {
+  if (!confirm('This will clear your entire attempt history. Are you sure?')) return;
+  S.log = [];
+  save();
+  renderReview();
+  showNotification('History cleared');
+}
+
+// ════════════════════════════════════════════════════════
+// KEYBOARD NAVIGATION IN PRACTICE MODE
+// ════════════════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  // In practice view: Enter to submit, N for next, Space to focus answer
+  const isPracticeVisible = document.getElementById('view-practice')?.classList.contains('show');
+  if (isPracticeVisible) {
+    if (e.key === 'Enter') { e.preventDefault(); pracSubmit(); }
+    if (e.key === 'n' || e.key === 'N') { e.preventDefault(); pracNext(); }
+    if (e.key === ' ') { e.preventDefault(); document.getElementById('pc-ans')?.focus(); }
+  }
+  // In modal: H for hint, Escape already handled
+  const modalOpen = document.getElementById('overlay')?.classList.contains('open');
+  if (modalOpen) {
+    if (e.key === 'h' || e.key === 'H') { e.preventDefault(); showHint(_hintLevel + 1); }
+    if (e.key === 'Enter') { e.preventDefault(); checkAnswer(); }
+  }
+});
+
+// ════════════════════════════════════════════════════════
+// PRACTICE MODE TIMER
+// ════════════════════════════════════════════════════════
+let _pracStart = null;
+let _pracTimerInterval = null;
+
+function startPracTimer() {
+  _pracStart = Date.now();
+  clearInterval(_pracTimerInterval);
+  _pracTimerInterval = setInterval(() => {
+    const el = document.getElementById('prac-timer-display');
+    if (!el) return;
+    const sec = Math.floor((Date.now() - _pracStart) / 1000);
+    const m = Math.floor(sec / 60), s = sec % 60;
+    el.textContent = `${m}:${String(s).padStart(2, '0')}`;
+  }, 1000);
+}
+
+function stopPracTimer() {
+  clearInterval(_pracTimerInterval);
+  const elapsed = _pracStart ? Math.floor((Date.now() - _pracStart) / 1000) : null;
+  _pracStart = null;
+  return elapsed;
+}
+
+// ════════════════════════════════════════════════════════
+// STREAK ON HOMEPAGE
+// ════════════════════════════════════════════════════════
+function updateHomeStreak() {
+  const el = document.getElementById('home-streak');
+  if (!el) return;
+  el.textContent = S.streak > 0 ? `🔥 ${S.streak} day streak` : '';
+  el.style.display = S.streak > 0 ? 'inline-flex' : 'none';
+}
+
+// ════════════════════════════════════════════════════════
+// EXTEND _navCore FOR NEW VIEWS
+// ════════════════════════════════════════════════════════
+
+// ════════════════════════════════════════════════════════
+// PATCH openModal TO RESET HINTS + UPDATE BOOKMARK STATE
+// ════════════════════════════════════════════════════════
+
+function updateWrongCount() {
+  const log = S.log || [];
+  const latest = {};
+  log.forEach(e => { if (!latest[e.id] || e.ts > latest[e.id].ts) latest[e.id] = e; });
+  const count = Object.values(latest).filter(e => e.result === 'wrong').length;
+  const badge = document.getElementById('sb-wrong-count');
+  if (badge) {
+    badge.textContent = count;
+    badge.style.display = count > 0 ? 'inline' : 'none';
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  updateWrongCount();
+  updateHomeStreak();
+  // Add timer display to practice card header
+  const pcName = document.getElementById('pc-name');
+  if (pcName && !document.getElementById('prac-timer-display')) {
+    const timerEl = document.createElement('span');
+    timerEl.id = 'prac-timer-display';
+    timerEl.style.cssText = 'font-family:"JetBrains Mono",monospace;font-size:.75rem;color:var(--ink3);background:var(--surface3);padding:2px 8px;border-radius:4px;min-width:42px;text-align:center';
+    timerEl.textContent = '0:00';
+    pcName.parentNode.insertBefore(timerEl, pcName.nextSibling);
+  }
+  // Add streak to hero
+  const heroStats = document.querySelector('.hero-stats');
+  if (heroStats && !document.getElementById('home-streak') && S.streak > 0) {
+    const streakEl = document.createElement('div');
+    streakEl.style.cssText = 'text-align:center';
+    streakEl.innerHTML = `<div class="hs-n" id="home-streak-val">${S.streak}</div><div class="hs-l">Day Streak 🔥</div>`;
+    heroStats.appendChild(streakEl);
+  }
+});
 </script>
 
 
@@ -6595,3 +6989,44 @@ document.addEventListener('keydown', e=>{
 
 </body>
 </html>
+<!-- ══════ REVIEW WRONG ANSWERS VIEW ══════ -->
+<div id="view-review" class="view">
+  <div style="max-width:820px;margin:0 auto;padding:28px 32px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px">
+      <div>
+        <h2 style="font-size:1.4rem;font-weight:700;margin:0 0 6px">❌ Wrong Answers Review</h2>
+        <p style="color:var(--ink2);font-size:.9rem">Problems you've gotten wrong. Practice these until you get them right.</p>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button type="button" onclick="practiceWrongAnswers()" class="btn btn-p" style="padding:9px 18px">⚡ Practice All Wrong</button>
+        <button type="button" onclick="clearWrongAnswers()" class="btn" style="padding:9px 14px;background:var(--surface2);border:1px solid var(--border2);color:var(--red)">Clear</button>
+      </div>
+    </div>
+    <div id="review-stats" style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap"></div>
+    <div id="review-list"></div>
+    <div id="review-empty" style="display:none;text-align:center;padding:40px 0;color:var(--ink3)">
+      <div style="font-size:2rem;margin-bottom:8px">🎉</div>
+      <div style="font-weight:600;color:var(--ink2)">No wrong answers yet!</div>
+      <div style="font-size:.875rem;margin-top:4px">Keep practicing and any mistakes will appear here.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ BOOKMARKS VIEW ══════ -->
+<div id="view-bookmarks" class="view">
+  <div style="max-width:820px;margin:0 auto;padding:28px 32px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px">
+      <div>
+        <h2 style="font-size:1.4rem;font-weight:700;margin:0 0 6px">🔖 Bookmarks</h2>
+        <p style="color:var(--ink2);font-size:.9rem">Problems you've saved to revisit. Click any to open.</p>
+      </div>
+      <button type="button" onclick="clearBookmarks()" class="btn" style="padding:9px 14px;background:var(--surface2);border:1px solid var(--border2);color:var(--red)">Clear All</button>
+    </div>
+    <div id="bookmarks-list"></div>
+    <div id="bookmarks-empty" style="display:none;text-align:center;padding:40px 0;color:var(--ink3)">
+      <div style="font-size:2rem;margin-bottom:8px">🔖</div>
+      <div style="font-weight:600;color:var(--ink2)">No bookmarks yet</div>
+      <div style="font-size:.875rem;margin-top:4px">Click the 🔖 button on any problem to save it here.</div>
+    </div>
+  </div>
+</div>
