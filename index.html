@@ -3372,6 +3372,50 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
     </div>
   </div>
 </div>
+
+<!-- ══════ REVIEW WRONG ANSWERS VIEW ══════ -->
+<div id="view-review" class="view">
+  <div style="max-width:820px;margin:0 auto;padding:28px 32px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px">
+      <div>
+        <h2 style="font-size:1.4rem;font-weight:700;margin:0 0 6px">❌ Wrong Answers Review</h2>
+        <p style="color:var(--ink2);font-size:.9rem">Problems you've gotten wrong. Practice these until you get them right.</p>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button type="button" onclick="practiceWrongAnswers()" class="btn btn-p" style="padding:9px 18px">⚡ Practice All Wrong</button>
+        <button type="button" onclick="clearWrongAnswers()" class="btn" style="padding:9px 14px;background:var(--surface2);border:1px solid var(--border2);color:var(--red)">Clear</button>
+      </div>
+    </div>
+    <div id="review-stats" style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap"></div>
+    <div id="review-list"></div>
+    <div id="review-empty" style="display:none;text-align:center;padding:40px 0;color:var(--ink3)">
+      <div style="font-size:2rem;margin-bottom:8px">🎉</div>
+      <div style="font-weight:600;color:var(--ink2)">No wrong answers yet!</div>
+      <div style="font-size:.875rem;margin-top:4px">Keep practicing and any mistakes will appear here.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ BOOKMARKS VIEW ══════ -->
+<div id="view-bookmarks" class="view">
+  <div style="max-width:820px;margin:0 auto;padding:28px 32px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px">
+      <div>
+        <h2 style="font-size:1.4rem;font-weight:700;margin:0 0 6px">🔖 Bookmarks</h2>
+        <p style="color:var(--ink2);font-size:.9rem">Problems you've saved to revisit. Click any to open.</p>
+      </div>
+      <button type="button" onclick="clearBookmarks()" class="btn" style="padding:9px 14px;background:var(--surface2);border:1px solid var(--border2);color:var(--red)">Clear All</button>
+    </div>
+    <div id="bookmarks-list"></div>
+    <div id="bookmarks-empty" style="display:none;text-align:center;padding:40px 0;color:var(--ink3)">
+      <div style="font-size:2rem;margin-bottom:8px">🔖</div>
+      <div style="font-weight:600;color:var(--ink2)">No bookmarks yet</div>
+      <div style="font-size:.875rem;margin-top:4px">Click the 🔖 button on any problem to save it here.</div>
+    </div>
+  </div>
+</div>
+
+
 </main>
 </div>
 
@@ -7000,44 +7044,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
-<!-- ══════ REVIEW WRONG ANSWERS VIEW ══════ -->
-<div id="view-review" class="view">
-  <div style="max-width:820px;margin:0 auto;padding:28px 32px">
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px">
-      <div>
-        <h2 style="font-size:1.4rem;font-weight:700;margin:0 0 6px">❌ Wrong Answers Review</h2>
-        <p style="color:var(--ink2);font-size:.9rem">Problems you've gotten wrong. Practice these until you get them right.</p>
-      </div>
-      <div style="display:flex;gap:8px">
-        <button type="button" onclick="practiceWrongAnswers()" class="btn btn-p" style="padding:9px 18px">⚡ Practice All Wrong</button>
-        <button type="button" onclick="clearWrongAnswers()" class="btn" style="padding:9px 14px;background:var(--surface2);border:1px solid var(--border2);color:var(--red)">Clear</button>
-      </div>
-    </div>
-    <div id="review-stats" style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap"></div>
-    <div id="review-list"></div>
-    <div id="review-empty" style="display:none;text-align:center;padding:40px 0;color:var(--ink3)">
-      <div style="font-size:2rem;margin-bottom:8px">🎉</div>
-      <div style="font-weight:600;color:var(--ink2)">No wrong answers yet!</div>
-      <div style="font-size:.875rem;margin-top:4px">Keep practicing and any mistakes will appear here.</div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════ BOOKMARKS VIEW ══════ -->
-<div id="view-bookmarks" class="view">
-  <div style="max-width:820px;margin:0 auto;padding:28px 32px">
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px">
-      <div>
-        <h2 style="font-size:1.4rem;font-weight:700;margin:0 0 6px">🔖 Bookmarks</h2>
-        <p style="color:var(--ink2);font-size:.9rem">Problems you've saved to revisit. Click any to open.</p>
-      </div>
-      <button type="button" onclick="clearBookmarks()" class="btn" style="padding:9px 14px;background:var(--surface2);border:1px solid var(--border2);color:var(--red)">Clear All</button>
-    </div>
-    <div id="bookmarks-list"></div>
-    <div id="bookmarks-empty" style="display:none;text-align:center;padding:40px 0;color:var(--ink3)">
-      <div style="font-size:2rem;margin-bottom:8px">🔖</div>
-      <div style="font-weight:600;color:var(--ink2)">No bookmarks yet</div>
-      <div style="font-size:.875rem;margin-top:4px">Click the 🔖 button on any problem to save it here.</div>
-    </div>
-  </div>
-</div>
