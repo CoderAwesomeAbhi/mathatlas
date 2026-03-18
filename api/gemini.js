@@ -91,7 +91,7 @@ If all steps are correct use: {"firstErrorStep":null,"errorType":"Correct","erro
           contents: [{ parts: [{ text: prompt }] }],
           generationConfig: {
             temperature: 0.1,
-            maxOutputTokens: 1024
+            maxOutputTokens: 2048
           }
         })
       }
