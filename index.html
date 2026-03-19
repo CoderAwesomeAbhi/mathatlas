@@ -5850,6 +5850,14 @@ function showView(n){
     const tb=document.getElementById('tab-simulator'); if(tb)tb.classList.add('on');
     return;
   }
+  if(n==='ftw'){
+    const el=document.getElementById('view-ftw');
+    if(el){el.classList.add('show');el.style.display='';}
+    document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('on'));
+    const sb=document.getElementById('sbg-ftw');if(sb)sb.classList.add('on');
+    ftwShowModeSelect();
+    return;
+  }
   if(n==='roadmap'){
     const el=document.getElementById('view-roadmap');
     if(el){el.classList.add('show');el.style.display='';}
