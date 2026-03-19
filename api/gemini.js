@@ -10,6 +10,7 @@ async function fetchProblemText(link) {
     const html = await res.text();
 
     // AoPS problem text lives inside .mw-parser-output, before the solution header
+    // Extract everything between the first <p> and the "Solution" heading
     const bodyMatch = html.match(/<div[^>]*class="[^"]*mw-parser-output[^"]*"[^>]*>([\s\S]*?)<\/div>/);
     if (!bodyMatch) return null;
 
@@ -83,7 +84,7 @@ If all steps are correct use: {"firstErrorStep":null,"errorType":"Correct","erro
 
   try {
     const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -91,7 +92,7 @@ If all steps are correct use: {"firstErrorStep":null,"errorType":"Correct","erro
           contents: [{ parts: [{ text: prompt }] }],
           generationConfig: {
             temperature: 0.1,
-            maxOutputTokens: 2048
+            maxOutputTokens: 1024
           }
         })
       }
@@ -110,9 +111,7 @@ If all steps are correct use: {"firstErrorStep":null,"errorType":"Correct","erro
     const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!text) return res.status(502).json({ error: 'Gemini returned no text', detail: JSON.stringify(data).substring(0, 500) });
 
-    // Strip markdown code blocks that Gemini 2.5 sometimes wraps around JSON
-    const clean = text.replace(/```json|```/g, '').trim();
-    const match = clean.match(/\{[\s\S]*\}/);
+    const match = text.match(/\{[\s\S]*\}/);
     if (!match) return res.status(502).json({ error: 'No JSON found in response', detail: text });
 
     let parsed;
