@@ -6903,6 +6903,8 @@ function showView(n){
   if(n==='simulator'){
     const el=document.getElementById('view-simulator');
     if(el){el.classList.add('show');el.style.display='';}
+    document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('on'));
+    const sb=document.getElementById('sbg-simulator');if(sb)sb.classList.add('on');
     const tb=document.getElementById('tab-simulator'); if(tb)tb.classList.add('on');
     return;
   }
@@ -8534,13 +8536,16 @@ async function assistantSend() {
   const thinkId = 'think-' + Date.now();
   assistantAddThinking(thinkId);
   try {
-    const fullPrompt = ASSISTANT_SYSTEM + '\n\n' + assistantHistory.map(m=>`${m.role==='user'?'Student':'Atlas AI'}: ${m.content}`).join('\n\n');
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    const resp = await fetch('/api/atlas', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:fullPrompt}]})
+      body: JSON.stringify({
+        system: ASSISTANT_SYSTEM,
+        messages: assistantHistory.map(m=>({role:m.role,content:m.content})),
+        max_tokens: 1000
+      })
     });
     const data = await resp.json();
-    const reply = data.content?.[0]?.text || 'Sorry, I could not generate a response. Please try again.';
+    const reply = data.text || data.error || 'Sorry, I could not generate a response. Please try again.';
     assistantHistory.push({role:'assistant',content:reply});
     document.getElementById(thinkId)?.remove();
     assistantAddMsg('bot', reply);
@@ -8608,12 +8613,12 @@ async function runMistakeAnalysis() {
   if(btn) { btn.disabled = true; btn.textContent = '🔍 Analyzing…'; }
   const summary = wrong.map(e => `- ${e.display} (${e.domain}, Elo ${e.elo||'?'}) — answered "${e.userAns||'?'}", correct: "${e.answer||'?'}"`).join('\n');
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    const resp = await fetch('/api/atlas', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:`You are an expert AMC/AIME math tutor analyzing a student's mistake patterns.\n\nWrong answers:\n${summary}\n\nAnalyze these and identify error patterns. Return JSON only:\n{"patterns":[{"title":"...","description":"...","count":3,"examples":["problem name"]}],"weakestTopic":"...","weakestSubskill":"...","drill":"...","encouragement":"..."}`}]})
+      body: JSON.stringify({messages:[{role:'user',content:`You are an expert AMC/AIME math tutor analyzing a student's mistake patterns.\n\nWrong answers:\n${summary}\n\nAnalyze these and identify error patterns. Return JSON only:\n{"patterns":[{"title":"...","description":"...","count":3,"examples":["problem name"]}],"weakestTopic":"...","weakestSubskill":"...","drill":"...","encouragement":"..."}`}],max_tokens:1000})
     });
     const data = await resp.json();
-    const text = data.content?.[0]?.text || '';
+    const text = data.text || '';
     const match = text.match(/\{[\s\S]*\}/);
     if(!match) throw new Error('no json');
     const result = JSON.parse(match[0]);
@@ -8724,7 +8729,7 @@ async function runPredictor() {
   const typeLabel={amc8:'AMC 8',amc10:'AMC 10',amc12:'AMC 12',aime:'AIME'}[type];
   const avg=scores.reduce((a,b)=>a+b,0)/scores.length;
   try {
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:800,messages:[{role:'user',content:`AMC expert. Student preparing for ${typeLabel}. Practice scores: ${scores.join(', ')} out of ${maxScore}. MathAtlas Elo: ${rating}. Weeks until exam: ${weeks}. Return JSON only: {"predictedScore":${Math.round(avg)},"lowEstimate":${Math.round(avg*.85)},"highEstimate":${Math.round(avg*1.15)},"percentile":"~top 30%","qualifiesFor":"AIME","trend":"stable","advice":["tip1","tip2","tip3"],"focusArea":"specific area","confidence":"moderate"}`}]})});
+    const resp=await fetch('/api/atlas',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens:800,messages:[{role:'user',content:`AMC expert. Student preparing for ${typeLabel}. Practice scores: ${scores.join(', ')} out of ${maxScore}. MathAtlas Elo: ${rating}. Weeks until exam: ${weeks}. Return JSON only: {"predictedScore":${Math.round(avg)},"lowEstimate":${Math.round(avg*.85)},"highEstimate":${Math.round(avg*1.15)},"percentile":"~top 30%","qualifiesFor":"AIME","trend":"stable","advice":["tip1","tip2","tip3"],"focusArea":"specific area","confidence":"moderate"}`}]})});
     const data=await resp.json();
     const text=data.content?.[0]?.text||'';
     const match=text.match(/\{[\s\S]*\}/);
@@ -9155,14 +9160,18 @@ function rtBuildGrid() {
   const seen = new Set();
   const probs = allProbs.filter(p => { if(seen.has(p.id)){return false;} seen.add(p.id); return true; });
 
-  // Group by contest+year
+  // Group by contest+year, only count problems up to the max for that contest
   const groups = {};
   probs.forEach(p => {
     const cf = p.contestFull || p.contest || '';
     if(!cfg.contests.includes(cf)) return;
+    if(p.num > cfg.questions) return; // skip ghost problems
     const key = cf + '_' + p.year;
     if(!groups[key]) groups[key] = { cf, year: p.year, probs: [] };
-    groups[key].probs.push(p);
+    // Only add if not already present (dedup by num)
+    if(!groups[key].probs.find(x => x.num === p.num)) {
+      groups[key].probs.push(p);
+    }
   });
 
   // Sort by year desc, then contest name
