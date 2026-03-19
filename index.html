@@ -140,6 +140,30 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:v
 .ftw-recap-pill.draw{background:var(--amber-l);color:var(--amber)}
 @media(max-width:600px){.ftw-mode-grid{grid-template-columns:1fr}.ftw-stats-row{grid-template-columns:repeat(2,1fr)}.ftw-choice{width:54px;height:54px;font-size:1.1rem}}
 
+/* ═══ REAL TEST MODE ═══ */
+.rt-type-btn{padding:8px 18px;border-radius:20px;border:2px solid var(--border2);background:var(--surface);color:var(--ink2);font-size:.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .14s}
+.rt-type-btn:hover{border-color:var(--blue);color:var(--blue)}
+.rt-type-btn.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.rt-test-card{background:var(--surface);border:2px solid var(--border);border-radius:12px;padding:18px;cursor:pointer;transition:all .15s;text-align:center}
+.rt-test-card:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:0 4px 12px rgba(61,90,254,.1)}
+.rt-test-card-name{font-weight:700;font-size:.95rem;margin-bottom:4px}
+.rt-test-card-meta{font-size:.75rem;color:var(--ink3)}
+.rt-test-card-count{font-size:.7rem;margin-top:6px;padding:3px 8px;border-radius:10px;display:inline-block}
+.rt-choice{width:60px;height:60px;border:2px solid var(--border2);border-radius:12px;font-size:1.2rem;font-weight:800;cursor:pointer;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif;transition:all .14s}
+.rt-choice:hover{border-color:var(--blue);background:var(--blue-l);color:var(--blue)}
+.rt-choice.selected{border-color:var(--blue);background:var(--blue);color:#fff}
+.rt-nav-dot{width:26px;height:26px;border-radius:6px;border:1.5px solid var(--border2);display:grid;place-items:center;font-size:.7rem;font-weight:700;cursor:pointer;transition:all .13s;flex-shrink:0}
+.rt-nav-dot:hover{border-color:var(--blue)}
+.rt-nav-dot.answered{background:var(--blue-l);border-color:var(--blue);color:var(--blue)}
+.rt-nav-dot.current{background:var(--blue);border-color:var(--blue);color:#fff}
+.rt-nav-dot.correct{background:var(--green-l);border-color:var(--green);color:var(--green)}
+.rt-nav-dot.wrong{background:var(--red-l);border-color:var(--red);color:var(--red)}
+.rt-nav-dot.skipped{background:var(--surface2);border-color:var(--border2);color:var(--ink3)}
+.rt-review-row{display:grid;grid-template-columns:40px 1fr 80px 80px 80px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);font-size:.82rem;gap:8px}
+.rt-review-row:last-child{border-bottom:none}
+.rt-review-row:hover{background:var(--surface2)}
+@media(max-width:600px){.rt-review-row{grid-template-columns:30px 1fr 60px 60px}}
+
 @keyframes ftw-wait-pulse{0%,100%{width:30%}50%{width:80%}}
 .ftw-modesel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px}
 .ftw-modesel-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:24px 18px;text-align:center;cursor:pointer;transition:all .18s}
@@ -207,7 +231,24 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:v
    HOME / GUIDE
 ═══════════════════════════════ */
 .hero{background:linear-gradient(155deg,#f0f3ff 0%,#fafaff 55%,#f5f0ff 100%);border-bottom:1px solid var(--border);padding:60px 64px 52px}
-.hero-eyebrow{font-size:.6875rem;font-weight:700;color:var(--blue);letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
+.hero-feature-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:36px}
+.hero-feat{display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(61,90,254,.08);border:1px solid rgba(61,90,254,.15);border-radius:20px;font-size:.82rem;font-weight:600;color:var(--blue)}
+body.dark-mode .hero-feat{background:rgba(61,90,254,.15);border-color:rgba(61,90,254,.3)}
+body.dark-mode .hero{background:linear-gradient(155deg,#0d0f1f 0%,#0a0a14 55%,#0f0a1f 100%)}
+body.dark-mode .rt-test-card{background:var(--surface);border-color:var(--border)}
+body.dark-mode .ftw-section{background:var(--surface)}
+body.dark-mode .ftw-mode-inner,.dark-mode .ftw-diff-inner{border-color:var(--border)}
+body.dark-mode .ftw-problem-area,.dark-mode .ftw-battle-hd{background:var(--surface)}
+body.dark-mode .ftw-choice,.dark-mode .rt-choice{background:var(--surface2);border-color:var(--border2)}
+body.dark-mode .ftw-int-input,.dark-mode .rt-int-inp{background:var(--surface2);border-color:var(--border2)}
+
+/* ─── DARK MODE CSS VARS ─── */
+body.dark-mode{
+  --bg:#0a0a14;--surface:#12121e;--surface2:#1a1a28;--surface3:#222236;
+  --border:#2a2a3e;--border2:#363654;
+  --ink:#e8e8f0;--ink2:#9090b0;--ink3:#5a5a7a;
+  --blue-l:#1a1f3a;--green-l:#0a1f12;--amber-l:#1f1500;--red-l:#1f0a0a;--purple-l:#1a0f2e;
+}font-weight:700;color:var(--blue);letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
 .hero h1{font-family:'DM Serif Display',serif;font-size:2.5rem;font-weight:400;letter-spacing:-.02em;line-height:1.18;max-width:640px;margin-bottom:18px;color:var(--ink)}
 .hero h1 em{color:var(--blue);font-style:normal}
 .hero-sub{font-size:1rem;color:var(--ink2);max-width:560px;line-height:1.7;margin-bottom:34px}
@@ -928,6 +969,7 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
   </div>
   <div class="tb-right">
     <div class="tb-elo-badge" id="tb-elo" onclick="showView('progress')" title="Your Elo rating — click for progress">⚡ <span id="tb-elo-val">1200</span></div>
+    <a href="https://github.com/CoderAwesomeAbhi/mathatlas" target="_blank" title="View on GitHub" class="tb-icon-btn" style="text-decoration:none;font-size:.85rem">★ GitHub</a>
     <button type="button" id="solveModeBtn" onclick="toggleSolveMode()" title="Timed solve mode" class="tb-icon-btn">⏱</button>
     <button type="button" onclick="openFeedback()" title="Send feedback" class="tb-icon-btn">💬</button>
     <button type="button" id="darkToggle" onclick="toggleDark()" title="Toggle dark mode" class="tb-icon-btn">🌙</button>
@@ -959,6 +1001,7 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
   <button type="button" class="sb-item" id="sbg-practice" onclick="showView('practice')"><span class="sb-icon">⚡</span><span class="sb-lbl">Infinite Practice</span></button>
   <button type="button" class="sb-item" id="sbg-diag" onclick="showView('diag')"><span class="sb-icon">🎯</span><span class="sb-lbl">Skill Diagnostic</span></button>
   <button type="button" class="sb-item" id="sbg-simulator" onclick="showView('simulator')"><span class="sb-icon">🏆</span><span class="sb-lbl">Contest Sim</span></button>
+  <button type="button" class="sb-item" id="sbg-realtest" onclick="showView('realtest')"><span class="sb-icon">📝</span><span class="sb-lbl">Real Tests</span></button>
   <button type="button" class="sb-item" id="sbg-ftw" onclick="showView('ftw')"><span class="sb-icon">⚔️</span><span class="sb-lbl">1v1 Battle</span><span class="sb-chip" style="background:#fee2e2;color:#dc2626;font-size:.5rem">LIVE</span></button>
   <button type="button" class="sb-item" id="sbg-log" onclick="showView('log')"><span class="sb-icon">📋</span><span class="sb-lbl">Question Log</span></button>
 </div>
@@ -1040,18 +1083,25 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
 <div id="view-guide" class="view show">
 
 <div class="hero">
-  <div class="hero-eyebrow">Competition Mathematics Training Platform</div>
-  <h1>The <em>MathAtlas</em><br>Training Guide</h1>
-  <p class="hero-sub">A structured roadmap from foundational algebra to elite AIME problem solving — modeled on the USACO Guide's proven progression system, built for AMC and AIME preparation.</p>
+  <div class="hero-eyebrow">Free AMC & AIME Training Platform</div>
+  <h1>Train smarter.<br>Score higher on <em>AMC & AIME</em>.</h1>
+  <p class="hero-sub">The only free platform with structured modules, real past tests, AI-powered reasoning feedback, and 1v1 live battles — built by a competitor, for competitors.</p>
   <div class="hero-cta">
-    <button type="button" class="btn btn-p btn-xl" onclick="startFromBeginning()">▶ Start from Level 1</button>
-    <button type="button" class="btn btn-g btn-xl" onclick="showView('diag')">Take Diagnostic First</button>
+    <button type="button" class="btn btn-p btn-xl" onclick="showView('diag')">🎯 Take Placement Test</button>
+    <button type="button" class="btn btn-g btn-xl" onclick="startFromBeginning()">▶ Start Level 1</button>
+  </div>
+  <div class="hero-feature-row">
+    <div class="hero-feat"><span>🤖</span><span>AI Reasoning Feedback</span></div>
+    <div class="hero-feat"><span>📝</span><span>Real Past Tests</span></div>
+    <div class="hero-feat"><span>⚔️</span><span>1v1 Live Battles</span></div>
+    <div class="hero-feat"><span>📊</span><span>Elo Rating System</span></div>
+    <div class="hero-feat"><span>🆓</span><span>Completely Free</span></div>
   </div>
   <div class="hero-stats">
     <div><div class="hs-n" id="hs-problems">2,170<em>+</em></div><div class="hs-l">Verified problems</div></div>
     <div><div class="hs-n">29</div><div class="hs-l">Topic modules</div></div>
-    <div><div class="hs-n">5</div><div class="hs-l">Progression levels</div></div>
-    <div><div class="hs-n">AoPS<em>↗</em></div><div class="hs-l">External problem links</div></div>
+    <div><div class="hs-n">5</div><div class="hs-l">Difficulty levels</div></div>
+    <div><div class="hs-n">AMC 8→AIME</div><div class="hs-l">Full pipeline</div></div>
   </div>
 </div>
 <div class="guide-body">
@@ -1066,8 +1116,10 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
     </div>
     <button type="button" class="btn btn-p" id="daily-btn" onclick="openDailyChallenge()" style="white-space:nowrap;flex-shrink:0">Solve Now →</button>
   </div>
-  <div class="ib ib-blue"><span class="ib-icon">ℹ️</span><div><strong>How it works:</strong> Each module has a conceptual overview, key techniques, and worked examples — then a curated problem list that links externally to AoPS. No copyrighted problem text is hosted here. Solve problems externally, then return to submit your answer and step-by-step reasoning for AI analysis.</div></div>
-  <div class="ib ib-green"><span class="ib-icon">🎯</span><div>New here? <a onclick="showView('diag')">Take the 15-minute diagnostic</a> to get your skill profile and a personalized starting point in the roadmap.</div></div>
+  <div class="ib ib-blue"><span class="ib-icon">🤖</span><div><strong>AI-powered reasoning feedback:</strong> Open any problem, write your step-by-step solution, and click "Analyze Reasoning" — Gemini AI identifies exactly where your logic breaks down and gives a targeted hint. <a onclick="showModule('f1')" style="color:var(--blue);cursor:pointer">Try it on a problem →</a></div></div>
+  <div class="ib ib-green"><span class="ib-icon">🎯</span><div>New here? <a onclick="showView('diag')" style="color:var(--green);cursor:pointer;font-weight:600">Take the placement diagnostic</a> to find your starting level — it takes about 15 minutes and gives you a personalized roadmap.</div></div>
+  <div class="ib" style="background:var(--purple-l);border-color:var(--purple)"><span class="ib-icon">⚔️</span><div><strong>New: 1v1 Battle Mode</strong> — race a real opponent or bot to answer AMC/AIME problems first. Choose AMC 8, AMC 10/12, or AIME. <a onclick="showView('ftw')" style="color:var(--purple);cursor:pointer;font-weight:600">Start a battle →</a></div></div>
+  <div class="ib" style="background:#fff3e0;border-color:#f77f00"><span class="ib-icon">📝</span><div><strong>New: Real Tests</strong> — take actual AMC 8, AMC 10A/B, AMC 12A/B, and AIME exams in official order with real time limits and full scoring. <a onclick="showView('realtest')" style="color:#f77f00;cursor:pointer;font-weight:600">Pick a test →</a></div></div>
   <h2 data-n="1">Five-Level Training Roadmap</h2>
   <div class="roadmap" id="roadmap">
 <div class="rl" id="rl-1">
@@ -3413,6 +3465,36 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
 </div>
 
 
+<!-- Guide footer -->
+<div style="margin-top:60px;padding:40px 64px;border-top:1px solid var(--border);background:var(--surface2)">
+  <div style="max-width:900px;display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;margin-bottom:32px">
+    <div>
+      <div style="font-family:'DM Serif Display',serif;font-size:1.2rem;margin-bottom:8px">MathAtlas</div>
+      <div style="font-size:.82rem;color:var(--ink2);line-height:1.7;margin-bottom:12px">A free, structured AMC & AIME training platform built by a student, for students. 2,170+ verified problems, AI feedback, real past tests, and live 1v1 battles.</div>
+      <div style="font-size:.78rem;color:var(--ink3)">Problems © Mathematical Association of America. Used for educational practice. <a href="https://artofproblemsolving.com" target="_blank" style="color:var(--blue)">AoPS ↗</a></div>
+    </div>
+    <div>
+      <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);margin-bottom:12px">Platform</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <a onclick="showView('diag')" style="font-size:.85rem;color:var(--ink2);cursor:pointer;text-decoration:none" onmouseover="this.style.color='var(--blue)'" onmouseout="this.style.color='var(--ink2)'">Skill Diagnostic</a>
+        <a onclick="showView('practice')" style="font-size:.85rem;color:var(--ink2);cursor:pointer;text-decoration:none" onmouseover="this.style.color='var(--blue)'" onmouseout="this.style.color='var(--ink2)'">Infinite Practice</a>
+        <a onclick="showView('realtest')" style="font-size:.85rem;color:var(--ink2);cursor:pointer;text-decoration:none" onmouseover="this.style.color='var(--blue)'" onmouseout="this.style.color='var(--ink2)'">Real Tests</a>
+        <a onclick="showView('ftw')" style="font-size:.85rem;color:var(--ink2);cursor:pointer;text-decoration:none" onmouseover="this.style.color='var(--blue)'" onmouseout="this.style.color='var(--ink2)'">1v1 Battle</a>
+        <a onclick="showView('simulator')" style="font-size:.85rem;color:var(--ink2);cursor:pointer;text-decoration:none" onmouseover="this.style.color='var(--blue)'" onmouseout="this.style.color='var(--ink2)'">Contest Sim</a>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);margin-bottom:12px">Links</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <a href="https://github.com/CoderAwesomeAbhi/mathatlas" target="_blank" style="font-size:.85rem;color:var(--ink2);text-decoration:none" onmouseover="this.style.color='var(--blue)'" onmouseout="this.style.color='var(--ink2)'">★ GitHub</a>
+        <a onclick="openFeedback()" style="font-size:.85rem;color:var(--ink2);cursor:pointer;text-decoration:none" onmouseover="this.style.color='var(--blue)'" onmouseout="this.style.color='var(--ink2)'">💬 Send Feedback</a>
+        <a href="https://artofproblemsolving.com" target="_blank" style="font-size:.85rem;color:var(--ink2);text-decoration:none" onmouseover="this.style.color='var(--blue)'" onmouseout="this.style.color='var(--ink2)'">AoPS ↗</a>
+      </div>
+    </div>
+  </div>
+  <div style="font-size:.75rem;color:var(--ink3);padding-top:20px;border-top:1px solid var(--border)">© 2025 MathAtlas · Built with ❤️ for the math community · Free forever</div>
+</div>
+
 <!-- ══════ PROGRESS VIEW ══════ -->
 <div id="view-progress" class="view">
   <div class="pv-hdr">
@@ -4219,6 +4301,109 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
 </div>
 
 
+
+<!-- ══════ REAL TEST VIEW ══════ -->
+<div id="view-realtest" class="view">
+  <div style="max-width:900px;margin:0 auto;padding:32px 20px 60px">
+
+    <!-- Test picker -->
+    <div id="rt-picker">
+      <div style="margin-bottom:28px">
+        <h1 style="font-family:'DM Serif Display',serif;font-size:2rem;letter-spacing:-.02em;margin-bottom:8px">📝 Real Tests</h1>
+        <p style="color:var(--ink2);font-size:.95rem">Take an actual AMC or AIME exam in the correct order, timed like the real thing.</p>
+      </div>
+
+      <!-- Contest type tabs -->
+      <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+        <button type="button" class="rt-type-btn active" onclick="rtSetType('amc8')" id="rt-type-amc8">AMC 8</button>
+        <button type="button" class="rt-type-btn" onclick="rtSetType('amc10')" id="rt-type-amc10">AMC 10</button>
+        <button type="button" class="rt-type-btn" onclick="rtSetType('amc12')" id="rt-type-amc12">AMC 12</button>
+        <button type="button" class="rt-type-btn" onclick="rtSetType('aime')" id="rt-type-aime">AIME</button>
+      </div>
+
+      <!-- Test grid -->
+      <div id="rt-test-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:32px"></div>
+    </div>
+
+    <!-- Active test -->
+    <div id="rt-active" style="display:none">
+      <!-- Header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+        <div>
+          <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3)" id="rt-test-label"></div>
+          <div style="font-size:1.4rem;font-weight:800;font-family:'DM Serif Display',serif" id="rt-test-title"></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px">
+          <div style="text-align:center">
+            <div style="font-size:1.6rem;font-weight:800;font-family:'JetBrains Mono',monospace;color:var(--blue)" id="rt-timer">75:00</div>
+            <div style="font-size:.7rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em">Time Left</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:1.6rem;font-weight:800;font-family:'JetBrains Mono',monospace" id="rt-q-counter">1/25</div>
+            <div style="font-size:.7rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em">Question</div>
+          </div>
+          <button type="button" onclick="rtFinish()" class="btn btn-g btn-sm">End Test</button>
+        </div>
+      </div>
+
+      <!-- Progress bar -->
+      <div style="height:4px;background:var(--border);border-radius:2px;margin-bottom:24px">
+        <div id="rt-progress-bar" style="height:100%;background:var(--blue);border-radius:2px;transition:width .3s;width:4%"></div>
+      </div>
+
+      <!-- Question nav dots -->
+      <div id="rt-nav-dots" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px"></div>
+
+      <!-- Problem card -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:16px">
+        <div style="font-size:.78rem;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px" id="rt-prob-meta"></div>
+        <a id="rt-prob-link" target="_blank" style="font-size:.82rem;color:var(--blue);text-decoration:none;display:inline-block;margin-bottom:20px">View full problem on AoPS ↗</a>
+
+        <!-- AMC choices -->
+        <div id="rt-choices" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:16px">
+          <button type="button" class="rt-choice" onclick="rtSelect('A')">A</button>
+          <button type="button" class="rt-choice" onclick="rtSelect('B')">B</button>
+          <button type="button" class="rt-choice" onclick="rtSelect('C')">C</button>
+          <button type="button" class="rt-choice" onclick="rtSelect('D')">D</button>
+          <button type="button" class="rt-choice" onclick="rtSelect('E')">E</button>
+        </div>
+
+        <!-- AIME integer input -->
+        <div id="rt-integer" style="display:none;justify-content:center;gap:10px;margin-bottom:16px">
+          <input type="number" id="rt-int-inp" min="0" max="999" placeholder="0–999"
+            style="padding:10px 16px;border:2px solid var(--border2);border-radius:10px;font-size:1.2rem;font-weight:700;width:140px;text-align:center;font-family:'JetBrains Mono',monospace;background:var(--surface);color:var(--ink)">
+        </div>
+
+        <div style="font-size:.8rem;color:var(--ink3);text-align:center" id="rt-answer-status">Select your answer</div>
+      </div>
+
+      <!-- Nav buttons -->
+      <div style="display:flex;justify-content:space-between;gap:12px">
+        <button type="button" class="btn btn-g" onclick="rtNav(-1)" id="rt-prev-btn">← Previous</button>
+        <button type="button" class="btn btn-g" onclick="rtClear()" style="color:var(--red)">Clear Answer</button>
+        <button type="button" class="btn btn-p" onclick="rtNav(1)" id="rt-next-btn">Next →</button>
+      </div>
+    </div>
+
+    <!-- Results screen -->
+    <div id="rt-results" style="display:none">
+      <div style="text-align:center;padding:40px 0 28px">
+        <div style="font-size:3rem;margin-bottom:12px" id="rt-result-emoji">🎯</div>
+        <h2 style="font-family:'DM Serif Display',serif;font-size:2rem;margin-bottom:6px" id="rt-result-title">Test Complete</h2>
+        <div style="font-size:.9rem;color:var(--ink2)" id="rt-result-sub"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px" id="rt-result-stats"></div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:24px">
+        <div style="padding:14px 20px;font-weight:700;font-size:.85rem;border-bottom:1px solid var(--border);background:var(--surface2)">Answer Review</div>
+        <div id="rt-review-table" style="max-height:420px;overflow-y:auto"></div>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button type="button" class="btn btn-p btn-lg" onclick="rtRetake()">↺ Retake Test</button>
+        <button type="button" class="btn btn-g btn-lg" onclick="rtBackToPicker()">← Pick Another Test</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ══════ FTW 1v1 BATTLE VIEW ══════ -->
 <div id="view-ftw" class="view">
@@ -6010,6 +6195,109 @@ const CONCEPTS = [
       <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Tangent-Chord:</strong> Angle between tangent and chord = inscribed angle on opposite side.</div>
     </div>`,
   },
+  {id:'stars-bars',domain:'Counting',title:'Stars and Bars',icon:'⭐',summary:'Count ways to distribute n identical items into k distinct bins.',formula:'\\\\binom{n+k-1}{k-1}',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Stars and Bars</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:16px;text-align:center;font-size:1.1rem;margin-bottom:16px">Ways to put n identical items in k bins = C(n+k−1, k−1)</div>
+    <h4 style="color:var(--ink2);font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;margin:16px 0 8px">Key Idea</h4>
+    <p style="color:var(--ink2);font-size:.9rem;line-height:1.7">Think of n stars (items) and k−1 bars (dividers between bins). Any arrangement of n stars and k−1 bars corresponds to a distribution. Total objects = n+(k−1), choose positions for bars.</p>
+    <h4 style="color:var(--ink2);font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;margin:16px 0 8px">Variants</h4>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>At least 1 per bin:</strong> substitute x_i = y_i + 1, gives C(n−1, k−1)</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Example:</strong> x+y+z = 10, non-negative integers → C(12,2) = 66</div>`,
+  },
+  {id:'expected-value',domain:'Probability',title:'Expected Value',icon:'🎯',summary:'Average outcome weighted by probability. E[X] = Σ x·P(x).',formula:'E[X] = \\\\sum x_i P(x_i)',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Expected Value</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:16px;text-align:center;font-size:1.1rem;margin-bottom:16px">E[X] = x₁P(x₁) + x₂P(x₂) + ⋯</div>
+    <h4 style="color:var(--ink2);font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;margin:16px 0 8px">Linearity of Expectation</h4>
+    <p style="color:var(--ink2);font-size:.9rem;line-height:1.7">E[X+Y] = E[X] + E[Y] always, even if X and Y are dependent. This is the most powerful tool — use indicator random variables.</p>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Indicator trick:</strong> E[# events] = sum of probabilities of each event occurring individually</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Example:</strong> Roll 3 dice, E[sum] = 3 × E[one die] = 3 × 3.5 = 10.5</div>`,
+  },
+  {id:'recursion',domain:'Algebra',title:'Recursion & Sequences',icon:'🔁',summary:'Define sequences by their previous terms. Solve with telescoping or characteristic roots.',formula:'a_n = p\\\\cdot a_{n-1} + q\\\\cdot a_{n-2}',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Recursion</h3>
+    <p style="color:var(--ink2);font-size:.9rem;line-height:1.7">A recursive sequence defines each term using previous ones. Key strategies: telescoping (sum or product), characteristic equation (for linear recurrences), and pattern recognition.</p>
+    <h4 style="color:var(--ink2);font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;margin:16px 0 8px">Linear Recurrences</h4>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Fibonacci:</strong> F_n = F_{n-1} + F_{n-2}. Characteristic equation: r² = r+1</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Telescoping:</strong> If a_n − a_{n-1} = f(n), then a_n = a_1 + Σf(k)</div>`,
+  },
+  {id:'law-cosines',domain:'Geometry',title:'Law of Cosines',icon:'📐',summary:'Generalization of Pythagorean theorem to any triangle.',formula:'c^2 = a^2 + b^2 - 2ab\\\\cos C',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Law of Cosines</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:16px;text-align:center;font-size:1.1rem;margin-bottom:16px">c² = a² + b² − 2ab cos(C)</div>
+    <p style="color:var(--ink2);font-size:.9rem;line-height:1.7">Use when you know: (1) two sides and the included angle (SAS), or (2) all three sides to find an angle (SSS). When C = 90°, cos(C) = 0 and it reduces to Pythagorean theorem.</p>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Finding an angle:</strong> cos C = (a²+b²−c²)/(2ab)</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Common AMC use:</strong> Find diagonal of a parallelogram given sides and angle</div>`,
+  },
+  {id:'induction',domain:'Number Theory',title:'Mathematical Induction',icon:'🔗',summary:'Prove P(n) for all n by base case + inductive step.',formula:'P(1) \\\\text{ true}, P(k) \\\\Rightarrow P(k+1)',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Mathematical Induction</h3>
+    <p style="color:var(--ink2);font-size:.9rem;line-height:1.7">Prove a statement for all positive integers by: (1) Base case: show P(1) is true. (2) Inductive step: assume P(k) is true, then prove P(k+1).</p>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Strong induction:</strong> Assume P(1),…,P(k) all true to prove P(k+1)</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Classic example:</strong> 1+2+…+n = n(n+1)/2. Base: n=1 gives 1=1. Step: assume true for k, then 1+…+k+(k+1) = k(k+1)/2 + (k+1) = (k+1)(k+2)/2 ✓</div>`,
+  },
+  {id:'gcd-lcm',domain:'Number Theory',title:'GCD & LCM',icon:'🔢',summary:'Greatest common divisor and least common multiple.',formula:'\\\\gcd(a,b) \\\\cdot \\\\text{lcm}(a,b) = ab',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">GCD and LCM</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:16px;text-align:center;font-size:1.1rem;margin-bottom:16px">gcd(a,b) · lcm(a,b) = a · b</div>
+    <h4 style="color:var(--ink2);font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;margin:16px 0 8px">Euclidean Algorithm</h4>
+    <p style="color:var(--ink2);font-size:.9rem;line-height:1.7">gcd(a,b) = gcd(b, a mod b). Keep reducing until remainder = 0.</p>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>From prime factorization:</strong> gcd takes min exponents, lcm takes max</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Example:</strong> gcd(48,36): 48=36·1+12, 36=12·3+0 → gcd=12. lcm=48·36/12=144</div>`,
+  },
+  {id:'coordinate-geo',domain:'Geometry',title:'Coordinate Geometry',icon:'📊',summary:'Geometry on the coordinate plane. Distance, slope, area.',formula:'d = \\\\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Coordinate Geometry</h3>
+    <h4 style="color:var(--ink2);font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;margin:0 0 8px">Key Formulas</h4>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Distance:</strong> √((x₂−x₁)²+(y₂−y₁)²)</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Midpoint:</strong> ((x₁+x₂)/2, (y₁+y₂)/2)</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Slope:</strong> m = (y₂−y₁)/(x₂−x₁). Perpendicular slopes: m₁·m₂ = −1</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Shoelace formula:</strong> Area = ½|Σ(xᵢyᵢ₊₁ − xᵢ₊₁yᵢ)|</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Circle:</strong> (x−h)²+(y−k)²=r²</div>`,
+  },
+  {id:'fermat-little',domain:'Number Theory',title:"Fermat's Little Theorem",icon:'🔄',summary:'If p prime and gcd(a,p)=1, then aᵖ⁻¹ ≡ 1 (mod p).',formula:'a^{p-1} \\\\equiv 1 \\\\pmod{p}',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Fermat's Little Theorem</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:16px;text-align:center;font-size:1.1rem;margin-bottom:16px">aᵖ⁻¹ ≡ 1 (mod p), when p is prime and p∤a</div>
+    <p style="color:var(--ink2);font-size:.9rem;line-height:1.7">Use to reduce large exponents modulo a prime. Since aᵖ⁻¹ ≡ 1, find the remainder of the exponent when divided by p−1.</p>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Example:</strong> 2¹⁰⁰ mod 7. Since 2⁶ ≡ 1 (mod 7), 100 = 6·16+4, so 2¹⁰⁰ ≡ 2⁴ = 16 ≡ 2 (mod 7)</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Euler's generalization:</strong> aᵠ⁽ⁿ⁾ ≡ 1 (mod n) when gcd(a,n)=1</div>`,
+  },
+  {id:'telescoping',domain:'Algebra',title:'Telescoping Sums',icon:'🔭',summary:'Sums where most terms cancel, leaving only first and last.',formula:'\\\\sum_{k=1}^{n}(a_k - a_{k-1}) = a_n - a_0',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Telescoping Sums</h3>
+    <p style="color:var(--ink2);font-size:.9rem;line-height:1.7">When consecutive terms cancel, write each term as a difference f(k)−f(k−1). The sum collapses to f(n)−f(0).</p>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Classic:</strong> Σ 1/(k(k+1)) = Σ(1/k − 1/(k+1)) = 1 − 1/(n+1) = n/(n+1)</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Partial fractions:</strong> Decompose into difference form first</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Products too:</strong> Telescoping products where factors cancel</div>`,
+  },
+  {id:'sfft',domain:'Number Theory',title:"Simon's Favorite Factoring Trick",icon:'🧩',summary:'Factor expressions of the form xy + ax + by + ab = (x+a)(y+b).',formula:'xy + ax + by + ab = (x+a)(y+b)',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Simon's Favorite Factoring Trick</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:16px;text-align:center;font-size:1.1rem;margin-bottom:16px">xy + ax + by = (x+b)(y+a) − ab</div>
+    <p style="color:var(--ink2);font-size:.9rem;line-height:1.7">When you see an equation like xy + 2x + 3y = 17, add ab to both sides to factor. Here: xy + 2x + 3y + 6 = 23, so (x+3)(y+2) = 23. Since 23 is prime, find integer factor pairs.</p>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Step 1:</strong> Identify the cross terms</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Step 2:</strong> Add the right constant to both sides</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Step 3:</strong> Factor and find integer solutions</div>`,
+  },
+  {id:'inclusion-excl',domain:'Counting',title:'Inclusion-Exclusion',icon:'🔄',summary:'Count unions by adding then subtracting intersections.',formula:'|A\\\\cup B| = |A|+|B|-|A\\\\cap B|',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Inclusion-Exclusion Principle</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:16px;text-align:center;font-size:1rem;margin-bottom:16px">|A∪B∪C| = |A|+|B|+|C| − |A∩B| − |A∩C| − |B∩C| + |A∩B∩C|</div>
+    <p style="color:var(--ink2);font-size:.9rem;line-height:1.7">Add individual sets, subtract pairwise intersections, add triple intersections, etc. Alternating signs.</p>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Derangements:</strong> D(n) = n! · Σ (−1)^k/k! from k=0 to n</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>AMC use:</strong> "At least one" = total − "none". "Exactly one" uses full IE.</div>`,
+  },
+  {id:'heron',domain:'Geometry',title:"Heron's Formula",icon:'📐',summary:'Area of a triangle given all three sides.',formula:'A = \\\\sqrt{s(s-a)(s-b)(s-c)}',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Heron's Formula</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:16px;text-align:center;font-size:1.1rem;margin-bottom:16px">s = (a+b+c)/2, then A = √(s(s−a)(s−b)(s−c))</div>
+    <p style="color:var(--ink2);font-size:.9rem;line-height:1.7">s is the semi-perimeter. Use when you have all three sides and no height.</p>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>3-4-5 triangle:</strong> s=6, A=√(6·3·2·1)=√36=6 ✓</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Tip:</strong> Check if triangle is right first — might be easier with (1/2)·base·height</div>`,
+  },
+  {id:'complex-nums',domain:'Algebra',title:'Complex Numbers',icon:'🌀',summary:'z = a+bi. Magnitude, argument, De Moivre, roots of unity.',formula:'|z|^2 = a^2+b^2, \\\\quad z\\\\bar{z} = |z|^2',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Complex Numbers</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:16px;text-align:center;font-size:1rem;margin-bottom:16px">z = a + bi = r(cos θ + i sin θ) = re^(iθ)</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>De Moivre:</strong> (cos θ + i sin θ)ⁿ = cos(nθ) + i sin(nθ)</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Roots of unity:</strong> nth roots of 1 are e^(2πik/n) for k=0,…,n−1. They sum to 0.</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Geometry:</strong> Multiplication by i = rotation by 90°. |z₁−z₂| = distance</div>`,
+  },
+  {id:'crt',domain:'Number Theory',title:'Chinese Remainder Theorem',icon:'🔐',summary:'Solve simultaneous congruences with coprime moduli.',formula:'x \\\\equiv a_i \\\\pmod{m_i} \\\\Rightarrow \\\\text{unique } x \\\\pmod{M}',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Chinese Remainder Theorem</h3>
+    <p style="color:var(--ink2);font-size:.9rem;line-height:1.7">If m₁, m₂, …, mₖ are pairwise coprime, then the system x ≡ a₁ (mod m₁), …, x ≡ aₖ (mod mₖ) has a unique solution mod M = m₁m₂⋯mₖ.</p>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Example:</strong> x ≡ 2 (mod 3), x ≡ 3 (mod 5) → x ≡ 8 (mod 15)</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>AMC use:</strong> "Find the remainder when divided by 60" often means work mod 3, 4, 5 separately</div>`,
+  },
 ];
 
 function filterConcepts(){
@@ -6092,6 +6380,14 @@ function showView(n){
     const el=document.getElementById('view-simulator');
     if(el){el.classList.add('show');el.style.display='';}
     const tb=document.getElementById('tab-simulator'); if(tb)tb.classList.add('on');
+    return;
+  }
+  if(n==='realtest'){
+    const el=document.getElementById('view-realtest');
+    if(el){el.classList.add('show');el.style.display='';}
+    document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('on'));
+    const sb=document.getElementById('sbg-realtest');if(sb)sb.classList.add('on');
+    rtInitPicker();
     return;
   }
   if(n==='ftw'){
@@ -6986,7 +7282,6 @@ let searchDebounce_ = null;
 
 // Topic keyword → domain/tags mapping
 const TOPIC_KEYWORDS = {
-  // Each entry maps a search term → array of skill tags to match
   'pigeonhole': ['pigeonhole'],
   'inclusion exclusion': ['inclusion-exclusion'],
   'inclusion-exclusion': ['inclusion-exclusion'],
@@ -7019,8 +7314,10 @@ const TOPIC_KEYWORDS = {
   'law of cosines': ['law-of-cosines'],
   'law of sines': ['law-of-sines'],
   'trigonometry': ['trigonometry'],
+  'trig': ['trigonometry'],
   '3d geometry': ['3d-geometry'],
   'stars and bars': ['stars-and-bars'],
+  'stars bars': ['stars-and-bars'],
   'burnside': ['burnside'],
   'generating functions': ['generating-functions'],
   'euler totient': ['euler-totient'],
@@ -7028,23 +7325,69 @@ const TOPIC_KEYWORDS = {
   'crt': ['chinese-remainder'],
   'telescoping': ['telescoping'],
   'binomial theorem': ['binomial-theorem'],
+  'binomial': ['binomial-theorem'],
   'inequalities': ['inequalities'],
   'inequality': ['inequalities'],
   'markov': ['markov'],
   'similar triangles': ['similar-triangles'],
   'pythagorean': ['pythagorean'],
+  'pythagorean theorem': ['pythagorean'],
   'sfft': ['sfft'],
+  'simon favorite factoring': ['sfft'],
   'legendre': ['legendre'],
   'systems': ['systems'],
   'quadratics': ['quadratics'],
+  'quadratic': ['quadratics'],
   'polynomials': ['polynomials'],
   'polynomial': ['polynomials'],
   'derangement': ['derangements'],
+  'derangements': ['derangements'],
   'heron': ['triangle-area'],
+  "heron's formula": ['triangle-area'],
   'ptolemy': ['circles'],
   'fermat': ['modular-arithmetic'],
-  'law of cosines': ['law-of-cosines'],
-  'absolute value': ['absolute-value']
+  "fermat's little theorem": ['modular-arithmetic'],
+  'absolute value': ['absolute-value'],
+  'floor function': ['floor-ceiling'],
+  'ceiling function': ['floor-ceiling'],
+  'floor': ['floor-ceiling'],
+  'parity': ['parity'],
+  'even odd': ['parity'],
+  'bijection': ['bijection'],
+  'bijective': ['bijection'],
+  'counting': ['counting'],
+  'combinations': ['combinations'],
+  'permutations': ['permutations'],
+  'factorials': ['factorial'],
+  'prime': ['prime-factorization'],
+  'prime factorization': ['prime-factorization'],
+  'divisors': ['divisors'],
+  'gcf': ['gcd'],
+  'gcd': ['gcd'],
+  'lcm': ['lcm'],
+  'number theory': ['modular-arithmetic','prime-factorization','divisors'],
+  'geometry': ['triangles','circles','polygons'],
+  'algebra': ['linear-equations','quadratics','polynomials'],
+  'probability': ['probability','expected-value'],
+  'combo': ['combinations','permutations','counting'],
+  'combinatorics': ['combinations','permutations','pigeonhole','inclusion-exclusion'],
+  'circle': ['circles','inscribed-angle','power-of-point'],
+  'triangle': ['triangles','similar-triangles','pythagorean'],
+  'graph theory': ['graph-theory'],
+  'induction': ['induction'],
+  'contradiction': ['contradiction'],
+  'median': ['median'],
+  'centroid': ['centroid'],
+  'ceva': ['ceva'],
+  "ceva's theorem": ['ceva'],
+  'mass points': ['mass-points'],
+  'weighted average': ['weighted-average'],
+  'logarithm': ['logarithms'],
+  'log': ['logarithms'],
+  'exponents': ['exponents'],
+  'radical': ['radicals'],
+  'sqrt': ['radicals'],
+  'square root': ['radicals']
 }
 
 function runSearch(query) {
@@ -7495,6 +7838,389 @@ const _svOrig3 = showView;
 // instead of wrapping, patch _navCore fallthrough
 // Add a hook by patching the existing showView cases indirectly
 // via overriding _navCore to handle extra views
+
+// ════════════════════════════════════
+// REAL TEST MODE
+// ════════════════════════════════════
+const RT = {
+  type: 'amc8',
+  currentTest: null,
+  problems: [],
+  answers: {},  // {idx: 'A'|'B'|'C'|'D'|'E'|number}
+  current: 0,
+  timerInterval: null,
+  timeLeft: 0,
+  totalTime: 0,
+  finished: false
+};
+
+const RT_CONFIG = {
+  amc8:  { label:'AMC 8',   questions:25, minutes:40,  type:'letter', contests:['amc8'] },
+  amc10: { label:'AMC 10',  questions:30, minutes:75,  type:'letter', contests:['amc10','amc10a','amc10b'] },
+  amc12: { label:'AMC 12',  questions:30, minutes:75,  type:'letter', contests:['amc12','amc12a','amc12b'] },
+  aime:  { label:'AIME',    questions:15, minutes:180, type:'integer', contests:['aime1','aime2','aime'] }
+};
+
+function rtSetType(type) {
+  RT.type = type;
+  document.querySelectorAll('.rt-type-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('rt-type-' + type);
+  if(btn) btn.classList.add('active');
+  rtBuildGrid();
+}
+
+function rtInitPicker() {
+  document.getElementById('rt-picker').style.display = '';
+  document.getElementById('rt-active').style.display = 'none';
+  document.getElementById('rt-results').style.display = 'none';
+  rtBuildGrid();
+}
+
+function rtBuildGrid() {
+  const cfg = RT_CONFIG[RT.type];
+  const allProbs = ((typeof ALL_PROBS !== 'undefined' ? ALL_PROBS : [])
+    .concat(typeof window.MA_PROBLEMS !== 'undefined' ? window.MA_PROBLEMS : []));
+
+  // Deduplicate by id
+  const seen = new Set();
+  const probs = allProbs.filter(p => { if(seen.has(p.id)){return false;} seen.add(p.id); return true; });
+
+  // Group by contest+year
+  const groups = {};
+  probs.forEach(p => {
+    const cf = p.contestFull || p.contest || '';
+    if(!cfg.contests.includes(cf)) return;
+    const key = cf + '_' + p.year;
+    if(!groups[key]) groups[key] = { cf, year: p.year, probs: [] };
+    groups[key].probs.push(p);
+  });
+
+  // Sort by year desc, then contest name
+  const sorted = Object.values(groups).sort((a,b) => b.year - a.year || a.cf.localeCompare(b.cf));
+
+  const grid = document.getElementById('rt-test-grid');
+  if(!grid) return;
+
+  if(sorted.length === 0) {
+    grid.innerHTML = '<div style="color:var(--ink3);font-size:.9rem;grid-column:1/-1;padding:20px">No complete tests found. Make sure problems.js is loaded.</div>';
+    return;
+  }
+
+  grid.innerHTML = sorted.map(g => {
+    const count = g.probs.length;
+    const pct = Math.round(count / cfg.questions * 100);
+    const complete = count >= cfg.questions;
+    const label = g.cf.toUpperCase().replace('AMC10A','AMC 10A').replace('AMC10B','AMC 10B')
+      .replace('AMC12A','AMC 12A').replace('AMC12B','AMC 12B')
+      .replace('AIME1','AIME I').replace('AIME2','AIME II')
+      .replace('AMC10','AMC 10').replace('AMC12','AMC 12').replace('AMC8','AMC 8');
+    const bgColor = complete ? 'var(--green-l)' : 'var(--amber-l)';
+    const txColor = complete ? 'var(--green)' : 'var(--amber)';
+    return `<div class="rt-test-card" onclick="rtStartTest('${g.cf}','${g.year}')">
+      <div class="rt-test-card-name">${label} ${g.year}</div>
+      <div class="rt-test-card-meta">${cfg.minutes} min · ${cfg.questions} problems</div>
+      <div class="rt-test-card-count" style="background:${bgColor};color:${txColor}">${count}/${cfg.questions} problems</div>
+    </div>`;
+  }).join('');
+}
+
+function rtStartTest(cf, year) {
+  const cfg = RT_CONFIG[RT.type];
+  const allProbs = ((typeof ALL_PROBS !== 'undefined' ? ALL_PROBS : [])
+    .concat(typeof window.MA_PROBLEMS !== 'undefined' ? window.MA_PROBLEMS : []));
+  const seen = new Set();
+  const probs = allProbs.filter(p => { if(seen.has(p.id)){return false;} seen.add(p.id); return true; });
+
+  // Get problems for this specific test, sorted by problem number
+  RT.problems = probs
+    .filter(p => (p.contestFull || p.contest || '') === cf && String(p.year) === String(year))
+    .sort((a,b) => (a.num||0) - (b.num||0));
+
+  if(RT.problems.length === 0) { alert('No problems found for this test.'); return; }
+
+  RT.currentTest = { cf, year, cfg };
+  RT.answers = {};
+  RT.current = 0;
+  RT.finished = false;
+  RT.totalTime = cfg.minutes * 60;
+  RT.timeLeft = RT.totalTime;
+
+  const label = cf.toUpperCase().replace('AMC10A','AMC 10A').replace('AMC10B','AMC 10B')
+    .replace('AMC12A','AMC 12A').replace('AMC12B','AMC 12B')
+    .replace('AIME1','AIME I').replace('AIME2','AIME II')
+    .replace('AMC10','AMC 10').replace('AMC12','AMC 12').replace('AMC8','AMC 8');
+
+  document.getElementById('rt-test-label').textContent = cfg.label;
+  document.getElementById('rt-test-title').textContent = label + ' ' + year;
+  document.getElementById('rt-picker').style.display = 'none';
+  document.getElementById('rt-active').style.display = '';
+  document.getElementById('rt-results').style.display = 'none';
+
+  // Show/hide answer inputs
+  const choicesEl = document.getElementById('rt-choices');
+  const intEl = document.getElementById('rt-integer');
+  if(cfg.type === 'integer') {
+    choicesEl.style.display = 'none';
+    intEl.style.display = 'flex';
+  } else {
+    choicesEl.style.display = 'flex';
+    intEl.style.display = 'none';
+  }
+
+  rtRenderNav();
+  rtShowQuestion(0);
+  rtStartTimer();
+}
+
+function rtStartTimer() {
+  if(RT.timerInterval) clearInterval(RT.timerInterval);
+  function tick() {
+    RT.timeLeft--;
+    const m = Math.floor(RT.timeLeft / 60), s = RT.timeLeft % 60;
+    const el = document.getElementById('rt-timer');
+    if(el) {
+      el.textContent = m + ':' + String(s).padStart(2,'0');
+      el.style.color = RT.timeLeft < 300 ? 'var(--red)' : 'var(--blue)';
+    }
+    if(RT.timeLeft <= 0) { clearInterval(RT.timerInterval); rtFinish(); }
+  }
+  RT.timerInterval = setInterval(tick, 1000);
+}
+
+function rtShowQuestion(idx) {
+  RT.current = idx;
+  const prob = RT.problems[idx];
+  if(!prob) return;
+
+  // Update meta
+  const metaEl = document.getElementById('rt-prob-meta');
+  const linkEl = document.getElementById('rt-prob-link');
+  if(metaEl) metaEl.textContent = `Problem ${prob.num || idx+1} of ${RT.problems.length} — ${prob.domain || ''}`;
+  if(linkEl) linkEl.href = prob.link || '#';
+
+  // Counter
+  const counter = document.getElementById('rt-q-counter');
+  if(counter) counter.textContent = `${idx+1}/${RT.problems.length}`;
+
+  // Progress bar
+  const bar = document.getElementById('rt-progress-bar');
+  if(bar) bar.style.width = Math.round((idx+1)/RT.problems.length*100) + '%';
+
+  // Answer state
+  const ans = RT.answers[idx];
+  const cfg = RT_CONFIG[RT.type];
+
+  if(cfg.type === 'letter') {
+    document.querySelectorAll('.rt-choice').forEach(b => {
+      b.className = 'rt-choice';
+      if(ans && b.textContent === ans) b.classList.add('selected');
+    });
+  } else {
+    const inp = document.getElementById('rt-int-inp');
+    if(inp) inp.value = ans !== undefined ? ans : '';
+  }
+
+  const statusEl = document.getElementById('rt-answer-status');
+  if(statusEl) statusEl.textContent = ans !== undefined ? `Selected: ${ans}` : 'Select your answer';
+
+  // Nav buttons
+  const prev = document.getElementById('rt-prev-btn');
+  const next = document.getElementById('rt-next-btn');
+  if(prev) prev.disabled = idx === 0;
+  if(next) next.textContent = idx === RT.problems.length - 1 ? 'Finish →' : 'Next →';
+
+  // Update nav dots
+  rtRenderNav();
+}
+
+function rtRenderNav() {
+  const row = document.getElementById('rt-nav-dots');
+  if(!row) return;
+  row.innerHTML = RT.problems.map((p,i) => {
+    const ans = RT.answers[i];
+    const cls = i === RT.current ? 'current' : ans !== undefined ? 'answered' : '';
+    return `<div class="rt-nav-dot ${cls}" onclick="rtShowQuestion(${i})">${i+1}</div>`;
+  }).join('');
+}
+
+function rtSelect(letter) {
+  if(RT.finished) return;
+  RT.answers[RT.current] = letter;
+  document.querySelectorAll('.rt-choice').forEach(b => {
+    b.className = 'rt-choice';
+    if(b.textContent === letter) b.classList.add('selected');
+  });
+  const statusEl = document.getElementById('rt-answer-status');
+  if(statusEl) statusEl.textContent = 'Selected: ' + letter;
+  rtRenderNav();
+}
+
+function rtClear() {
+  delete RT.answers[RT.current];
+  document.querySelectorAll('.rt-choice').forEach(b => b.className = 'rt-choice');
+  const inp = document.getElementById('rt-int-inp');
+  if(inp) inp.value = '';
+  const statusEl = document.getElementById('rt-answer-status');
+  if(statusEl) statusEl.textContent = 'Select your answer';
+  rtRenderNav();
+}
+
+function rtNav(dir) {
+  // Save integer answer if AIME
+  if(RT_CONFIG[RT.type].type === 'integer') {
+    const inp = document.getElementById('rt-int-inp');
+    if(inp && inp.value !== '') {
+      RT.answers[RT.current] = inp.value;
+    }
+  }
+  const next = RT.current + dir;
+  if(next < 0) return;
+  if(next >= RT.problems.length) { rtFinish(); return; }
+  rtShowQuestion(next);
+}
+
+function rtFinish() {
+  if(RT.finished) return;
+  RT.finished = true;
+  clearInterval(RT.timerInterval);
+
+  // Save any pending integer answer
+  if(RT_CONFIG[RT.type].type === 'integer') {
+    const inp = document.getElementById('rt-int-inp');
+    if(inp && inp.value !== '') RT.answers[RT.current] = inp.value;
+  }
+
+  // Score
+  let correct = 0, wrong = 0, skipped = 0;
+  const cfg = RT_CONFIG[RT.type];
+  RT.problems.forEach((p,i) => {
+    const ans = RT.answers[i];
+    if(ans === undefined) { skipped++; return; }
+    const correctAns = (p.answer || '').toString().trim().toUpperCase();
+    const userAns = ans.toString().trim().toUpperCase();
+    if(userAns === correctAns) correct++;
+    else wrong++;
+  });
+
+  // AMC score (6 correct, 0 wrong, 1.5 blank for AMC8 it's just correct)
+  let score;
+  if(RT.type === 'amc8') score = correct;
+  else if(RT.type === 'aime') score = correct;
+  else score = correct * 6 + skipped * 1.5;
+
+  const timeTaken = RT.totalTime - RT.timeLeft;
+  const mm = Math.floor(timeTaken/60), ss = timeTaken%60;
+
+  document.getElementById('rt-active').style.display = 'none';
+  document.getElementById('rt-results').style.display = '';
+
+  const emoji = correct >= RT.problems.length * 0.8 ? '🏆' : correct >= RT.problems.length * 0.5 ? '🎯' : '📚';
+  document.getElementById('rt-result-emoji').textContent = emoji;
+  const label = (RT.currentTest.cf||'').toUpperCase().replace('AMC10A','AMC 10A').replace('AMC10B','AMC 10B').replace('AMC12A','AMC 12A').replace('AMC12B','AMC 12B').replace('AIME1','AIME I').replace('AIME2','AIME II').replace('AMC10','AMC 10').replace('AMC12','AMC 12').replace('AMC8','AMC 8');
+  document.getElementById('rt-result-title').textContent = label + ' ' + RT.currentTest.year;
+  document.getElementById('rt-result-sub').textContent = `Time used: ${mm}:${String(ss).padStart(2,'0')} of ${cfg.minutes} minutes`;
+
+  document.getElementById('rt-result-stats').innerHTML = [
+    {n:correct, l:'Correct', c:'var(--green)', bg:'var(--green-l)'},
+    {n:wrong,   l:'Wrong',   c:'var(--red)',   bg:'var(--red-l)'},
+    {n:skipped, l:'Skipped', c:'var(--amber)', bg:'var(--amber-l)'},
+    {n:RT.type==='aime'?correct:Math.round(score*10)/10, l:RT.type==='aime'?'Score /15':'AMC Score', c:'var(--blue)', bg:'var(--blue-l)'},
+  ].map(s=>`<div style="background:${s.bg};border-radius:10px;padding:16px;text-align:center">
+    <div style="font-size:1.8rem;font-weight:800;color:${s.c};font-family:'JetBrains Mono',monospace">${s.n}</div>
+    <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:${s.c};margin-top:4px;font-weight:700">${s.l}</div>
+  </div>`).join('');
+
+  // Review table
+  const reviewEl = document.getElementById('rt-review-table');
+  reviewEl.innerHTML = `<div class="rt-review-row" style="font-weight:700;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ink3);background:var(--surface2)">
+    <div>#</div><div>Problem</div><div>Your Ans</div><div>Correct</div><div>Result</div>
+  </div>` + RT.problems.map((p,i) => {
+    const ans = RT.answers[i];
+    const correctAns = (p.answer||'').toString().trim().toUpperCase();
+    const userAns = ans !== undefined ? ans.toString().trim().toUpperCase() : '—';
+    const isCorrect = ans !== undefined && userAns === correctAns;
+    const isSkipped = ans === undefined;
+    const resultTag = isSkipped
+      ? '<span style="color:var(--amber);font-weight:700">Skip</span>'
+      : isCorrect
+        ? '<span style="color:var(--green);font-weight:700">✓</span>'
+        : '<span style="color:var(--red);font-weight:700">✗</span>';
+    return `<div class="rt-review-row">
+      <div style="font-weight:700;color:var(--ink3)">${i+1}</div>
+      <div><a href="${p.link||'#'}" target="_blank" style="color:var(--blue);text-decoration:none;font-size:.8rem">${p.display||'Problem '+(i+1)}</a></div>
+      <div style="font-family:'JetBrains Mono',monospace;font-weight:700;color:${isCorrect?'var(--green)':isSkipped?'var(--ink3)':'var(--red)'}">${userAns}</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--green)">${correctAns||'?'}</div>
+      <div>${resultTag}</div>
+    </div>`;
+  }).join('');
+
+  // Log to question history
+  RT.problems.forEach((p,i) => {
+    const ans = RT.answers[i];
+    if(ans !== undefined) {
+      const correctAns = (p.answer||'').toString().trim().toUpperCase();
+      const result = ans.toString().trim().toUpperCase() === correctAns ? 'correct' : 'wrong';
+      if(typeof logAttempt === 'function') logAttempt(p, ans, result);
+    }
+  });
+}
+
+function rtRetake() {
+  if(RT.currentTest) rtStartTest(RT.currentTest.cf, RT.currentTest.year);
+}
+function rtBackToPicker() { rtInitPicker(); }
+
+// ════════════════════════════════════
+// ONBOARDING (first visit)
+// ════════════════════════════════════
+function closeOnboarding(goToDiag) {
+  document.getElementById('onboarding-overlay').classList.remove('open');
+  try { localStorage.setItem('ma_visited', '1'); } catch(e) {}
+  if(goToDiag) showView('diag');
+}
+
+(function() {
+  try {
+    if(!localStorage.getItem('ma_visited')) {
+      setTimeout(() => {
+        const el = document.getElementById('onboarding-overlay');
+        if(el) el.classList.add('open');
+      }, 800);
+    }
+  } catch(e) {}
+})();
+
+// ════════════════════════════════════
+// TIP OF THE DAY
+// ════════════════════════════════════
+const TIPS = [
+  { icon:'💡', text:'On AMC problems, eliminate obviously wrong answers first. With 5 choices, even ruling out 2 makes guessing worthwhile.' },
+  { icon:'⏱', text:'In contests, skip hard problems and come back. Getting 10 easy problems right beats spending 20 minutes on one hard one.' },
+  { icon:'🔄', text:'Modular arithmetic tip: if you need aⁿ mod p where p is prime, the exponent cycles with period p−1 (Fermat\'s Little Theorem).' },
+  { icon:'📐', text:'For geometry problems, draw a large, accurate diagram. Many students lose points from working off a tiny inaccurate sketch.' },
+  { icon:'🎯', text:'When stuck, try small cases first. What happens with n=1, 2, 3? A pattern often reveals itself.' },
+  { icon:'🔢', text:'Stars and Bars: distributing n identical items into k bins = C(n+k-1, k-1). Non-negative integer solutions to x₁+x₂+…+xₖ=n.' },
+  { icon:'🧠', text:'AM-GM inequality: (a+b)/2 ≥ √(ab). Equality holds iff a=b. Use when you want to find the minimum of a sum or maximum of a product.' },
+  { icon:'🐦', text:'Pigeonhole: if n+1 items go into n bins, some bin has ≥2. For "at least k" items: use (k-1)n+1 items.' },
+  { icon:'🔁', text:'For recursion problems, define your state carefully. Often f(n) = f(n-1) + f(n-2) or similar — look for the "last step" pattern.' },
+  { icon:'📊', text:'Coordinate geometry: the shoelace formula gives exact triangle area from coordinates. No need for height formulas.' },
+  { icon:'🔐', text:'Chinese Remainder Theorem: simultaneous congruences mod coprime moduli always have a unique solution mod their product.' },
+  { icon:'⭐', text:'Vieta\'s formulas: for ax²+bx+c=0, sum of roots = -b/a, product = c/a. For degree n: alternating elementary symmetric polynomials of roots equal coefficients.' },
+  { icon:'🔭', text:'Telescoping sums: try writing each term as f(k)−f(k−1). If you can, the sum collapses to just f(n)−f(0).' },
+  { icon:'🎲', text:'Linearity of expectation is always true — even for dependent events. E[X+Y]=E[X]+E[Y] always. Use indicator variables.' },
+];
+
+(function() {
+  const tip = TIPS[Math.floor(Date.now() / 86400000) % TIPS.length];
+  document.addEventListener('DOMContentLoaded', () => {
+    const el = document.getElementById('daily-challenge-card');
+    if(!el) return;
+    const tipEl = document.createElement('div');
+    tipEl.style.cssText = 'background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;gap:12px;align-items:flex-start';
+    tipEl.innerHTML = `<div style="font-size:1.3rem;flex-shrink:0">${tip.icon}</div><div><div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);margin-bottom:4px">Tip of the Day</div><div style="font-size:.875rem;color:var(--ink2);line-height:1.6">${tip.text}</div></div>`;
+    el.parentNode.insertBefore(tipEl, el.nextSibling);
+  });
+})();
 
 // ════════════════════════════════════
 // FTW — 1v1 BATTLE MODE
@@ -8473,6 +9199,39 @@ document.addEventListener('DOMContentLoaded', () => {
     <div id="solve-bar-prog" style="height:100%;background:var(--blue);border-radius:3px;transition:width 1s;width:100%"></div>
   </div>
   <button type="button" onclick="toggleSolveMode()" class="btn" style="padding:6px 14px;background:var(--surface2);border:1px solid var(--border2);font-size:.82rem">End Mode</button>
+</div>
+
+<!-- Onboarding Modal (first visit) -->
+<div class="overlay" id="onboarding-overlay">
+  <div class="modal" style="max-width:480px;border-radius:18px;overflow:hidden">
+    <div style="background:linear-gradient(135deg,var(--blue) 0%,var(--purple) 100%);padding:32px 28px 24px;color:#fff;text-align:center">
+      <div style="font-size:2.8rem;margin-bottom:10px">🧮</div>
+      <h2 style="font-family:'DM Serif Display',serif;font-size:1.6rem;margin-bottom:8px;font-weight:400">Welcome to MathAtlas</h2>
+      <p style="font-size:.9rem;opacity:.9;line-height:1.6">The free AMC & AIME training platform built by a student, for students.</p>
+    </div>
+    <div style="padding:24px 28px 28px">
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px">
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="font-size:1.4rem;flex-shrink:0">🎯</div>
+          <div><div style="font-weight:700;font-size:.9rem;margin-bottom:2px">Start with the Diagnostic</div><div style="font-size:.82rem;color:var(--ink2)">15 minutes to find your level and get a personalized roadmap</div></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="font-size:1.4rem;flex-shrink:0">📚</div>
+          <div><div style="font-weight:700;font-size:.9rem;margin-bottom:2px">29 Structured Modules</div><div style="font-size:.82rem;color:var(--ink2)">From AMC 8 basics to hardest AIME — follow the roadmap</div></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="font-size:1.4rem;flex-shrink:0">🤖</div>
+          <div><div style="font-weight:700;font-size:.9rem;margin-bottom:2px">AI Reasoning Feedback</div><div style="font-size:.82rem;color:var(--ink2)">Write your solution steps — AI finds exactly where you go wrong</div></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="font-size:1.4rem;flex-shrink:0">⚔️</div>
+          <div><div style="font-weight:700;font-size:.9rem;margin-bottom:2px">1v1 Battle Mode</div><div style="font-size:.82rem;color:var(--ink2)">Race opponents to answer AMC/AIME problems first</div></div>
+        </div>
+      </div>
+      <button type="button" onclick="closeOnboarding(true)" class="btn btn-p" style="width:100%;padding:14px;font-size:1rem;border-radius:10px">🎯 Take Placement Diagnostic</button>
+      <button type="button" onclick="closeOnboarding(false)" style="width:100%;padding:10px;background:none;border:none;color:var(--ink3);font-size:.85rem;cursor:pointer;margin-top:8px">I'll explore on my own →</button>
+    </div>
+  </div>
 </div>
 
 <!-- Google Sign-In Modal -->
