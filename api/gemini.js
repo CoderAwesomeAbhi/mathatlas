@@ -74,7 +74,6 @@ Return ONLY a JSON object with these fields:
           generationConfig: {
             temperature: 0.0,
             maxOutputTokens: 2048,
-            responseMimeType: 'application/json'
           }
         })
       }
