@@ -4219,6 +4219,250 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
 </div>
 
 
+
+<!-- ══════ FTW 1v1 BATTLE VIEW ══════ -->
+<div id="view-ftw" class="view">
+  <div class="ftw-wrap">
+    <!-- MODE SELECT SCREEN -->
+    <div id="ftw-mode-select" class="ftw-screen">
+      <div class="ftw-hero">
+        <div class="ftw-hero-icon">⚔️</div>
+        <h1 class="ftw-title">1v1 Battle Mode</h1>
+        <p class="ftw-subtitle">Race to answer AMC & AIME problems correctly. First to answer wins the round. Best of 5 wins the match.</p>
+      </div>
+      <div class="ftw-modesel-grid">
+        <div class="ftw-modesel-card" onclick="ftwGoLobby('bot')">
+          <div class="ftw-modesel-icon">🤖</div>
+          <div class="ftw-modesel-name">Practice vs Bot</div>
+          <div class="ftw-modesel-desc">Play instantly against an AI opponent. Choose difficulty, topic, and contest type. No waiting.</div>
+          <div class="ftw-modesel-btn">Play Now →</div>
+        </div>
+        <div class="ftw-modesel-card" onclick="ftwGoLobby('real')">
+          <div class="ftw-modesel-icon">👤</div>
+          <div class="ftw-modesel-name">Find Real Opponent</div>
+          <div class="ftw-modesel-desc">Join the matchmaking queue and get paired with a real player near your rating.</div>
+          <div class="ftw-modesel-btn" style="background:var(--green);color:#fff">Find Match →</div>
+        </div>
+        <div class="ftw-modesel-card" onclick="ftwGoLobby('challenge')">
+          <div class="ftw-modesel-icon">🔗</div>
+          <div class="ftw-modesel-name">Challenge a Friend</div>
+          <div class="ftw-modesel-desc">Create a private room and share the link. Your friend joins and you battle head-to-head.</div>
+          <div class="ftw-modesel-btn" style="background:var(--purple);color:#fff">Create Room →</div>
+        </div>
+      </div>
+      <div class="ftw-section" style="margin-top:20px">
+        <div class="ftw-section-title">Your Stats</div>
+        <div class="ftw-stats-row">
+          <div class="ftw-stat"><div class="ftw-stat-n" id="ftw-stat-rating">—</div><div class="ftw-stat-l">Rating</div></div>
+          <div class="ftw-stat"><div class="ftw-stat-n" id="ftw-stat-wins">0</div><div class="ftw-stat-l">Wins</div></div>
+          <div class="ftw-stat"><div class="ftw-stat-n" id="ftw-stat-losses">0</div><div class="ftw-stat-l">Losses</div></div>
+          <div class="ftw-stat"><div class="ftw-stat-n" id="ftw-stat-streak">0</div><div class="ftw-stat-l">Win Streak</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOT LOBBY -->
+    <div id="ftw-lobby" class="ftw-screen" style="display:none">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px">
+        <button type="button" class="btn btn-g btn-sm" onclick="ftwShowModeSelect()">← Back</button>
+        <h2 style="font-size:1.3rem;font-family:'DM Serif Display',serif">Practice vs Bot</h2>
+      </div>
+      <div class="ftw-lobby-grid">
+        <div class="ftw-section">
+          <div class="ftw-section-title">Select Contest Type</div>
+          <div class="ftw-mode-grid">
+            <label class="ftw-mode-card"><input type="radio" name="ftw-mode" value="amc8" checked><div class="ftw-mode-inner"><div class="ftw-mode-icon">🥉</div><div class="ftw-mode-name">AMC 8</div><div class="ftw-mode-desc">Elo 500–900<br>2 min per problem</div></div></label>
+            <label class="ftw-mode-card"><input type="radio" name="ftw-mode" value="amc10"><div class="ftw-mode-inner"><div class="ftw-mode-icon">🥈</div><div class="ftw-mode-name">AMC 10/12</div><div class="ftw-mode-desc">Elo 900–1350<br>3 min per problem</div></div></label>
+            <label class="ftw-mode-card"><input type="radio" name="ftw-mode" value="aime"><div class="ftw-mode-inner"><div class="ftw-mode-icon">🥇</div><div class="ftw-mode-name">AIME</div><div class="ftw-mode-desc">Elo 1300+<br>5 min per problem</div></div></label>
+          </div>
+        </div>
+        <div class="ftw-section">
+          <div class="ftw-section-title">Topic Filter <span style="font-size:.75rem;font-weight:400;color:var(--ink3)">(optional)</span></div>
+          <div class="ftw-topic-grid" id="ftw-topics">
+            <label class="ftw-topic"><input type="checkbox" value="algebra" checked> Algebra</label>
+            <label class="ftw-topic"><input type="checkbox" value="geometry" checked> Geometry</label>
+            <label class="ftw-topic"><input type="checkbox" value="counting" checked> Counting</label>
+            <label class="ftw-topic"><input type="checkbox" value="number-theory" checked> Number Theory</label>
+            <label class="ftw-topic"><input type="checkbox" value="probability" checked> Probability</label>
+          </div>
+        </div>
+        <div class="ftw-section">
+          <div class="ftw-section-title">Bot Difficulty</div>
+          <div class="ftw-diff-grid">
+            <label class="ftw-diff-card"><input type="radio" name="ftw-diff" value="easy"><div class="ftw-diff-inner"><div style="font-size:1.2rem">🐣</div><div style="font-weight:600;font-size:.85rem">Beginner</div><div style="font-size:.75rem;color:var(--ink3)">Elo ~900</div></div></label>
+            <label class="ftw-diff-card"><input type="radio" name="ftw-diff" value="medium" checked><div class="ftw-diff-inner"><div style="font-size:1.2rem">🦊</div><div style="font-weight:600;font-size:.85rem">Matched</div><div style="font-size:.75rem;color:var(--ink3)">Near your Elo</div></div></label>
+            <label class="ftw-diff-card"><input type="radio" name="ftw-diff" value="hard"><div class="ftw-diff-inner"><div style="font-size:1.2rem">🧠</div><div style="font-weight:600;font-size:.85rem">Expert</div><div style="font-size:.75rem;color:var(--ink3)">Elo ~1600</div></div></label>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="ftw-start-btn" onclick="ftwFindMatch()">🤖 Start Bot Match</button>
+    </div>
+
+    <!-- REAL OPPONENT LOBBY -->
+    <div id="ftw-real-lobby" class="ftw-screen" style="display:none">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px">
+        <button type="button" class="btn btn-g btn-sm" onclick="ftwShowModeSelect()">← Back</button>
+        <h2 style="font-size:1.3rem;font-family:'DM Serif Display',serif">Find Real Opponent</h2>
+      </div>
+      <div class="ftw-lobby-grid">
+        <div class="ftw-section">
+          <div class="ftw-section-title">Your Username</div>
+          <input type="text" id="ftw-username" placeholder="Enter a display name…" maxlength="20"
+            style="width:100%;padding:10px 14px;border:1.5px solid var(--border2);border-radius:8px;font-size:.95rem;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif">
+          <div style="font-size:.75rem;color:var(--ink3);margin-top:6px">Visible to your opponent during the match</div>
+        </div>
+        <div class="ftw-section">
+          <div class="ftw-section-title">Select Contest Type</div>
+          <div class="ftw-mode-grid">
+            <label class="ftw-mode-card"><input type="radio" name="ftw-real-mode" value="amc8" checked><div class="ftw-mode-inner"><div class="ftw-mode-icon">🥉</div><div class="ftw-mode-name">AMC 8</div><div class="ftw-mode-desc">Elo 500–900<br>2 min per problem</div></div></label>
+            <label class="ftw-mode-card"><input type="radio" name="ftw-real-mode" value="amc10"><div class="ftw-mode-inner"><div class="ftw-mode-icon">🥈</div><div class="ftw-mode-name">AMC 10/12</div><div class="ftw-mode-desc">Elo 900–1350<br>3 min per problem</div></div></label>
+            <label class="ftw-mode-card"><input type="radio" name="ftw-real-mode" value="aime"><div class="ftw-mode-inner"><div class="ftw-mode-icon">🥇</div><div class="ftw-mode-name">AIME</div><div class="ftw-mode-desc">Elo 1300+<br>5 min per problem</div></div></label>
+          </div>
+        </div>
+        <div class="ftw-section" style="background:var(--amber-l);border-color:var(--amber)">
+          <div style="font-size:.85rem;color:var(--amber);font-weight:600">⚙️ Setup Required</div>
+          <div style="font-size:.82rem;color:var(--ink2);margin-top:6px;line-height:1.6">
+            Real multiplayer requires a Supabase project. Enter your Supabase URL and anon key below to enable live matchmaking.
+          </div>
+          <input type="text" id="ftw-sb-url" placeholder="https://xxxx.supabase.co" style="width:100%;margin-top:10px;padding:8px 12px;border:1.5px solid var(--border2);border-radius:7px;font-size:.8rem;background:var(--surface);color:var(--ink);font-family:'JetBrains Mono',monospace">
+          <input type="text" id="ftw-sb-key" placeholder="your-anon-key" style="width:100%;margin-top:6px;padding:8px 12px;border:1.5px solid var(--border2);border-radius:7px;font-size:.8rem;background:var(--surface);color:var(--ink);font-family:'JetBrains Mono',monospace">
+          <button type="button" onclick="ftwSaveSupabase()" class="btn btn-p btn-sm" style="margin-top:8px">Save Credentials</button>
+          <div id="ftw-sb-status" style="font-size:.78rem;margin-top:6px;color:var(--ink3)"></div>
+        </div>
+      </div>
+      <button type="button" class="ftw-start-btn" style="background:var(--green)" onclick="ftwJoinQueue()">👤 Find Opponent</button>
+    </div>
+
+    <!-- CHALLENGE LOBBY -->
+    <div id="ftw-challenge-lobby" class="ftw-screen" style="display:none">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px">
+        <button type="button" class="btn btn-g btn-sm" onclick="ftwShowModeSelect()">← Back</button>
+        <h2 style="font-size:1.3rem;font-family:'DM Serif Display',serif">Challenge a Friend</h2>
+      </div>
+      <div class="ftw-lobby-grid">
+        <div class="ftw-section">
+          <div class="ftw-section-title">Your Username</div>
+          <input type="text" id="ftw-challenge-username" placeholder="Enter a display name…" maxlength="20"
+            style="width:100%;padding:10px 14px;border:1.5px solid var(--border2);border-radius:8px;font-size:.95rem;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif">
+        </div>
+        <div class="ftw-section">
+          <div class="ftw-section-title">Select Contest Type</div>
+          <div class="ftw-mode-grid">
+            <label class="ftw-mode-card"><input type="radio" name="ftw-chal-mode" value="amc8" checked><div class="ftw-mode-inner"><div class="ftw-mode-icon">🥉</div><div class="ftw-mode-name">AMC 8</div><div class="ftw-mode-desc">2 min per problem</div></div></label>
+            <label class="ftw-mode-card"><input type="radio" name="ftw-chal-mode" value="amc10"><div class="ftw-mode-inner"><div class="ftw-mode-icon">🥈</div><div class="ftw-mode-name">AMC 10/12</div><div class="ftw-mode-desc">3 min per problem</div></div></label>
+            <label class="ftw-mode-card"><input type="radio" name="ftw-chal-mode" value="aime"><div class="ftw-mode-inner"><div class="ftw-mode-icon">🥇</div><div class="ftw-mode-name">AIME</div><div class="ftw-mode-desc">5 min per problem</div></div></label>
+          </div>
+        </div>
+        <div class="ftw-section">
+          <div class="ftw-section-title">Join Existing Room</div>
+          <div style="display:flex;gap:8px">
+            <input type="text" id="ftw-room-code-inp" placeholder="Enter room code (e.g. ABC123)" maxlength="6"
+              style="flex:1;padding:10px 14px;border:1.5px solid var(--border2);border-radius:8px;font-size:.95rem;text-transform:uppercase;letter-spacing:.1em;background:var(--surface);color:var(--ink);font-family:'JetBrains Mono',monospace">
+            <button type="button" onclick="ftwJoinRoom()" class="btn btn-p">Join →</button>
+          </div>
+          <div style="font-size:.75rem;color:var(--ink3);margin-top:6px">Ask your friend for their room code</div>
+        </div>
+        <div class="ftw-section" style="background:var(--amber-l);border-color:var(--amber)">
+          <div style="font-size:.85rem;color:var(--amber);font-weight:600">⚙️ Supabase Required</div>
+          <div style="font-size:.82rem;color:var(--ink2);margin-top:6px;line-height:1.6">Enter your Supabase credentials to enable real-time rooms. Same credentials as Find Opponent.</div>
+          <div id="ftw-sb-status2" style="font-size:.78rem;margin-top:6px;color:var(--ink3)"></div>
+        </div>
+      </div>
+      <button type="button" class="ftw-start-btn" style="background:var(--purple)" onclick="ftwCreateRoom()">🔗 Create Room & Get Link</button>
+    </div>
+
+    <!-- WAITING FOR FRIEND -->
+    <div id="ftw-waiting-room" class="ftw-screen" style="display:none">
+      <div class="ftw-mm-inner">
+        <div style="font-size:3rem;margin-bottom:16px">🔗</div>
+        <h2 style="font-size:1.4rem;margin-bottom:8px">Room Created!</h2>
+        <p style="color:var(--ink2);font-size:.9rem;margin-bottom:20px">Share this code with your friend:</p>
+        <div class="ftw-room-code-display" id="ftw-room-code-display">—</div>
+        <button type="button" onclick="ftwCopyRoomCode()" class="btn btn-p" style="margin:16px 0">📋 Copy Room Code</button>
+        <p style="color:var(--ink3);font-size:.85rem" id="ftw-waiting-msg">Waiting for opponent to join…</p>
+        <div class="ftw-mm-bar" style="margin-top:16px"><div class="ftw-mm-fill" id="ftw-waiting-fill" style="animation:ftw-wait-pulse 2s ease-in-out infinite"></div></div>
+        <button type="button" onclick="ftwCancelRoom()" class="btn btn-g" style="margin-top:24px">Cancel</button>
+      </div>
+    </div>
+
+    <div id="ftw-matchmaking" class="ftw-screen" style="display:none">
+      <div class="ftw-mm-inner">
+        <div class="ftw-mm-spinner"></div>
+        <h2 style="font-size:1.4rem;margin:24px 0 8px">Finding Opponent…</h2>
+        <p style="color:var(--ink3);font-size:.9rem" id="ftw-mm-msg">Searching for a player near your rating</p>
+        <div class="ftw-mm-bar"><div class="ftw-mm-fill" id="ftw-mm-fill"></div></div>
+        <button type="button" onclick="ftwCancelMatch()" class="btn btn-g" style="margin-top:24px">Cancel</button>
+      </div>
+    </div>
+
+    <div id="ftw-battle" class="ftw-screen" style="display:none">
+      <div class="ftw-battle-hd">
+        <div class="ftw-player-hd">
+          <div class="ftw-player-avatar you-avatar">YOU</div>
+          <div><div class="ftw-player-name">You</div><div class="ftw-player-elo" id="ftw-your-elo-disp">—</div></div>
+          <div class="ftw-score-box" id="ftw-your-score">0</div>
+        </div>
+        <div class="ftw-battle-mid">
+          <div class="ftw-round-lbl" id="ftw-round-lbl">Round 1 of 5</div>
+          <div class="ftw-timer-ring">
+            <svg viewBox="0 0 80 80" class="ftw-timer-svg">
+              <circle cx="40" cy="40" r="34" fill="none" stroke="var(--border)" stroke-width="6"/>
+              <circle cx="40" cy="40" r="34" fill="none" stroke="var(--blue)" stroke-width="6" stroke-dasharray="213.6" stroke-dashoffset="0" id="ftw-timer-arc" stroke-linecap="round" transform="rotate(-90 40 40)"/>
+            </svg>
+            <div class="ftw-timer-text" id="ftw-timer-text">3:00</div>
+          </div>
+          <div style="font-size:.75rem;color:var(--ink3)">TIME LEFT</div>
+        </div>
+        <div class="ftw-player-hd" style="flex-direction:row-reverse">
+          <div class="ftw-player-avatar opp-avatar">BOT</div>
+          <div style="text-align:right"><div class="ftw-player-name" id="ftw-opp-name">Opponent</div><div class="ftw-player-elo" id="ftw-opp-elo-disp">—</div></div>
+          <div class="ftw-score-box" id="ftw-opp-score">0</div>
+        </div>
+      </div>
+      <div class="ftw-problem-area">
+        <div class="ftw-prob-meta" id="ftw-prob-meta"></div>
+        <a class="ftw-prob-link" id="ftw-prob-link" target="_blank">View full problem on AoPS ↗</a>
+        <div class="ftw-answer-area" id="ftw-answer-area">
+          <div id="ftw-choices" style="display:none">
+            <div class="ftw-choice-grid">
+              <button type="button" class="ftw-choice" onclick="ftwSubmitAnswer('A')">A</button>
+              <button type="button" class="ftw-choice" onclick="ftwSubmitAnswer('B')">B</button>
+              <button type="button" class="ftw-choice" onclick="ftwSubmitAnswer('C')">C</button>
+              <button type="button" class="ftw-choice" onclick="ftwSubmitAnswer('D')">D</button>
+              <button type="button" class="ftw-choice" onclick="ftwSubmitAnswer('E')">E</button>
+            </div>
+          </div>
+          <div id="ftw-integer-input" style="display:none">
+            <div style="display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap">
+              <input type="number" id="ftw-int-inp" min="0" max="999" placeholder="0–999" class="ftw-int-input" onkeydown="if(event.key==='Enter')ftwSubmitAnswer(document.getElementById('ftw-int-inp').value)">
+              <button type="button" class="ftw-submit-btn" onclick="ftwSubmitAnswer(document.getElementById('ftw-int-inp').value)">Submit →</button>
+            </div>
+          </div>
+        </div>
+        <div id="ftw-round-result" class="ftw-round-result" style="display:none"></div>
+        <div class="ftw-status-row">
+          <div class="ftw-status-pill" id="ftw-your-status">⏳ Thinking...</div>
+          <div class="ftw-status-pill" id="ftw-opp-status">⏳ Thinking...</div>
+        </div>
+      </div>
+      <div class="ftw-rounds-row" id="ftw-rounds-row"></div>
+    </div>
+
+    <div id="ftw-results" class="ftw-screen" style="display:none">
+      <div class="ftw-results-inner">
+        <div class="ftw-result-icon" id="ftw-result-icon">🏆</div>
+        <h1 class="ftw-result-title" id="ftw-result-title">You Win!</h1>
+        <div class="ftw-result-score" id="ftw-result-score">3 — 1</div>
+        <div class="ftw-elo-change" id="ftw-elo-change"></div>
+        <div class="ftw-round-recap" id="ftw-round-recap"></div>
+        <div style="display:flex;gap:12px;justify-content:center;margin-top:24px;flex-wrap:wrap">
+          <button type="button" class="ftw-start-btn" style="font-size:.95rem;padding:12px 28px;width:auto" onclick="ftwRematch()">⚔️ Rematch</button>
+          <button type="button" class="btn btn-g btn-lg" onclick="ftwBackToLobby()">← Back to Lobby</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </main>
 </div>
 
@@ -8220,249 +8464,6 @@ document.addEventListener('DOMContentLoaded', () => {
   </div>
 </div>
 
-<!-- ══════ FTW 1v1 BATTLE VIEW ══════ -->
-<div id="view-ftw" class="view">
-  <div class="ftw-wrap">
-    <!-- MODE SELECT SCREEN -->
-    <div id="ftw-mode-select" class="ftw-screen">
-      <div class="ftw-hero">
-        <div class="ftw-hero-icon">⚔️</div>
-        <h1 class="ftw-title">1v1 Battle Mode</h1>
-        <p class="ftw-subtitle">Race to answer AMC & AIME problems correctly. First to answer wins the round. Best of 5 wins the match.</p>
-      </div>
-      <div class="ftw-modesel-grid">
-        <div class="ftw-modesel-card" onclick="ftwGoLobby('bot')">
-          <div class="ftw-modesel-icon">🤖</div>
-          <div class="ftw-modesel-name">Practice vs Bot</div>
-          <div class="ftw-modesel-desc">Play instantly against an AI opponent. Choose difficulty, topic, and contest type. No waiting.</div>
-          <div class="ftw-modesel-btn">Play Now →</div>
-        </div>
-        <div class="ftw-modesel-card" onclick="ftwGoLobby('real')">
-          <div class="ftw-modesel-icon">👤</div>
-          <div class="ftw-modesel-name">Find Real Opponent</div>
-          <div class="ftw-modesel-desc">Join the matchmaking queue and get paired with a real player near your rating.</div>
-          <div class="ftw-modesel-btn" style="background:var(--green);color:#fff">Find Match →</div>
-        </div>
-        <div class="ftw-modesel-card" onclick="ftwGoLobby('challenge')">
-          <div class="ftw-modesel-icon">🔗</div>
-          <div class="ftw-modesel-name">Challenge a Friend</div>
-          <div class="ftw-modesel-desc">Create a private room and share the link. Your friend joins and you battle head-to-head.</div>
-          <div class="ftw-modesel-btn" style="background:var(--purple);color:#fff">Create Room →</div>
-        </div>
-      </div>
-      <div class="ftw-section" style="margin-top:20px">
-        <div class="ftw-section-title">Your Stats</div>
-        <div class="ftw-stats-row">
-          <div class="ftw-stat"><div class="ftw-stat-n" id="ftw-stat-rating">—</div><div class="ftw-stat-l">Rating</div></div>
-          <div class="ftw-stat"><div class="ftw-stat-n" id="ftw-stat-wins">0</div><div class="ftw-stat-l">Wins</div></div>
-          <div class="ftw-stat"><div class="ftw-stat-n" id="ftw-stat-losses">0</div><div class="ftw-stat-l">Losses</div></div>
-          <div class="ftw-stat"><div class="ftw-stat-n" id="ftw-stat-streak">0</div><div class="ftw-stat-l">Win Streak</div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- BOT LOBBY -->
-    <div id="ftw-lobby" class="ftw-screen" style="display:none">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px">
-        <button type="button" class="btn btn-g btn-sm" onclick="ftwShowModeSelect()">← Back</button>
-        <h2 style="font-size:1.3rem;font-family:'DM Serif Display',serif">Practice vs Bot</h2>
-      </div>
-      <div class="ftw-lobby-grid">
-        <div class="ftw-section">
-          <div class="ftw-section-title">Select Contest Type</div>
-          <div class="ftw-mode-grid">
-            <label class="ftw-mode-card"><input type="radio" name="ftw-mode" value="amc8" checked><div class="ftw-mode-inner"><div class="ftw-mode-icon">🥉</div><div class="ftw-mode-name">AMC 8</div><div class="ftw-mode-desc">Elo 500–900<br>2 min per problem</div></div></label>
-            <label class="ftw-mode-card"><input type="radio" name="ftw-mode" value="amc10"><div class="ftw-mode-inner"><div class="ftw-mode-icon">🥈</div><div class="ftw-mode-name">AMC 10/12</div><div class="ftw-mode-desc">Elo 900–1350<br>3 min per problem</div></div></label>
-            <label class="ftw-mode-card"><input type="radio" name="ftw-mode" value="aime"><div class="ftw-mode-inner"><div class="ftw-mode-icon">🥇</div><div class="ftw-mode-name">AIME</div><div class="ftw-mode-desc">Elo 1300+<br>5 min per problem</div></div></label>
-          </div>
-        </div>
-        <div class="ftw-section">
-          <div class="ftw-section-title">Topic Filter <span style="font-size:.75rem;font-weight:400;color:var(--ink3)">(optional)</span></div>
-          <div class="ftw-topic-grid" id="ftw-topics">
-            <label class="ftw-topic"><input type="checkbox" value="algebra" checked> Algebra</label>
-            <label class="ftw-topic"><input type="checkbox" value="geometry" checked> Geometry</label>
-            <label class="ftw-topic"><input type="checkbox" value="counting" checked> Counting</label>
-            <label class="ftw-topic"><input type="checkbox" value="number-theory" checked> Number Theory</label>
-            <label class="ftw-topic"><input type="checkbox" value="probability" checked> Probability</label>
-          </div>
-        </div>
-        <div class="ftw-section">
-          <div class="ftw-section-title">Bot Difficulty</div>
-          <div class="ftw-diff-grid">
-            <label class="ftw-diff-card"><input type="radio" name="ftw-diff" value="easy"><div class="ftw-diff-inner"><div style="font-size:1.2rem">🐣</div><div style="font-weight:600;font-size:.85rem">Beginner</div><div style="font-size:.75rem;color:var(--ink3)">Elo ~900</div></div></label>
-            <label class="ftw-diff-card"><input type="radio" name="ftw-diff" value="medium" checked><div class="ftw-diff-inner"><div style="font-size:1.2rem">🦊</div><div style="font-weight:600;font-size:.85rem">Matched</div><div style="font-size:.75rem;color:var(--ink3)">Near your Elo</div></div></label>
-            <label class="ftw-diff-card"><input type="radio" name="ftw-diff" value="hard"><div class="ftw-diff-inner"><div style="font-size:1.2rem">🧠</div><div style="font-weight:600;font-size:.85rem">Expert</div><div style="font-size:.75rem;color:var(--ink3)">Elo ~1600</div></div></label>
-          </div>
-        </div>
-      </div>
-      <button type="button" class="ftw-start-btn" onclick="ftwFindMatch()">🤖 Start Bot Match</button>
-    </div>
-
-    <!-- REAL OPPONENT LOBBY -->
-    <div id="ftw-real-lobby" class="ftw-screen" style="display:none">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px">
-        <button type="button" class="btn btn-g btn-sm" onclick="ftwShowModeSelect()">← Back</button>
-        <h2 style="font-size:1.3rem;font-family:'DM Serif Display',serif">Find Real Opponent</h2>
-      </div>
-      <div class="ftw-lobby-grid">
-        <div class="ftw-section">
-          <div class="ftw-section-title">Your Username</div>
-          <input type="text" id="ftw-username" placeholder="Enter a display name…" maxlength="20"
-            style="width:100%;padding:10px 14px;border:1.5px solid var(--border2);border-radius:8px;font-size:.95rem;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif">
-          <div style="font-size:.75rem;color:var(--ink3);margin-top:6px">Visible to your opponent during the match</div>
-        </div>
-        <div class="ftw-section">
-          <div class="ftw-section-title">Select Contest Type</div>
-          <div class="ftw-mode-grid">
-            <label class="ftw-mode-card"><input type="radio" name="ftw-real-mode" value="amc8" checked><div class="ftw-mode-inner"><div class="ftw-mode-icon">🥉</div><div class="ftw-mode-name">AMC 8</div><div class="ftw-mode-desc">Elo 500–900<br>2 min per problem</div></div></label>
-            <label class="ftw-mode-card"><input type="radio" name="ftw-real-mode" value="amc10"><div class="ftw-mode-inner"><div class="ftw-mode-icon">🥈</div><div class="ftw-mode-name">AMC 10/12</div><div class="ftw-mode-desc">Elo 900–1350<br>3 min per problem</div></div></label>
-            <label class="ftw-mode-card"><input type="radio" name="ftw-real-mode" value="aime"><div class="ftw-mode-inner"><div class="ftw-mode-icon">🥇</div><div class="ftw-mode-name">AIME</div><div class="ftw-mode-desc">Elo 1300+<br>5 min per problem</div></div></label>
-          </div>
-        </div>
-        <div class="ftw-section" style="background:var(--amber-l);border-color:var(--amber)">
-          <div style="font-size:.85rem;color:var(--amber);font-weight:600">⚙️ Setup Required</div>
-          <div style="font-size:.82rem;color:var(--ink2);margin-top:6px;line-height:1.6">
-            Real multiplayer requires a Supabase project. Enter your Supabase URL and anon key below to enable live matchmaking.
-          </div>
-          <input type="text" id="ftw-sb-url" placeholder="https://xxxx.supabase.co" style="width:100%;margin-top:10px;padding:8px 12px;border:1.5px solid var(--border2);border-radius:7px;font-size:.8rem;background:var(--surface);color:var(--ink);font-family:'JetBrains Mono',monospace">
-          <input type="text" id="ftw-sb-key" placeholder="your-anon-key" style="width:100%;margin-top:6px;padding:8px 12px;border:1.5px solid var(--border2);border-radius:7px;font-size:.8rem;background:var(--surface);color:var(--ink);font-family:'JetBrains Mono',monospace">
-          <button type="button" onclick="ftwSaveSupabase()" class="btn btn-p btn-sm" style="margin-top:8px">Save Credentials</button>
-          <div id="ftw-sb-status" style="font-size:.78rem;margin-top:6px;color:var(--ink3)"></div>
-        </div>
-      </div>
-      <button type="button" class="ftw-start-btn" style="background:var(--green)" onclick="ftwJoinQueue()">👤 Find Opponent</button>
-    </div>
-
-    <!-- CHALLENGE LOBBY -->
-    <div id="ftw-challenge-lobby" class="ftw-screen" style="display:none">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px">
-        <button type="button" class="btn btn-g btn-sm" onclick="ftwShowModeSelect()">← Back</button>
-        <h2 style="font-size:1.3rem;font-family:'DM Serif Display',serif">Challenge a Friend</h2>
-      </div>
-      <div class="ftw-lobby-grid">
-        <div class="ftw-section">
-          <div class="ftw-section-title">Your Username</div>
-          <input type="text" id="ftw-challenge-username" placeholder="Enter a display name…" maxlength="20"
-            style="width:100%;padding:10px 14px;border:1.5px solid var(--border2);border-radius:8px;font-size:.95rem;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif">
-        </div>
-        <div class="ftw-section">
-          <div class="ftw-section-title">Select Contest Type</div>
-          <div class="ftw-mode-grid">
-            <label class="ftw-mode-card"><input type="radio" name="ftw-chal-mode" value="amc8" checked><div class="ftw-mode-inner"><div class="ftw-mode-icon">🥉</div><div class="ftw-mode-name">AMC 8</div><div class="ftw-mode-desc">2 min per problem</div></div></label>
-            <label class="ftw-mode-card"><input type="radio" name="ftw-chal-mode" value="amc10"><div class="ftw-mode-inner"><div class="ftw-mode-icon">🥈</div><div class="ftw-mode-name">AMC 10/12</div><div class="ftw-mode-desc">3 min per problem</div></div></label>
-            <label class="ftw-mode-card"><input type="radio" name="ftw-chal-mode" value="aime"><div class="ftw-mode-inner"><div class="ftw-mode-icon">🥇</div><div class="ftw-mode-name">AIME</div><div class="ftw-mode-desc">5 min per problem</div></div></label>
-          </div>
-        </div>
-        <div class="ftw-section">
-          <div class="ftw-section-title">Join Existing Room</div>
-          <div style="display:flex;gap:8px">
-            <input type="text" id="ftw-room-code-inp" placeholder="Enter room code (e.g. ABC123)" maxlength="6"
-              style="flex:1;padding:10px 14px;border:1.5px solid var(--border2);border-radius:8px;font-size:.95rem;text-transform:uppercase;letter-spacing:.1em;background:var(--surface);color:var(--ink);font-family:'JetBrains Mono',monospace">
-            <button type="button" onclick="ftwJoinRoom()" class="btn btn-p">Join →</button>
-          </div>
-          <div style="font-size:.75rem;color:var(--ink3);margin-top:6px">Ask your friend for their room code</div>
-        </div>
-        <div class="ftw-section" style="background:var(--amber-l);border-color:var(--amber)">
-          <div style="font-size:.85rem;color:var(--amber);font-weight:600">⚙️ Supabase Required</div>
-          <div style="font-size:.82rem;color:var(--ink2);margin-top:6px;line-height:1.6">Enter your Supabase credentials to enable real-time rooms. Same credentials as Find Opponent.</div>
-          <div id="ftw-sb-status2" style="font-size:.78rem;margin-top:6px;color:var(--ink3)"></div>
-        </div>
-      </div>
-      <button type="button" class="ftw-start-btn" style="background:var(--purple)" onclick="ftwCreateRoom()">🔗 Create Room & Get Link</button>
-    </div>
-
-    <!-- WAITING FOR FRIEND -->
-    <div id="ftw-waiting-room" class="ftw-screen" style="display:none">
-      <div class="ftw-mm-inner">
-        <div style="font-size:3rem;margin-bottom:16px">🔗</div>
-        <h2 style="font-size:1.4rem;margin-bottom:8px">Room Created!</h2>
-        <p style="color:var(--ink2);font-size:.9rem;margin-bottom:20px">Share this code with your friend:</p>
-        <div class="ftw-room-code-display" id="ftw-room-code-display">—</div>
-        <button type="button" onclick="ftwCopyRoomCode()" class="btn btn-p" style="margin:16px 0">📋 Copy Room Code</button>
-        <p style="color:var(--ink3);font-size:.85rem" id="ftw-waiting-msg">Waiting for opponent to join…</p>
-        <div class="ftw-mm-bar" style="margin-top:16px"><div class="ftw-mm-fill" id="ftw-waiting-fill" style="animation:ftw-wait-pulse 2s ease-in-out infinite"></div></div>
-        <button type="button" onclick="ftwCancelRoom()" class="btn btn-g" style="margin-top:24px">Cancel</button>
-      </div>
-    </div>
-
-    <div id="ftw-matchmaking" class="ftw-screen" style="display:none">
-      <div class="ftw-mm-inner">
-        <div class="ftw-mm-spinner"></div>
-        <h2 style="font-size:1.4rem;margin:24px 0 8px">Finding Opponent…</h2>
-        <p style="color:var(--ink3);font-size:.9rem" id="ftw-mm-msg">Searching for a player near your rating</p>
-        <div class="ftw-mm-bar"><div class="ftw-mm-fill" id="ftw-mm-fill"></div></div>
-        <button type="button" onclick="ftwCancelMatch()" class="btn btn-g" style="margin-top:24px">Cancel</button>
-      </div>
-    </div>
-
-    <div id="ftw-battle" class="ftw-screen" style="display:none">
-      <div class="ftw-battle-hd">
-        <div class="ftw-player-hd">
-          <div class="ftw-player-avatar you-avatar">YOU</div>
-          <div><div class="ftw-player-name">You</div><div class="ftw-player-elo" id="ftw-your-elo-disp">—</div></div>
-          <div class="ftw-score-box" id="ftw-your-score">0</div>
-        </div>
-        <div class="ftw-battle-mid">
-          <div class="ftw-round-lbl" id="ftw-round-lbl">Round 1 of 5</div>
-          <div class="ftw-timer-ring">
-            <svg viewBox="0 0 80 80" class="ftw-timer-svg">
-              <circle cx="40" cy="40" r="34" fill="none" stroke="var(--border)" stroke-width="6"/>
-              <circle cx="40" cy="40" r="34" fill="none" stroke="var(--blue)" stroke-width="6" stroke-dasharray="213.6" stroke-dashoffset="0" id="ftw-timer-arc" stroke-linecap="round" transform="rotate(-90 40 40)"/>
-            </svg>
-            <div class="ftw-timer-text" id="ftw-timer-text">3:00</div>
-          </div>
-          <div style="font-size:.75rem;color:var(--ink3)">TIME LEFT</div>
-        </div>
-        <div class="ftw-player-hd" style="flex-direction:row-reverse">
-          <div class="ftw-player-avatar opp-avatar">BOT</div>
-          <div style="text-align:right"><div class="ftw-player-name" id="ftw-opp-name">Opponent</div><div class="ftw-player-elo" id="ftw-opp-elo-disp">—</div></div>
-          <div class="ftw-score-box" id="ftw-opp-score">0</div>
-        </div>
-      </div>
-      <div class="ftw-problem-area">
-        <div class="ftw-prob-meta" id="ftw-prob-meta"></div>
-        <a class="ftw-prob-link" id="ftw-prob-link" target="_blank">View full problem on AoPS ↗</a>
-        <div class="ftw-answer-area" id="ftw-answer-area">
-          <div id="ftw-choices" style="display:none">
-            <div class="ftw-choice-grid">
-              <button type="button" class="ftw-choice" onclick="ftwSubmitAnswer('A')">A</button>
-              <button type="button" class="ftw-choice" onclick="ftwSubmitAnswer('B')">B</button>
-              <button type="button" class="ftw-choice" onclick="ftwSubmitAnswer('C')">C</button>
-              <button type="button" class="ftw-choice" onclick="ftwSubmitAnswer('D')">D</button>
-              <button type="button" class="ftw-choice" onclick="ftwSubmitAnswer('E')">E</button>
-            </div>
-          </div>
-          <div id="ftw-integer-input" style="display:none">
-            <div style="display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap">
-              <input type="number" id="ftw-int-inp" min="0" max="999" placeholder="0–999" class="ftw-int-input" onkeydown="if(event.key==='Enter')ftwSubmitAnswer(document.getElementById('ftw-int-inp').value)">
-              <button type="button" class="ftw-submit-btn" onclick="ftwSubmitAnswer(document.getElementById('ftw-int-inp').value)">Submit →</button>
-            </div>
-          </div>
-        </div>
-        <div id="ftw-round-result" class="ftw-round-result" style="display:none"></div>
-        <div class="ftw-status-row">
-          <div class="ftw-status-pill" id="ftw-your-status">⏳ Thinking...</div>
-          <div class="ftw-status-pill" id="ftw-opp-status">⏳ Thinking...</div>
-        </div>
-      </div>
-      <div class="ftw-rounds-row" id="ftw-rounds-row"></div>
-    </div>
-
-    <div id="ftw-results" class="ftw-screen" style="display:none">
-      <div class="ftw-results-inner">
-        <div class="ftw-result-icon" id="ftw-result-icon">🏆</div>
-        <h1 class="ftw-result-title" id="ftw-result-title">You Win!</h1>
-        <div class="ftw-result-score" id="ftw-result-score">3 — 1</div>
-        <div class="ftw-elo-change" id="ftw-elo-change"></div>
-        <div class="ftw-round-recap" id="ftw-round-recap"></div>
-        <div style="display:flex;gap:12px;justify-content:center;margin-top:24px;flex-wrap:wrap">
-          <button type="button" class="ftw-start-btn" style="font-size:.95rem;padding:12px 28px;width:auto" onclick="ftwRematch()">⚔️ Rematch</button>
-          <button type="button" class="btn btn-g btn-lg" onclick="ftwBackToLobby()">← Back to Lobby</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- Solve Mode Bar -->
 <div class="solve-mode-bar" id="solve-bar">
