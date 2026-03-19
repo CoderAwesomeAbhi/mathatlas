@@ -5855,7 +5855,12 @@ function showView(n){
     if(el){el.classList.add('show');el.style.display='';}
     document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('on'));
     const sb=document.getElementById('sbg-ftw');if(sb)sb.classList.add('on');
-    ftwShowModeSelect();
+    // Show all inner screens first so display:none can be applied correctly
+    ['ftw-mode-select','ftw-lobby','ftw-real-lobby','ftw-challenge-lobby','ftw-waiting-room','ftw-matchmaking','ftw-battle','ftw-results'].forEach(s=>{
+      const sc=document.getElementById(s);if(sc)sc.style.display='none';
+    });
+    const ms=document.getElementById('ftw-mode-select');if(ms)ms.style.display='';
+    ftwUpdateLobbyStats();
     return;
   }
   if(n==='roadmap'){
