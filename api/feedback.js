@@ -21,7 +21,7 @@ module.exports = async function handler(req, res) {
     formData.append('type', type || 'general');
     formData.append('_subject', `MathAtlas Feedback — ${type || 'general'}`);
 
-    const resp = await fetch('https://formspree.io/f/meerdjzb', {
+    const resp = await fetch('https://formspree.io/f/mreydzje', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
