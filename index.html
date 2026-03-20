@@ -7287,32 +7287,30 @@ async function submitFeedback(){
   res.style.display='block'; res.style.background='var(--surface2)'; res.style.color='var(--ink2)'; res.textContent='Sending…';
 
   try {
-    const formData = new FormData();
-    formData.append('message', msg);
-    formData.append('email', email||'anonymous');
-    formData.append('type', fbType||'general');
-    formData.append('_subject', `MathAtlas Feedback — ${fbType||'general'}`);
-    formData.append('_replyto', email||'noreply@mathatlas.app');
-
-    const resp = await fetch('/api/feedback', {
+    const resp = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: msg, email: email||'anonymous', type: fbType||'general' })
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        access_key: 'fdd32c55-2244-4679-a68d-f1e01bed62eb',
+        subject: `MathAtlas Feedback — ${fbType||'general'}`,
+        message: msg,
+        email: email || 'anonymous',
+        type: fbType || 'general',
+        from_name: 'MathAtlas User'
+      })
     });
-
-    if(resp.ok) {
+    const data = await resp.json();
+    if(data.success) {
       res.style.background='var(--green-l)'; res.style.color='var(--green)';
       res.textContent='✓ Feedback sent! Thank you — we read every message.';
       setTimeout(()=>closeFeedback(), 2500);
-      return;
+    } else {
+      throw new Error(data.message || 'error');
     }
-  } catch(e) {}
-
-  // If Formspree fails, show success anyway and log it
-  console.log('Feedback:', { type: fbType, message: msg, email });
-  res.style.background='var(--green-l)'; res.style.color='var(--green)';
-  res.textContent='✓ Feedback received! Thank you — we read every message.';
-  setTimeout(()=>closeFeedback(), 2500);
+  } catch(e) {
+    res.style.background='var(--red-l)'; res.style.color='var(--red)';
+    res.textContent='Failed to send. Please try again.';
+  }
 }
 
 // ════════════════════════════════════
