@@ -9153,15 +9153,14 @@ function rtInitPicker() {
 
 function rtBuildGrid() {
   const cfg = RT_CONFIG[RT.type];
-  const allProbs = ((typeof ALL_PROBS !== 'undefined' ? ALL_PROBS : [])
-    .concat(typeof window.MA_PROBLEMS !== 'undefined' ? window.MA_PROBLEMS : []));
+  // Only use MA_PROBLEMS for real tests — DOM problems lack proper contestFull tags
+  const allProbs = typeof window.MA_PROBLEMS !== 'undefined' ? window.MA_PROBLEMS : [];
 
-  // Deduplicate by id
+  // Deduplicate by id and remove nonexistent contests
   const seen = new Set();
   const probs = allProbs.filter(p => {
     if(seen.has(p.id)){return false;}
     seen.add(p.id);
-    // Remove 2021 AMC 8 (never existed)
     if((p.contestFull === 'amc8' || p.contest === 'amc8') && p.year === 2021) return false;
     return true;
   });
@@ -9211,8 +9210,8 @@ function rtBuildGrid() {
 
 function rtStartTest(cf, year) {
   const cfg = RT_CONFIG[RT.type];
-  const allProbs = ((typeof ALL_PROBS !== 'undefined' ? ALL_PROBS : [])
-    .concat(typeof window.MA_PROBLEMS !== 'undefined' ? window.MA_PROBLEMS : []));
+  // Only use MA_PROBLEMS for real tests — DOM problems lack proper contestFull tags
+  const allProbs = typeof window.MA_PROBLEMS !== 'undefined' ? window.MA_PROBLEMS : [];
   const seen = new Set();
   const probs = allProbs.filter(p => {
     if(seen.has(p.id)){return false;}
