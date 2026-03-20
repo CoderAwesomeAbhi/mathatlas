@@ -4536,10 +4536,20 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
           <button type="button" class="rt-choice" onclick="rtSelect('E')">E</button>
         </div>
 
-        <!-- AIME integer input -->
-        <div id="rt-integer" style="display:none;justify-content:center;gap:10px;margin-bottom:16px">
-          <input type="number" id="rt-int-inp" min="0" max="999" placeholder="0–999"
-            style="padding:10px 16px;border:2px solid var(--border2);border-radius:10px;font-size:1.2rem;font-weight:700;width:140px;text-align:center;font-family:'JetBrains Mono',monospace;background:var(--surface);color:var(--ink)">
+        <!-- AIME integer input - 3 separate digit boxes -->
+        <div id="rt-integer" style="display:none;flex-direction:column;align-items:center;gap:12px;margin-bottom:16px">
+          <div style="font-size:.78rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em">Enter a 3-digit integer (000–999)</div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <input type="text" id="rt-digit-0" maxlength="1" inputmode="numeric" pattern="[0-9]"
+              style="width:56px;height:64px;border:2px solid var(--border2);border-radius:10px;font-size:2rem;font-weight:800;text-align:center;font-family:'JetBrains Mono',monospace;background:var(--surface);color:var(--ink)"
+              oninput="rtDigitInput(this,0)" onkeydown="rtDigitKey(event,0)">
+            <input type="text" id="rt-digit-1" maxlength="1" inputmode="numeric" pattern="[0-9]"
+              style="width:56px;height:64px;border:2px solid var(--border2);border-radius:10px;font-size:2rem;font-weight:800;text-align:center;font-family:'JetBrains Mono',monospace;background:var(--surface);color:var(--ink)"
+              oninput="rtDigitInput(this,1)" onkeydown="rtDigitKey(event,1)">
+            <input type="text" id="rt-digit-2" maxlength="1" inputmode="numeric" pattern="[0-9]"
+              style="width:56px;height:64px;border:2px solid var(--border2);border-radius:10px;font-size:2rem;font-weight:800;text-align:center;font-family:'JetBrains Mono',monospace;background:var(--surface);color:var(--ink)"
+              oninput="rtDigitInput(this,2)" onkeydown="rtDigitKey(event,2)">
+          </div>
         </div>
 
         <div style="font-size:.8rem;color:var(--ink3);text-align:center" id="rt-answer-status">Select your answer</div>
@@ -6888,6 +6898,8 @@ function showView(n){
   if(n==='concepts'){
     const el=document.getElementById('view-concepts');
     if(el){el.classList.add('show');el.style.display='';}
+    document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('on'));
+    const sb=document.getElementById('sbg-concepts');if(sb)sb.classList.add('on');
     const tb=document.getElementById('tab-concepts'); if(tb)tb.classList.add('on');
     renderConceptGrid(CONCEPTS);
     return;
@@ -9305,8 +9317,11 @@ function rtShowQuestion(idx) {
       if(ans && b.textContent === ans) b.classList.add('selected');
     });
   } else {
-    const inp = document.getElementById('rt-int-inp');
-    if(inp) inp.value = ans !== undefined ? ans : '';
+    const digits = String(ans !== undefined ? ans : '').padStart(3,'').split('');
+    ['rt-digit-0','rt-digit-1','rt-digit-2'].forEach((id,i) => {
+      const el = document.getElementById(id);
+      if(el) el.value = digits[i] || '';
+    });
   }
 
   const statusEl = document.getElementById('rt-answer-status');
@@ -9344,23 +9359,49 @@ function rtSelect(letter) {
   rtRenderNav();
 }
 
+function rtDigitInput(el, idx) {
+  el.value = el.value.replace(/[^0-9]/g,'').slice(-1);
+  if(el.value && idx < 2) document.getElementById('rt-digit-'+(idx+1))?.focus();
+  // Save answer when all 3 filled
+  const d0 = document.getElementById('rt-digit-0')?.value||'';
+  const d1 = document.getElementById('rt-digit-1')?.value||'';
+  const d2 = document.getElementById('rt-digit-2')?.value||'';
+  const val = d0+d1+d2;
+  if(val.length === 3) {
+    RT.answers[RT.current] = val;
+    const statusEl = document.getElementById('rt-answer-status');
+    if(statusEl) statusEl.textContent = 'Answer: ' + val;
+    rtRenderNav();
+  }
+}
+
+function rtDigitKey(event, idx) {
+  if(event.key === 'Backspace') {
+    const el = document.getElementById('rt-digit-'+idx);
+    if(el && !el.value && idx > 0) document.getElementById('rt-digit-'+(idx-1))?.focus();
+  }
+  if(event.key === 'ArrowRight' && idx < 2) document.getElementById('rt-digit-'+(idx+1))?.focus();
+  if(event.key === 'ArrowLeft' && idx > 0) document.getElementById('rt-digit-'+(idx-1))?.focus();
+}
+
 function rtClear() {
   delete RT.answers[RT.current];
   document.querySelectorAll('.rt-choice').forEach(b => b.className = 'rt-choice');
-  const inp = document.getElementById('rt-int-inp');
-  if(inp) inp.value = '';
+  ['rt-digit-0','rt-digit-1','rt-digit-2'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.value = '';
+  });
   const statusEl = document.getElementById('rt-answer-status');
   if(statusEl) statusEl.textContent = 'Select your answer';
   rtRenderNav();
 }
 
 function rtNav(dir) {
-  // Save integer answer if AIME
   if(RT_CONFIG[RT.type].type === 'integer') {
-    const inp = document.getElementById('rt-int-inp');
-    if(inp && inp.value !== '') {
-      RT.answers[RT.current] = inp.value;
-    }
+    const d0 = document.getElementById('rt-digit-0')?.value||'';
+    const d1 = document.getElementById('rt-digit-1')?.value||'';
+    const d2 = document.getElementById('rt-digit-2')?.value||'';
+    const val = d0+d1+d2;
+    if(val.length === 3 && /^\d{3}$/.test(val)) RT.answers[RT.current] = val;
   }
   const next = RT.current + dir;
   if(next < 0) return;
@@ -9375,8 +9416,11 @@ function rtFinish() {
 
   // Save any pending integer answer
   if(RT_CONFIG[RT.type].type === 'integer') {
-    const inp = document.getElementById('rt-int-inp');
-    if(inp && inp.value !== '') RT.answers[RT.current] = inp.value;
+    const d0 = document.getElementById('rt-digit-0')?.value||'';
+    const d1 = document.getElementById('rt-digit-1')?.value||'';
+    const d2 = document.getElementById('rt-digit-2')?.value||'';
+    const val = d0+d1+d2;
+    if(val.length === 3 && /^\d{3}$/.test(val)) RT.answers[RT.current] = val;
   }
 
   // Score
