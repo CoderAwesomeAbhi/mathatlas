@@ -7365,6 +7365,19 @@ function renderLatex(el) {
 }
 
 function openModal(prob){
+  // Enrich with data from MA_PROBLEMS if available
+  if(window.MA_PROBLEMS && (!prob.answer || !prob.hint1)) {
+    const cf = prob.contestFull || prob.contest || '';
+    const match = window.MA_PROBLEMS.find(p =>
+      p.year === prob.year && p.num === prob.num &&
+      (p.contestFull === cf || p.contestFull === prob.contestFull ||
+       (p.contest === prob.contest && Math.abs((p.elo||1000)-(prob.elo||1000)) < 200))
+    );
+    if(match) {
+      if(!prob.answer && match.answer) prob = {...prob, answer: match.answer};
+      if(!prob.hint1 && match.hint1) prob = {...prob, hint1: match.hint1, hint2: match.hint2, hint3: match.hint3};
+    }
+  }
   _curProb=prob;
   setText('modTitle',prob.display); setText('modProbName',prob.display);
   document.getElementById('modAops').href=prob.link||'#';
