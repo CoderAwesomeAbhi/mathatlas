@@ -21,7 +21,7 @@ async function fetchProblemText(link) {
 }
 
 module.exports = async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', 'https://mathatlas.vercel.app');
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
@@ -52,16 +52,11 @@ ${problemDescription}
 STUDENT STEPS:
 ${steps.map((s, i) => `Step ${i + 1}: ${s}`).join('\n')}
 
-Carefully analyze each step. Find the FIRST step that contains any error (logical mistake, wrong arithmetic, bad assumption, or incomplete casework).
+Find the FIRST step with any error. Return ONLY this JSON structure with no other text:
+{"firstErrorStep":null,"errorType":"Correct","errorCode":null,"stepFeedback":[{"step":1,"status":"ok","comment":null}],"mainFeedback":"All steps are correct.","hint":"Double check your final answer.","moduleLink":""}
 
-Return ONLY a JSON object with these fields:
-- firstErrorStep: integer (1-indexed) or null if all correct
-- errorType: string describing error, or "Correct"
-- errorCode: string like "A-1" or null
-- stepFeedback: array of {step, status ("ok"/"error"/"warning"), comment (string or null)}
-- mainFeedback: 2-3 sentence explanation
-- hint: 1-2 sentence hint
-- moduleLink: relevant topic or ""`;
+If there is an error, use:
+{"firstErrorStep":1,"errorType":"Arithmetic Error","errorCode":"A-1","stepFeedback":[{"step":1,"status":"error","comment":"explanation"}],"mainFeedback":"2-3 sentences.","hint":"1-2 sentence hint.","moduleLink":"topic"}`;
 
   try {
     const geminiRes = await fetch(
@@ -71,45 +66,53 @@ Return ONLY a JSON object with these fields:
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            temperature: 0.0,
-            maxOutputTokens: 2048,
-          }
+          generationConfig: { temperature: 0.0, maxOutputTokens: 2048 }
         })
       }
     );
 
     const rawText = await geminiRes.text();
     if (!geminiRes.ok) {
-      return res.status(502).json({ error: 'Gemini API rejected the request', detail: rawText });
+      return res.status(502).json({ error: 'Gemini API error', detail: rawText.substring(0, 300) });
     }
 
     let data;
     try { data = JSON.parse(rawText); }
-    catch (e) { return res.status(502).json({ error: 'Could not parse Gemini response', detail: rawText.substring(0, 300) }); }
+    catch (e) { return res.status(502).json({ error: 'Could not parse Gemini response' }); }
 
-    // Collect all non-thought text parts (Gemini 2.5 returns thinking blocks)
+    // Collect all non-thought text parts
     let text = '';
     const parts = data?.candidates?.[0]?.content?.parts || [];
     for (const part of parts) {
       if (part.text && !part.thought) text += part.text;
     }
-    if (!text) return res.status(502).json({ error: 'Gemini returned no text', detail: JSON.stringify(data).substring(0, 300) });
+    // Fallback to first part if all were thoughts
+    if (!text && parts.length > 0) text = parts[parts.length - 1]?.text || '';
+    if (!text) return res.status(502).json({ error: 'Gemini returned no text' });
 
-    // Strip markdown and parse JSON
-    const clean = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
-    let parsed;
+    // Aggressively extract JSON
+    const clean = text
+      .replace(/```json\s*/gi, '')
+      .replace(/```\s*/g, '')
+      .trim();
+
+    // Try direct parse first
     try {
-      parsed = JSON.parse(clean);
-    } catch (e) {
-      const match = clean.match(/\{[\s\S]*\}/);
-      if (!match) return res.status(502).json({ error: 'No JSON in response', detail: clean.substring(0, 300) });
-      try { parsed = JSON.parse(match[0]); }
-      catch (e2) { return res.status(502).json({ error: 'Could not parse JSON', detail: match[0].substring(0, 300) }); }
-    }
+      const parsed = JSON.parse(clean);
+      return res.status(200).json(parsed);
+    } catch(e) {}
 
-    return res.status(200).json(parsed);
+    // Try to find JSON object in text
+    const match = clean.match(/\{[\s\S]*\}/);
+    if (!match) return res.status(502).json({ error: 'No JSON in response', detail: clean.substring(0, 200) });
+
+    try {
+      const parsed = JSON.parse(match[0]);
+      return res.status(200).json(parsed);
+    } catch(e) {
+      return res.status(502).json({ error: 'Could not parse JSON', detail: match[0].substring(0, 200) });
+    }
   } catch (err) {
-    return res.status(500).json({ error: 'Network error calling Gemini', detail: err.message });
+    return res.status(500).json({ error: 'Network error', detail: err.message });
   }
 };

@@ -6891,7 +6891,8 @@ function showView(n){
   if(n==='tools'){
     const el=document.getElementById('view-tools');
     if(el){el.classList.add('show');el.style.display='';}
-    const tb=document.getElementById('tab-tools'); if(tb)tb.classList.add('on');
+    document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('on'));
+    const sb=document.getElementById('sbg-tools');if(sb)sb.classList.add('on');
     setTimeout(()=>{const c=document.getElementById('graphCanvas');if(c&&!graphFns.length){graphFns=['y = sin(x)'];drawGraph(c);}},150);
     return;
   }
@@ -6907,7 +6908,8 @@ function showView(n){
   if(n==='playground'){
     const el=document.getElementById('view-playground');
     if(el){el.classList.add('show');el.style.display='';}
-    const tb=document.getElementById('tab-playground'); if(tb)tb.classList.add('on');
+    document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('on'));
+    const sb=document.getElementById('sbg-playground');if(sb)sb.classList.add('on');
     setTimeout(()=>runSieve(),100);
     return;
   }
@@ -6974,7 +6976,7 @@ function showView(n){
     if(el){el.classList.add('show');el.style.display='';}
     document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('on'));
     const sb=document.getElementById('sbg-blog');if(sb)sb.classList.add('on');
-    renderBlog();
+    blogRender();
     return;
   }
   if(n==='chat'){
@@ -7020,7 +7022,8 @@ function showView(n){
   if(n==='roadmap'){
     const el=document.getElementById('view-roadmap');
     if(el){el.classList.add('show');el.style.display='';}
-    const tb=document.getElementById('tab-roadmap'); if(tb)tb.classList.add('on');
+    document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('on'));
+    const sb=document.getElementById('sbg-roadmap');if(sb)sb.classList.add('on');
     return;
   }
   // Sidebar highlight
