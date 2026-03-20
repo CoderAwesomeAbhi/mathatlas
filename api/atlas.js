@@ -52,7 +52,7 @@ module.exports = async function handler(req, res) {
     }
     if (!text) return res.status(502).json({ error: 'No response from Gemini' });
 
-    return res.status(200).json({ content: [{ text }] });
+    return res.status(200).json({ text, content: [{ text }] });
   } catch (err) {
     return res.status(500).json({ error: 'Network error', detail: err.message });
   }
