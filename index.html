@@ -7287,7 +7287,7 @@ async function submitFeedback(){
   res.style.display='block'; res.style.background='var(--surface2)'; res.style.color='var(--ink2)'; res.textContent='Sending…';
 
   try {
-    const resp = await fetch('https://formspree.io/f/xrbgkqgd', {
+    const resp = await fetch('https://formspree.io/f/meerdjzb', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify({ type: fbType, message: msg, email: email||'anonymous', _subject: `MathAtlas Feedback — ${fbType}` })
