@@ -58,14 +58,15 @@ If correct: {"firstErrorStep":null,"errorType":"Correct","errorCode":null,"stepF
 
 If error: {"firstErrorStep":1,"errorType":"Arithmetic Error","errorCode":"A-1","stepFeedback":[{"step":1,"status":"error","comment":"brief explanation of error"}],"mainFeedback":"2-3 sentence explanation.","hint":"1-2 sentence hint without giving away the answer.","moduleLink":"relevant-topic"}`;
 
-  // Try models in order — highest free quota first
-  const models = [
-    'gemini-1.5-flash',
-    'gemini-1.5-flash-8b',
-    'gemini-2.0-flash',
+  // Try models in order until one works
+  const MODELS = [
+    'gemini-2.5-flash-preview-04-17',
+    'gemini-2.0-flash-001',
+    'gemini-1.5-flash-001',
+    'gemini-1.5-flash-8b-001',
   ];
 
-  for (const model of models) {
+  for (const model of MODELS) {
     try {
       const geminiRes = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
@@ -83,8 +84,8 @@ If error: {"firstErrorStep":1,"errorType":"Arithmetic Error","errorCode":"A-1","
         }
       );
 
-      // Rate limited — try next model
-      if (geminiRes.status === 429) continue;
+      // Rate limited or model not found — try next
+      if (geminiRes.status === 429 || geminiRes.status === 404) continue;
 
       const rawText = await geminiRes.text();
       if (!geminiRes.ok) {
@@ -93,9 +94,9 @@ If error: {"firstErrorStep":1,"errorType":"Arithmetic Error","errorCode":"A-1","
 
       let data;
       try { data = JSON.parse(rawText); }
-      catch (e) { return res.status(502).json({ error: 'Could not parse Gemini response' }); }
+      catch (e) { continue; }
 
-      // Extract text, skipping thought parts
+      // Extract text, skipping internal thought parts
       let text = '';
       const parts = data?.candidates?.[0]?.content?.parts || [];
       for (const part of parts) {
@@ -104,7 +105,7 @@ If error: {"firstErrorStep":1,"errorType":"Arithmetic Error","errorCode":"A-1","
       if (!text && parts.length > 0) text = parts[parts.length - 1]?.text || '';
       if (!text) continue;
 
-      // Parse JSON from response
+      // Clean and parse JSON
       const clean = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
 
       try { return res.status(200).json(JSON.parse(clean)); } catch (e) {}
