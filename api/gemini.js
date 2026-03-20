@@ -52,21 +52,32 @@ ${problemDescription}
 STUDENT STEPS:
 ${steps.map((s, i) => `Step ${i + 1}: ${s}`).join('\n')}
 
-Find the FIRST step with any error. Return ONLY this JSON structure with no other text:
-{"firstErrorStep":null,"errorType":"Correct","errorCode":null,"stepFeedback":[{"step":1,"status":"ok","comment":null}],"mainFeedback":"All steps are correct.","hint":"Double check your final answer.","moduleLink":""}
+Analyze the student's work. Find the FIRST step that contains any error (arithmetic, logical, or conceptual). If all steps are correct, report no error.
 
-If there is an error, use:
-{"firstErrorStep":1,"errorType":"Arithmetic Error","errorCode":"A-1","stepFeedback":[{"step":1,"status":"error","comment":"explanation"}],"mainFeedback":"2-3 sentences.","hint":"1-2 sentence hint.","moduleLink":"topic"}`;
+Respond with a JSON object using exactly this structure:
+{
+  "firstErrorStep": null or step number (integer),
+  "errorType": "Correct" or short error type like "Arithmetic Error" / "Logic Error" / "Setup Error",
+  "errorCode": null or short code like "A-1",
+  "stepFeedback": [{"step": 1, "status": "ok" or "error" or "warn", "comment": null or brief comment}],
+  "mainFeedback": "2-3 sentence explanation of what was done right/wrong",
+  "hint": "1-2 sentence hint toward the correct approach without giving away the answer",
+  "moduleLink": "relevant topic keyword or empty string"
+}`;
 
   try {
     const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.0, maxOutputTokens: 2048 }
+          generationConfig: {
+            temperature: 0.0,
+            maxOutputTokens: 1024,
+            responseMimeType: 'application/json'
+          }
         })
       }
     );
@@ -80,38 +91,31 @@ If there is an error, use:
     try { data = JSON.parse(rawText); }
     catch (e) { return res.status(502).json({ error: 'Could not parse Gemini response' }); }
 
-    // Collect all non-thought text parts
+    // Extract text from response parts (skip thought parts)
     let text = '';
     const parts = data?.candidates?.[0]?.content?.parts || [];
     for (const part of parts) {
       if (part.text && !part.thought) text += part.text;
     }
-    // Fallback to first part if all were thoughts
     if (!text && parts.length > 0) text = parts[parts.length - 1]?.text || '';
     if (!text) return res.status(502).json({ error: 'Gemini returned no text' });
 
-    // Aggressively extract JSON
-    const clean = text
-      .replace(/```json\s*/gi, '')
-      .replace(/```\s*/g, '')
-      .trim();
+    // Clean and parse JSON
+    const clean = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
 
-    // Try direct parse first
     try {
-      const parsed = JSON.parse(clean);
-      return res.status(200).json(parsed);
-    } catch(e) {}
+      return res.status(200).json(JSON.parse(clean));
+    } catch (e) {}
 
-    // Try to find JSON object in text
     const match = clean.match(/\{[\s\S]*\}/);
     if (!match) return res.status(502).json({ error: 'No JSON in response', detail: clean.substring(0, 200) });
 
     try {
-      const parsed = JSON.parse(match[0]);
-      return res.status(200).json(parsed);
-    } catch(e) {
+      return res.status(200).json(JSON.parse(match[0]));
+    } catch (e) {
       return res.status(502).json({ error: 'Could not parse JSON', detail: match[0].substring(0, 200) });
     }
+
   } catch (err) {
     return res.status(500).json({ error: 'Network error', detail: err.message });
   }
