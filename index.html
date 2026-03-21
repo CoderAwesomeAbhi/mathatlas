@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script defer src="/_vercel/insights/script.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>MathAtlas — AMC & AIME Training Guide</title>
@@ -7006,7 +7005,7 @@ function showView(n){
     // Check if Supabase is set up
     const creds = ftwGetSbCreds();
     const notice = document.getElementById('chat-setup-notice');
-    if(notice) notice.style.display = (creds.url && creds.key) ? 'none' : '';
+    if(notice) notice.style.display = 'none'; // always connected
     return;
   }
   if(n==='probdb'){
@@ -9644,7 +9643,10 @@ function ftwSaveSupabase(){
   if(st){st.textContent='✅ Saved! Supabase connected.';st.style.color='var(--green)';}
 }
 function ftwGetSbCreds(){
-  try{return JSON.parse(localStorage.getItem('ma_ftw_sb')||'{}');}catch(e){return{};}
+  // Hardcoded credentials — no setup needed
+  const SUPABASE_URL = 'https://xngevpvhehzehcaarnoe.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhuZ2V2cHZoZWh6ZWhjYWFybm9lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTUxNDQsImV4cCI6MjA4OTQ3MTE0NH0._c92vSe4JzMPZbV6rx9lCfq84oHsyeXjCIn-fY_Id84';
+  return { url: SUPABASE_URL, key: SUPABASE_KEY };
 }
 
 // ── Supabase real-time channel setup ─────────────────────
