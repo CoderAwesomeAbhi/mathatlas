@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script defer src="/_vercel/insights/script.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>MathAtlas — AMC & AIME Training Guide</title>
@@ -5206,13 +5205,14 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
     <div class="mod-body">
       <!-- Problem text (shown for SolveFire problems with embedded text) -->
       <div id="mod-prob-text-box" style="display:none;background:var(--surface2);border:1.5px solid var(--border2);border-radius:10px;padding:16px 18px;margin-bottom:14px;font-size:.9rem;line-height:1.8;color:var(--ink)"></div>
+      <div id="mod-prob-loading" style="display:none;padding:12px 0;color:var(--ink3);font-size:.85rem">⏳ Loading problem text…</div>
       <!-- Attribution -->
       <div id="mod-attribution-sf" style="display:none;margin-bottom:10px;font-size:.75rem;color:var(--ink3);display:flex;align-items:center;gap:5px">
         🔥 Problem by <a href="https://solvefire.net" target="_blank" style="color:var(--blue);font-weight:600">SolveFire</a> — used with permission
       </div>
       <div class="prob-card-link" id="mod-aops-row">
-        <div class="pcl-text"><strong class="pcl-name" id="modProbName"></strong>Open the problem on AoPS, solve on paper, then submit your reasoning for AI analysis.</div>
-        <a id="modAops" href="#" target="_blank" class="pcl-aops">View on AoPS ↗</a>
+        <div class="pcl-text"><strong class="pcl-name" id="modProbName"></strong><span id="mod-aops-sub">Solve on paper, then submit your reasoning below for AI feedback.</span></div>
+        <a id="modAops" href="#" target="_blank" class="pcl-aops">View Solution ↗</a>
       </div>
       <div id="modTags" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px"></div>
       <!-- Hint system -->
@@ -7421,9 +7421,28 @@ function openModal(prob){
   const isSolveFire = prob.source === 'SolveFire' || prob.contest === 'solvefire';
 
   if(prob.text && textBox) {
+    // SolveFire or pre-loaded text
     textBox.style.display = '';
     textBox.innerHTML = `<div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);margin-bottom:8px">${prob.display}</div>${prob.text}`;
-    renderLatex(textBox);
+    if(typeof renderLatex==='function') renderLatex(textBox);
+  } else if(prob.link && prob.link.includes('artofproblemsolving.com') && textBox) {
+    // AMC/AIME problem — fetch text from AoPS via API
+    textBox.style.display = 'none';
+    const loadEl = document.getElementById('mod-prob-loading');
+    if(loadEl) loadEl.style.display = '';
+    fetch(`/api/problem?url=${encodeURIComponent(prob.link)}`)
+      .then(r => r.json())
+      .then(data => {
+        if(loadEl) loadEl.style.display = 'none';
+        if(data.text && textBox) {
+          // Store on prob object so it won't re-fetch if modal reopened
+          _curProb = {..._curProb, text: data.text};
+          textBox.style.display = '';
+          textBox.innerHTML = `<div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);margin-bottom:8px">${prob.display}</div>${data.text}`;
+          if(typeof renderLatex==='function') renderLatex(textBox);
+        }
+      })
+      .catch(() => { if(loadEl) loadEl.style.display = 'none'; });
   } else if(textBox) {
     textBox.style.display = 'none';
   }
@@ -7439,9 +7458,9 @@ function openModal(prob){
       const aopsLink = aopsRow.querySelector('#modAops');
       if(aopsLink) { aopsLink.textContent = 'View on SolveFire ↗'; aopsLink.href = prob.link||'https://solvefire.net/problems'; }
     } else {
-      aopsRow.querySelector('.pcl-text').innerHTML = `<strong class="pcl-name" id="modProbName">${prob.display}</strong>Open the problem on AoPS, solve on paper, then submit your reasoning for AI analysis.`;
+      aopsRow.querySelector('.pcl-text').innerHTML = `<strong class="pcl-name" id="modProbName">${prob.display}</strong><span id="mod-aops-sub">Submit your reasoning below for AI feedback.</span>`;
       const aopsLink = aopsRow.querySelector('#modAops');
-      if(aopsLink) { aopsLink.textContent = 'View on AoPS ↗'; aopsLink.href = prob.link||'#'; }
+      if(aopsLink) { aopsLink.textContent = 'View Solution ↗'; aopsLink.href = prob.link||'#'; }
     }
   }
 
