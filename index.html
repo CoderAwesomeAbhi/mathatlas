@@ -4853,7 +4853,7 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
     </div>
 
     <!-- Setup notice if no Supabase -->
-    <div id="chat-setup-notice" style="background:var(--amber-l);border:1.5px solid var(--amber);border-radius:12px;padding:16px 18px;margin-bottom:20px;font-size:.85rem;color:var(--ink2)">
+    <div id="chat-setup-notice" style="display:none" style="background:var(--amber-l);border:1.5px solid var(--amber);border-radius:12px;padding:16px 18px;margin-bottom:20px;font-size:.85rem;color:var(--ink2)">
       <strong style="color:var(--amber)">⚙️ Setup needed:</strong> Community chat requires Supabase. Enter your credentials in <button type="button" onclick="showView('ftw');ftwGoLobby('real')" style="color:var(--blue);background:none;border:none;cursor:pointer;font-weight:600;padding:0">1v1 Battle → Find Opponent</button>, then come back here.
     </div>
 
@@ -5043,7 +5043,7 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
             <label class="ftw-mode-card"><input type="radio" name="ftw-real-mode" value="aime"><div class="ftw-mode-inner"><div class="ftw-mode-icon">🥇</div><div class="ftw-mode-name">AIME</div><div class="ftw-mode-desc">Elo 1300+<br>5 min per problem</div></div></label>
           </div>
         </div>
-        <div class="ftw-section" style="background:var(--amber-l);border-color:var(--amber)">
+        <div class="ftw-section" style="background:var(--amber-l);border-color:var(--amber);display:none">
           <div style="font-size:.85rem;color:var(--amber);font-weight:600">⚙️ Setup Required</div>
           <div style="font-size:.82rem;color:var(--ink2);margin-top:6px;line-height:1.6">
             Real multiplayer requires a Supabase project. Enter your Supabase URL and anon key below to enable live matchmaking.
