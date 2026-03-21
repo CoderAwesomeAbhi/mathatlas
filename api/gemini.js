@@ -26,45 +26,40 @@ If correct: {"firstErrorStep":null,"errorType":"Correct","errorCode":null,"stepF
 
 If error: {"firstErrorStep":1,"errorType":"Arithmetic Error","errorCode":"A-1","stepFeedback":[{"step":1,"status":"error","comment":"what is wrong"}],"mainFeedback":"2-3 sentences about the error.","hint":"1-2 sentence hint.","moduleLink":"topic"}`;
 
-  // Try current flagship first, then fallback — both are stable long-term aliases
-  const MODELS = ['gemini-2.5-flash', 'gemini-2.0-flash'];
-
-  for (const model of MODELS) {
-    try {
-      const geminiRes = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: { temperature: 0.0, maxOutputTokens: 1024 }
-          })
-        }
-      );
-
-      if (geminiRes.status === 429 || geminiRes.status === 404) continue;
-
-      const data = await geminiRes.json();
-
-      let text = '';
-      const parts = data?.candidates?.[0]?.content?.parts || [];
-      for (const part of parts) {
-        if (part.text && !part.thought) text += part.text;
+  try {
+    const geminiRes = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.0, maxOutputTokens: 1024 }
+        })
       }
-      if (!text) continue;
+    );
 
-      const clean = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+    const data = await geminiRes.json();
 
-      try { return res.status(200).json(JSON.parse(clean)); } catch (e) {}
+    let text = '';
+    const parts = data?.candidates?.[0]?.content?.parts || [];
+    for (const part of parts) {
+      if (part.text && !part.thought) text += part.text;
+    }
+    if (!text) return res.status(502).json({ error: 'No response from Gemini', raw: JSON.stringify(data).substring(0, 300) });
 
-      const match = clean.match(/\{[\s\S]*\}/);
-      if (match) {
-        try { return res.status(200).json(JSON.parse(match[0])); } catch (e) {}
-      }
+    const clean = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
 
-    } catch (err) { continue; }
+    try { return res.status(200).json(JSON.parse(clean)); } catch (e) {}
+
+    const match = clean.match(/\{[\s\S]*\}/);
+    if (match) {
+      try { return res.status(200).json(JSON.parse(match[0])); } catch (e) {}
+    }
+
+    return res.status(502).json({ error: 'Bad JSON', detail: clean.substring(0, 300) });
+
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
   }
-
-  return res.status(503).json({ error: 'AI temporarily unavailable. Please try again.' });
 };
