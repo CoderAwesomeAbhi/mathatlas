@@ -32,12 +32,6 @@
   sf.onload = function() { if(typeof MASTER_PROBS !== 'undefined') MASTER_PROBS = null; };
   sf.onerror = function(){ console.warn('solvefire-problems.js not found'); };
   document.head.appendChild(sf);
-  // Load SolveFire problems
-  var sf = document.createElement('script');
-  sf.src = './solvefire-problems.js';
-  sf.async = true;
-  sf.onload = function() { MASTER_PROBS = null; }; // force re-merge
-  document.head.appendChild(sf);
 })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3668,7 +3662,7 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
       </div>
     </div>
   </div>
-  <div style="font-size:.75rem;color:var(--ink3);padding-top:20px;border-top:1px solid var(--border)">© 2026 MathAtlas · Built with ❤️ for the math community · Free forever</div>
+  <div style="font-size:.75rem;color:var(--ink3);padding-top:20px;border-top:1px solid var(--border)">© 2025 MathAtlas · Built with ❤️ for the math community · Free forever</div>
 </div>
 
 <!-- ══════ PROGRESS VIEW ══════ -->
@@ -3772,9 +3766,9 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
         <span id="pc-dom" class="mv-chip" style="font-size:.625rem"></span>
       </div>
       <div style="padding:18px">
-        <div class="ib ib-blue" style="margin-bottom:14px"><span class="ib-icon">📌</span><div>Open the problem on AoPS to read it, solve it on paper, then submit your answer here.</div></div>
-        <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
-          <a id="pc-link" href="#" target="_blank" class="btn btn-p btn-sm">Open on AoPS ↗</a>
+        <div id="pc-prob-text" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:14px;font-size:.93rem;line-height:1.75;color:var(--ink)"></div>
+        <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
+          <a id="pc-link" href="#" target="_blank" class="btn btn-g btn-sm" style="font-size:.8rem">View Solution ↗</a>
           <button type="button" onclick="pracSkip()" class="btn btn-g btn-sm">Skip →</button>
         </div>
         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
@@ -3999,23 +3993,35 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
     <h2 style="font-size:1.35rem;font-weight:700;margin:0 0 4px">📖 Concept Pages</h2>
     <p style="color:var(--ink2);margin:0;font-size:.9rem">Definition · Derivation · Examples · Common mistakes — one page per concept.</p>
   </div>
-  <div style="padding:0 32px 20px;display:flex;gap:10px;flex-wrap:wrap">
-    <input id="concept-search" type="text" placeholder="Search: quadratic, binomial, modular…" style="flex:1;min-width:200px;padding:10px 14px;border:1.5px solid var(--border2);border-radius:8px;font-size:.9rem;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif" oninput="filterConcepts()">
-    <select id="concept-domain" onchange="filterConcepts()" style="padding:10px 12px;border:1.5px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:.9rem">
-      <option value="">All domains</option>
-      <option value="Algebra">Algebra</option>
-      <option value="Geometry">Geometry</option>
-      <option value="Number Theory">Number Theory</option>
-      <option value="Counting">Counting</option>
-      <option value="Probability">Probability</option>
-    </select>
+  <!-- Tab bar -->
+  <div style="padding:0 32px 16px;display:flex;gap:8px;border-bottom:1px solid var(--border);margin-bottom:4px">
+    <button type="button" id="ctab-cards" onclick="switchConceptTab('cards')" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--blue);background:var(--blue);color:#fff;font-size:.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">📖 Concept Cards</button>
+    <button type="button" id="ctab-map" onclick="switchConceptTab('map')" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--border2);background:none;color:var(--ink2);font-size:.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">🗺️ Curriculum Map</button>
   </div>
-  <div style="padding:0 32px 32px">
+
+  <!-- Concept Cards tab -->
+  <div id="ctab-cards-content" style="padding:0 32px 20px">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
+      <input id="concept-search" type="text" placeholder="Search: quadratic, binomial, modular…" style="flex:1;min-width:200px;padding:10px 14px;border:1.5px solid var(--border2);border-radius:8px;font-size:.9rem;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif" oninput="filterConcepts()">
+      <select id="concept-domain" onchange="filterConcepts()" style="padding:10px 12px;border:1.5px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:.9rem">
+        <option value="">All domains</option>
+        <option value="Algebra">Algebra</option>
+        <option value="Geometry">Geometry</option>
+        <option value="Number Theory">Number Theory</option>
+        <option value="Counting">Counting</option>
+        <option value="Probability">Probability</option>
+      </select>
+    </div>
     <div id="concept-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px"></div>
     <div id="concept-detail" style="display:none;background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:28px 32px">
       <button type="button" onclick="closeConcept()" style="background:none;border:none;color:var(--blue);cursor:pointer;font-size:.875rem;margin-bottom:18px;padding:0;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:5px;font-weight:600">← All concepts</button>
       <div id="concept-detail-body"></div>
     </div>
+  </div>
+
+  <!-- Curriculum Map tab -->
+  <div id="ctab-map-content" style="display:none;padding:0 32px 32px;max-width:900px">
+    <div id="curriculum-map-render"></div>
   </div>
 </div>
 
@@ -4216,12 +4222,12 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
     <div class="rm2-card done"><div class="rm2-badge">✓ Live</div><h3>50-Question Skill Diagnostic</h3><p>Real AMC problems across all 5 domains. Get routed to the right starting module based on your results.</p></div>
     <div class="rm2-card done"><div class="rm2-badge">✓ Live</div><h3>Infinite Practice Mode</h3><p>Adaptive practice with domain filters, difficulty levels, Elo rating, and session stats.</p></div>
     <div class="rm2-card done"><div class="rm2-badge">✓ Live</div><h3>Interactive Math Tools</h3><p>Graph visualizer, equation solver, interactive geometry, number theory tools — all in-browser.</p></div>
-    <div class="rm2-card done"><div class="rm2-badge">✓ Live</div><h3>Concept Pages</h3><p>12 core concepts with definitions, derivations, worked examples, and common mistakes.</p></div>
+    <div class="rm2-card done"><div class="rm2-badge">✓ Live</div><h3>Concept Pages + Curriculum Map</h3><p>36+ concept pages covering every major AMC/AIME topic. Full 8-tier curriculum map from Mid AMC 8 through Advanced AIME with 328 topics organized by level.</p></div>
     <div class="rm2-card done"><div class="rm2-badge">✓ Live</div><h3>Math Playground</h3><p>Prime sieve, fractal generator, probability simulator, Pascal's triangle.</p></div>
     <div class="rm2-card done"><div class="rm2-badge">✓ Live</div><h3>Contest Simulator</h3><p>Full AMC 10/12 and AIME practice exams with official scoring (+6/+1.5/+0) and timer.</p></div>
 
     <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);margin:24px 0 10px">🔨 In Progress</div>
-    <div class="rm2-card in-progress"><div class="rm2-badge">In Progress</div><h3>Full Problem Database (5,500+)</h3><p>Expanding from 869 to all AMC/AIME problems from 2000 onwards with topic tags and difficulty ratings.</p></div>
+    <div class="rm2-card in-progress"><div class="rm2-badge">In Progress</div><h3>Full Problem Database (6,446 problems)</h3><p>All AMC 8/10/12 and AIME problems with topic tags, difficulty Elo ratings, and full problem text loaded inline — no AoPS redirect needed.</p></div>
     <div class="rm2-card in-progress"><div class="rm2-badge">In Progress</div><h3>Google Sign-In & Cloud Sync</h3><p>OAuth integration to sync your rating, streaks, and progress across all devices.</p></div>
     <div class="rm2-card in-progress"><div class="rm2-badge">In Progress</div><h3>Solve Mode</h3><p>Timed contest-style mode with solutions hidden, hints gated, and a 75-minute countdown.</p></div>
 
@@ -5205,7 +5211,6 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
     <div class="mod-body">
       <!-- Problem text (shown for SolveFire problems with embedded text) -->
       <div id="mod-prob-text-box" style="display:none;background:var(--surface2);border:1.5px solid var(--border2);border-radius:10px;padding:16px 18px;margin-bottom:14px;font-size:.9rem;line-height:1.8;color:var(--ink)"></div>
-      <div id="mod-prob-loading" style="display:none;padding:12px 0;color:var(--ink3);font-size:.85rem">⏳ Loading problem text…</div>
       <!-- Attribution -->
       <div id="mod-attribution-sf" style="display:none;margin-bottom:10px;font-size:.75rem;color:var(--ink3);display:flex;align-items:center;gap:5px">
         🔥 Problem by <a href="https://solvefire.net" target="_blank" style="color:var(--blue);font-weight:600">SolveFire</a> — used with permission
@@ -5218,9 +5223,7 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
       <!-- Hint system -->
       <div id="hint-section" style="margin-bottom:12px">
         <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-          <button type="button" class="hint-btn" id="hint-btn-1" onclick="showHint(1)">💡 Hint 1</button>
-          <button type="button" class="hint-btn" id="hint-btn-2" onclick="showHint(2)" style="opacity:.45">💡 Hint 2</button>
-          <button type="button" class="hint-btn" id="hint-btn-3" onclick="showHint(3)" style="opacity:.45">💡 Hint 3</button>
+          <button type="button" class="hint-btn" id="hint-btn-1" onclick="showHint()">💡 Hint</button>
           <a id="hint-aops-link" href="#" target="_blank" rel="noopener" class="hint-btn" style="text-decoration:none;margin-left:auto">📖 Full Solution ↗</a>
         </div>
         <div id="hint-box" style="display:none;margin-top:10px;padding:12px 16px;background:var(--amber-l);border:1.5px solid var(--amber);border-radius:9px;font-size:.875rem;color:var(--ink);line-height:1.6"></div>
@@ -5565,6 +5568,9 @@ function loadNextPrac(){
   const db=document.getElementById('pc-dom');
   if(db){ db.textContent=pracCur.domain; db.style.background=getDomBg(pracCur.domain); db.style.color=getDomColor(pracCur.domain); }
   document.getElementById('pc-link').href=pracCur.link;
+  // Load problem text
+  const ptEl=document.getElementById('pc-prob-text');
+  if(ptEl) renderProbTextInto(ptEl, pracCur);
   renderPracQueue();
 }
 
@@ -5707,7 +5713,7 @@ function loadDQ(){
         <span style="font-size:.78rem;font-weight:700;color:var(--ink2);letter-spacing:.04em;text-transform:uppercase">${contestLabel}</span>
         <a href="${q.link}" target="_blank" rel="noopener" style="font-size:.8rem;color:var(--blue);font-weight:600;text-decoration:none;display:flex;align-items:center;gap:4px">Read problem ↗</a>
       </div>
-      <p style="font-size:.92rem;color:var(--ink2);margin:0;line-height:1.5">Open the problem on AoPS, solve it, then select your answer below.</p>
+      <div id="dq-prob-text" style="font-size:.92rem;color:var(--ink);margin:0;line-height:1.75"><span style="color:var(--ink3);font-size:.85rem">⏳ Loading problem…</span></div>
     </div>
     <div style="display:flex;flex-direction:column;gap:8px" id="dq-choices">
       ${q.choices.map(c=>`<button type="button" onclick="dqPick('${c}')" class="dq-choice" data-val="${c}" style="display:flex;align-items:center;gap:12px;padding:12px 16px;border:1.5px solid var(--border2);border-radius:9px;background:var(--surface);cursor:pointer;text-align:left;transition:all .13s;width:100%;font-family:'DM Sans',sans-serif">
@@ -5721,6 +5727,9 @@ function loadDQ(){
       <button type="button" id="dq-next" onclick="dqNext()" style="display:none;padding:9px 22px;background:var(--blue);color:#fff;border:none;border-radius:7px;font-size:.9rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">${dqi+1<DQS.length?'Next Question →':'See Results →'}</button>
     </div>`;
 
+  // Load problem text
+  const dqPt = document.getElementById('dq-prob-text');
+  if(dqPt) renderProbTextInto(dqPt, {display: q.display||`${q.contest} ${q.year} #${q.num}`, year:q.year, num:q.num, contest:q.contest, link:q.link, id:q.id||`${q.year}-${q.contest}-${q.num}`});
   // Save state
   if(S.diagSave){S.diagSave.qi=dqi;}else{S.diagSave={qi:dqi,scores:dScores,answers:dAnswers};}
   save();
@@ -6853,6 +6862,231 @@ const CONCEPTS = [
   },
 ];
 
+// ════════════════════════════════════════════════════════
+// CURRICULUM MAP — 8-tier topic hierarchy from USAMO.guide
+// ════════════════════════════════════════════════════════
+const CURRICULUM = [
+  {
+    id:'mid-amc8', label:'Mid AMC 8', sub:'Problems 11–20',
+    elo:[500,750], color:'#16a34a', badge:'AMC 8',
+    sections:[
+      {title:'Arithmetic & Number Sense', topics:['Order of operations (PEMDAS)','Divisibility rules (2–11)','Prime factorization','GCD & LCM','Fraction arithmetic','Decimal-fraction-percent conversions','Ratios and proportions','Unit rate and unit conversion','Estimation and rounding']},
+      {title:'Basic Algebra', topics:['Solving one-variable linear equations','Writing equations from word problems','Substitution and evaluation','Distributive property & combining like terms','Simple inequalities','Consecutive integer problems','Age and mixture word problems']},
+      {title:'Geometry Foundations', topics:['Angle relationships (complementary, supplementary, vertical)','Triangle angle sum & exterior angle theorem','Area: triangles, rectangles, parallelograms, trapezoids','Circle area and circumference','Pythagorean theorem (3-4-5, 5-12-13)','Coordinate geometry — distance','Symmetry and reflection']},
+      {title:'Counting & Probability Basics', topics:['Fundamental counting principle','Permutations (small)','Combinations','Tree diagrams','Simple probability','Probability of complement','Expected value — basic']},
+      {title:'Logical Reasoning', topics:['Working backwards','Guess-and-check','Pigeonhole principle — elementary','Pattern recognition (arithmetic/geometric sequences)','Venn diagrams — inclusion-exclusion (2 sets)']},
+    ]
+  },
+  {
+    id:'adv-amc8', label:'Advanced AMC 8', sub:'Problems 21–25',
+    elo:[750,900], color:'#65a30d', badge:'AMC 8',
+    sections:[
+      {title:'Number Theory', topics:['Number of divisors formula d(n)=(a+1)(b+1)…','Sum of divisors formula','Modular arithmetic — basic congruences','Last digit / units digit patterns','Palindromes and digit manipulation','Two-digit representations (10a+b)']},
+      {title:'Algebraic Manipulation', topics:['Difference of squares: a²–b²=(a–b)(a+b)','Simon\'s Favorite Factoring Trick (SFFT)','Completing the square','Vieta\'s formulas — sum & product of roots','Systems of two linear equations']},
+      {title:'Geometry — Intermediate', topics:['Similar triangles (AA, SAS, SSS)','Angle bisector theorem','Midsegment theorem','Area ratios from similar figures','Composite areas — shaded region problems','3D geometry: surface area and volume (prisms, pyramids, cylinders, cones)']},
+      {title:'Combinatorics — Intermediate', topics:['Stars and bars','Counting with restrictions','Complementary counting','Casework','Circular arrangements','Multi-step probability (dependent events)','Geometric probability']},
+      {title:'Strategic Techniques', topics:['Invariants','Coloring / parity arguments','Symmetry exploitation','Answer choices elimination','Extremal principle']},
+    ]
+  },
+  {
+    id:'mid-amc10', label:'Mid AMC 10', sub:'Problems 11–20',
+    elo:[900,1100], color:'#2563eb', badge:'AMC 10',
+    sections:[
+      {title:'Algebra — Intermediate', topics:['Quadratic equations — factoring, quadratic formula, discriminant','Vieta\'s formulas (sum, product, sum of squares of roots)','Polynomial long division','Rational expressions','Absolute value equations and inequalities','Logarithms — product/quotient/power rules','Exponential equations','Systems of equations','Arithmetic & geometric sequences — nth term, sum formulas']},
+      {title:'Algebraic Manipulation', topics:['Simon\'s Favorite Factoring Trick','Sophie Germain Identity: a⁴+4b⁴','Sum/difference of cubes','Newton\'s identities (power sums)']},
+      {title:'Number Theory — Intermediate', topics:['Modular arithmetic — exponentiation','Fermat\'s Little Theorem','Chinese Remainder Theorem — basic','Euler\'s totient function','Base conversion','Digit sum properties','Legendre\'s formula — power of prime in n!']},
+      {title:'Geometry — Intermediate', topics:['Law of Cosines','Law of Sines','Area = ½ab sin C','Heron\'s formula','Circumradius R = abc/(4K)','Inradius r = K/s','Power of a Point','Ptolemy\'s theorem','Stewart\'s theorem','Inscribed angle theorem','Coordinate geometry — circles, slopes']},
+      {title:'Combinatorics — Intermediate', topics:['Binomial theorem','Pascal\'s triangle identities','Inclusion-exclusion — three sets','Derangements','Recurrence relations','Pigeonhole principle — advanced','Conditional probability, Bayes\' theorem']},
+    ]
+  },
+  {
+    id:'adv-amc10', label:'Advanced AMC 10', sub:'Problems 21–25',
+    elo:[1100,1300], color:'#7c3aed', badge:'AMC 10',
+    sections:[
+      {title:'Advanced Algebra', topics:['Polynomial roots — conjugate root theorem','Rational root theorem','Partial fractions','Telescoping products and sums','AM-GM, Cauchy-Schwarz (intro)','Piecewise functions and floor/ceiling functions']},
+      {title:'Number Theory — Advanced', topics:['Order of an element mod n','Integer solutions ax+by=c (Bezout/Euclidean)','Chicken McNugget theorem (Frobenius)']},
+      {title:'Geometry — Advanced', topics:['Ceva\'s theorem','Menelaus\' theorem','Homothety','Spiral similarity','Nine-point circle','Euler line','Mass point geometry','Vectors in geometry']},
+      {title:'Combinatorics — Advanced', topics:['Generating functions — basic','Burnside\'s lemma (intro)','Double counting','Expected value — linearity of expectation']},
+    ]
+  },
+  {
+    id:'adv-amc12', label:'Advanced AMC 12', sub:'Problems 21–25',
+    elo:[1300,1500], color:'#dc2626', badge:'AMC 12',
+    sections:[
+      {title:'Complex Numbers', topics:['Rectangular & polar form z=a+bi=re^(iθ)','De Moivre\'s theorem','Roots of unity — nth roots on unit circle','Conjugate properties: |z|²=z·z̄','Root of unity filter','Complex numbers in geometry (rotation)']},
+      {title:'Advanced Algebra', topics:['Lagrange interpolation','Generating functions — intermediate','AM-GM, Cauchy-Schwarz, Power Mean inequalities']},
+      {title:'Advanced Number Theory', topics:['Euler\'s theorem: a^φ(n)≡1 (mod n)','CRT — full version','Multiplicative functions: φ, σ, τ, μ (Möbius)','Sum of totients: Σφ(d)=n']},
+      {title:'Advanced Combinatorics', topics:['Exponential generating functions (EGF)','Stirling numbers','Partition theory','Burnside/Polya counting (full)','Catalan numbers','Ballot problem & reflection principle','Graph theory — chromatic polynomials']},
+      {title:'Advanced Geometry', topics:['Inversive geometry','Trigonometric identities — product-to-sum','Isogonal conjugates','Symmedians','Brocard points','Miquel point theorem','Trigonometric cevians']},
+    ]
+  },
+  {
+    id:'early-aime', label:'Early AIME', sub:'Problems 1–5',
+    elo:[1300,1500], color:'#ea580c', badge:'AIME',
+    sections:[
+      {title:'Computational Number Theory', topics:['Multi-step modular arithmetic','CRT — last digits','Fermat\'s Little Theorem — large powers mod p','Finding last three digits (mod 1000)','Legendre\'s formula','Sum of squares']},
+      {title:'Computational Algebra', topics:['Polynomial evaluation & remainder theorem','Vieta\'s with 3+ variables','Symmetric polynomials & Newton\'s identities','Telescoping sums and products','Floor function equations','Digit algebra']},
+      {title:'Counting Techniques', topics:['Stars and bars with restrictions','Inclusion-exclusion — four or more sets','Recurrence relations — setup and solve','Generating functions — extracting coefficients','Bijective counting','Lattice path counting with obstacles','Multinomial coefficients']},
+      {title:'Geometry — AIME Level', topics:['Trigonometric computations — exact values','Coordinate bashing','Shoelace formula','Radical axis','Triangle centers — centroid, incenter, circumcenter, orthocenter','3D geometry — cross-sections, frustums','Vectors — dot product']},
+      {title:'Sequences & Series', topics:['Telescoping series','Partial fraction decomposition for series','Fibonacci & Binet\'s formula']},
+    ]
+  },
+  {
+    id:'mid-aime', label:'Mid AIME', sub:'Problems 6–10',
+    elo:[1500,1700], color:'#c2410c', badge:'AIME',
+    sections:[
+      {title:'Advanced Number Theory', topics:['Lifting the Exponent Lemma (LTE)','p-adic valuation','Quadratic residues — Legendre symbol','Primitive roots','Wilson\'s theorem: (p–1)!≡–1 (mod p)','Gaussian integers','Pell\'s equation x²–Dy²=1']},
+      {title:'Advanced Algebra', topics:['Functional equations — Cauchy-type','Multi-variable optimization','Cauchy-Schwarz — Engel (Titu) form','Power Mean inequality','Chebyshev\'s inequality','Rearrangement inequality','SOS (sum of squares) decomposition']},
+      {title:'Advanced Combinatorics', topics:['Stirling numbers of the second kind','Bell numbers','Catalan numbers — Dyck paths, triangulations','Burnside\'s lemma — necklace counting','Möbius inversion']},
+      {title:'Advanced Geometry', topics:['Inversive geometry — circles to lines','Projective geometry — cross-ratio','Isogonal conjugates & symmedians','Brocard angle','Feuerbach\'s theorem','Directed angles (mod 180°)','Radical axes and coaxial circles','Barycentric coordinates — basics']},
+      {title:'Probability & Expected Value', topics:['Bayes\' theorem — multi-step','Markov chains — basic','Expected value — linearity on AIME','Geometric distribution','Gambler\'s ruin','Recursive probability equations']},
+    ]
+  },
+  {
+    id:'adv-aime', label:'Advanced AIME', sub:'Problems 11–15',
+    elo:[1700,2500], color:'#9f1239', badge:'AIME',
+    sections:[
+      {title:'Olympiad Algebra', topics:['Functional equations — bijective, involutive','Schur\'s inequality','Muirhead\'s inequality — majorization','SOS and positivity arguments','Jensen\'s inequality — convexity','Mixing variables technique','Cyclotomic polynomials']},
+      {title:'Olympiad Number Theory', topics:['Vieta jumping','Infinite descent (Fermat\'s method)','Pell equations — continued fractions','Gaussian integers — prime factorization','Minkowski\'s theorem','Möbius function & Möbius inversion','Squares mod p']},
+      {title:'Olympiad Combinatorics', topics:['Hall\'s marriage theorem','Dilworth\'s theorem','Sperner\'s theorem','Turán\'s theorem','Ramsey theory — R(r,s) bounds','Probabilistic method','Max-flow min-cut','Cycle lemma','Weighted Catalan numbers']},
+      {title:'Olympiad Geometry', topics:['Barycentric coordinates — full toolkit','Trigonometric form of Ptolemy','Inversion — hard configurations','Complex number geometry','Pascal\'s theorem','Brianchon\'s theorem','Pappus\' theorem','Harmonic bundles and poles/polars','Mixtilinear incircles']},
+      {title:'Advanced Techniques', topics:['Wishful thinking / working backwards','Invariant hunting — monovariant design','Extremal principle','Construction problems — existence','Generating function proofs','Induction — strong, structural, two-variable']},
+    ]
+  },
+];
+
+// ─── Add new concept cards for topics from the curriculum ────────────────────
+const CURRICULUM_CONCEPTS = [
+  {id:'fermat-little',domain:'Number Theory',title:"Fermat\'s Little Theorem",icon:'🔮',summary:'For prime p and gcd(a,p)=1: aᵖ⁻¹ ≡ 1 (mod p). Essential for computing large powers.',formula:'a^{p-1} \\equiv 1 \\pmod{p}',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Fermat's Little Theorem</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:16px;text-align:center;font-size:1.1rem;margin-bottom:16px">If p is prime and gcd(a,p)=1: a<sup>p−1</sup> ≡ 1 (mod p)</div>
+    <h4 style="color:var(--ink2);font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;margin:16px 0 8px">Key Uses</h4>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Large powers:</strong> 2¹⁰⁰ mod 7 → 2⁶≡1, so 2¹⁰⁰=2⁹⁶·2⁴≡1·16≡2 (mod 7)</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Corollary:</strong> aᵖ ≡ a (mod p) for ANY integer a (including multiples of p)</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Euler generalization:</strong> a^φ(n) ≡ 1 (mod n) for gcd(a,n)=1</div>`},
+  {id:'sfft',domain:'Algebra',title:"Simon\'s Favorite Factoring Trick",icon:'⚡',summary:'Factor xy+ax+by+c by adding a constant to both sides. Classic AMC technique.',formula:'xy+ax+by+ab=(x+b)(y+a)',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Simon's Favorite Factoring Trick (SFFT)</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:16px;text-align:center;font-size:1rem;margin-bottom:16px">xy + ax + by = c &nbsp;→&nbsp; (x+b)(y+a) = c + ab</div>
+    <h4 style="color:var(--ink2);font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;margin:16px 0 8px">Method</h4>
+    <p style="color:var(--ink2);font-size:.9rem;line-height:1.7">Add ab to both sides so the left side factors. Then find integer factor pairs of c+ab.</p>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Example:</strong> Find positive integer solutions to xy+3x+2y=52.<br>Add 6: (x+2)(y+3)=58=1×58=2×29. So (x,y)=(56,0) invalid, (x,y)=(27,0) invalid, (x+2,y+3)=(2,29)→(0,26) invalid, (29,2)→(27,-1) invalid. Try: 58=1·58→x=−1 no. 2·29→x=0 no. So check all. Answer: limited solutions.</div>
+    <h4 style="color:var(--ink2);font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;margin:16px 0 8px">AMC Tip</h4>
+    <p style="color:var(--ink2);font-size:.9rem">When you see xy + (linear terms) = constant, always try SFFT first.</p>`},
+  {id:'amgm',domain:'Algebra',title:'AM-GM Inequality',icon:'⚖️',summary:'Arithmetic mean ≥ geometric mean. Powerful for optimization on AMC/AIME.',formula:'\\frac{a_1+\\cdots+a_n}{n} \\geq \\sqrt[n]{a_1\\cdots a_n}',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">AM-GM Inequality</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:16px;text-align:center;font-size:1rem;margin-bottom:16px">(a₁+a₂+⋯+aₙ)/n ≥ (a₁a₂⋯aₙ)^(1/n) &nbsp;&nbsp; equality iff a₁=a₂=⋯=aₙ</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>2-variable form:</strong> (a+b)/2 ≥ √(ab) → a+b ≥ 2√(ab)</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Titu's Lemma:</strong> a²/x + b²/y + c²/z ≥ (a+b+c)²/(x+y+z) — great for AIME</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Example:</strong> Minimize x + 1/x for x>0. By AM-GM: x + 1/x ≥ 2√(x·1/x) = 2. Min is 2 at x=1.</div>`},
+  {id:'lte',domain:'Number Theory',title:'Lifting the Exponent (LTE)',icon:'🚀',summary:'Find the exact power of prime p dividing aⁿ±bⁿ. Key AIME tool.',formula:'v_p(a^n-b^n) = v_p(a-b) + v_p(n)',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Lifting the Exponent Lemma (LTE)</h3>
+    <p style="color:var(--ink2);font-size:.9rem;line-height:1.7;margin-bottom:12px">Let vₚ(n) = the exponent of prime p in n. For odd prime p with p|a−b but p∤a and p∤b:</p>
+    <div style="background:var(--blue-l);border-radius:10px;padding:14px;font-size:.95rem;margin-bottom:12px"><strong>vₚ(aⁿ−bⁿ) = vₚ(a−b) + vₚ(n)</strong></div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>For p=2, aⁿ−bⁿ:</strong> v₂(aⁿ−bⁿ) = v₂(a−b) + v₂(a+b) + v₂(n) − 1 (when 2|a−b)</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Example:</strong> v₃(4¹⁰⁰−1¹⁰⁰). p=3, a=4, b=1, a−b=3. v₃(3)=1, v₃(100)=0. So v₃(4¹⁰⁰−1)=1.</div>`},
+  {id:'pota',domain:'Geometry',title:'Power of a Point',icon:'⭕',summary:'For a point P and circle, PA·PB = PC·PD for any two chords/secants through P.',formula:'PA \\cdot PB = PC \\cdot PD',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Power of a Point</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:16px;margin-bottom:16px;font-size:.9rem">
+      <strong>Inside circle:</strong> PA · PB = PC · PD (intersecting chords)<br>
+      <strong>Outside circle:</strong> PA · PB = PC · PD (secant-secant)<br>
+      <strong>Tangent:</strong> PT² = PA · PB (tangent-secant)
+    </div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Example:</strong> Chord AB and CD intersect at P. PA=3, PB=8, PC=4. Find PD. → 3·8=4·PD → PD=6.</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Power value:</strong> For center O, radius r: pow(P) = PO²−r² (negative inside circle)</div>`},
+  {id:'ceva',domain:'Geometry',title:"Ceva\'s Theorem",icon:'📐',summary:'Concurrent cevians AD, BE, CF in triangle ABC iff (AF/FB)·(BD/DC)·(CE/EA)=1.',formula:'\\frac{AF}{FB}\\cdot\\frac{BD}{DC}\\cdot\\frac{CE}{EA}=1',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Ceva's Theorem</h3>
+    <p style="color:var(--ink2);font-size:.9rem;line-height:1.7">In triangle ABC, cevians AD, BE, CF (where D on BC, E on CA, F on AB) are concurrent if and only if:</p>
+    <div style="background:var(--blue-l);border-radius:10px;padding:14px;text-align:center;font-size:1.1rem;margin-bottom:14px">(AF/FB) · (BD/DC) · (CE/EA) = 1</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Special cases:</strong> Medians (all ratios = 1), angle bisectors (ratios from angle bisector theorem), altitudes</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Trig form:</strong> sin(∠BAD)/sin(∠CAD) · sin(∠CBE)/sin(∠ABE) · sin(∠ACF)/sin(∠BCF) = 1</div>`},
+  {id:'burnside',domain:'Counting',title:"Burnside\'s Lemma",icon:'🔄',summary:'Count distinct objects under symmetry: |X/G| = (1/|G|)Σ|Fix(g)|.',formula:'|X/G| = \\frac{1}{|G|}\\sum_{g\\in G}|X^g|',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Burnside's Lemma</h3>
+    <p style="color:var(--ink2);font-size:.9rem;line-height:1.7">To count distinct colorings under a group G of symmetries: average the number of colorings fixed by each symmetry.</p>
+    <div style="background:var(--blue-l);border-radius:10px;padding:14px;text-align:center;font-size:.95rem;margin-bottom:14px">Distinct objects = (1/|G|) × Σ (colorings fixed by each g ∈ G)</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Example:</strong> Color a 4-bead necklace with 3 colors. Rotations: identity fixes 3⁴=81, rot90° fixes 3¹=3, rot180° fixes 3²=9, rot270° fixes 3. Total = (81+3+9+3)/4 = 24 distinct necklaces.</div>`},
+  {id:'catalan',domain:'Counting',title:'Catalan Numbers',icon:'🔢',summary:'Cₙ = C(2n,n)/(n+1). Counts Dyck paths, ballot sequences, triangulations.',formula:'C_n = \\frac{1}{n+1}\\binom{2n}{n}',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Catalan Numbers</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:14px;text-align:center;font-size:1.1rem;margin-bottom:14px">Cₙ = C(2n,n)/(n+1) = 1, 1, 2, 5, 14, 42, 132, 429, …</div>
+    <h4 style="color:var(--ink2);font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;margin:12px 0 8px">What Cₙ counts</h4>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:6px;font-size:.9rem">• Dyck paths: paths from (0,0) to (2n,0) never going below x-axis</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:6px;font-size:.9rem">• Ballot sequences: strings of n X's and n Y's where #Y ≥ #X at every prefix</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:6px;font-size:.9rem">• Triangulations of a convex (n+2)-gon</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem">• Ways to fully parenthesize n+1 factors</div>`},
+  {id:'elt',domain:'Algebra',title:'Euler Line & Triangle Centers',icon:'🔺',summary:'Circumcenter O, centroid G, orthocenter H are collinear. OG:GH = 1:2.',formula:'O, G, H \\text{ collinear, } OG:GH = 1:2',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Euler Line & Triangle Centers</h3>
+    <div style="background:var(--blue-l);border-radius:10px;padding:14px;margin-bottom:14px;font-size:.9rem">
+      <strong>Circumcenter O:</strong> Equidistant from all 3 vertices (R = circumradius)<br>
+      <strong>Centroid G:</strong> Intersection of medians. G = (A+B+C)/3<br>
+      <strong>Orthocenter H:</strong> Intersection of altitudes<br>
+      <strong>Incenter I:</strong> Intersection of angle bisectors (r = inradius)
+    </div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Euler line:</strong> O, G, H are collinear with OG:GH = 1:2, so OH = 3·OG</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Nine-point circle:</strong> Passes through midpoints of sides, feet of altitudes, midpoints of AH, BH, CH. Radius = R/2.</div>`},
+  {id:'generating-fn',domain:'Counting',title:'Generating Functions',icon:'📊',summary:'Encode sequences as power series. Multiply generating functions to combine counts.',formula:'f(x) = \\sum_{n=0}^{\\infty} a_n x^n',body:`
+    <h3 style="font-size:1.3rem;margin:0 0 12px">Generating Functions</h3>
+    <p style="color:var(--ink2);font-size:.9rem;line-height:1.7">A generating function f(x) = Σaₙxⁿ encodes the sequence a₀, a₁, a₂, … The coefficient of xⁿ gives the count for n.</p>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>1/(1−x) = 1+x+x²+…</strong> → aₙ=1 for all n (choosing any number of identical items)</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;font-size:.9rem"><strong>Product rule:</strong> [coeff of xⁿ in f(x)g(x)] = Σₖ aₖbₙ₋ₖ — count ways to split n into two parts</div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:.9rem"><strong>Example:</strong> Ways to make change for n cents with 1¢ and 5¢: [xⁿ] in 1/((1−x)(1−x⁵))</div>`},
+];
+
+// Merge curriculum concepts into CONCEPTS array
+CURRICULUM_CONCEPTS.forEach(c => { if(!CONCEPTS.find(x=>x.id===c.id)) CONCEPTS.push(c); });
+
+
+
+
+function switchConceptTab(tab) {
+  const cards = document.getElementById('ctab-cards-content');
+  const map   = document.getElementById('ctab-map-content');
+  const btnCards = document.getElementById('ctab-cards');
+  const btnMap   = document.getElementById('ctab-map');
+  if (tab === 'cards') {
+    if(cards) cards.style.display = '';
+    if(map)   map.style.display   = 'none';
+    if(btnCards){ btnCards.style.background='var(--blue)'; btnCards.style.color='#fff'; btnCards.style.borderColor='var(--blue)'; }
+    if(btnMap)  { btnMap.style.background='none'; btnMap.style.color='var(--ink2)'; btnMap.style.borderColor='var(--border2)'; }
+  } else {
+    if(cards) cards.style.display = 'none';
+    if(map)   map.style.display   = '';
+    if(btnMap)  { btnMap.style.background='var(--blue)'; btnMap.style.color='#fff'; btnMap.style.borderColor='var(--blue)'; }
+    if(btnCards){ btnCards.style.background='none'; btnCards.style.color='var(--ink2)'; btnCards.style.borderColor='var(--border2)'; }
+    renderCurriculumMap();
+  }
+}
+
+function renderCurriculumMap() {
+  const el = document.getElementById('curriculum-map-render');
+  if (!el || el.dataset.rendered) return;
+  el.dataset.rendered = '1';
+
+  const tierBadgeColors = {
+    'AMC 8':  '#16a34a', 'AMC 10': '#2563eb',
+    'AMC 12': '#dc2626', 'AIME':   '#9f1239',
+  };
+
+  el.innerHTML = CURRICULUM.map(tier => `
+    <div style="margin-bottom:28px;border:1.5px solid var(--border2);border-radius:14px;overflow:hidden">
+      <div style="background:${tier.color};padding:16px 22px;display:flex;align-items:center;gap:12px;cursor:pointer" onclick="this.parentElement.querySelector('.tier-body').style.display = this.parentElement.querySelector('.tier-body').style.display==='none' ? '' : 'none'">
+        <div>
+          <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.8)">${tier.badge} · ${tier.sub}</div>
+          <div style="font-size:1.1rem;font-weight:700;color:#fff;margin-top:2px">${tier.label}</div>
+          <div style="font-size:.8rem;color:rgba(255,255,255,.75);margin-top:2px">Elo ${tier.elo[0]}–${tier.elo[1]}</div>
+        </div>
+        <div style="margin-left:auto;color:rgba(255,255,255,.8);font-size:1.2rem">▾</div>
+      </div>
+      <div class="tier-body" style="padding:16px 22px;background:var(--surface)">
+        ${tier.sections.map(sec => `
+          <div style="margin-bottom:16px">
+            <div style="font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);margin-bottom:8px">${sec.title}</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px">
+              ${sec.topics.map(t => `<span style="padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;font-size:.79rem;color:var(--ink2)">${t}</span>`).join('')}
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
 function filterConcepts(){
   const q=(document.getElementById('concept-search')?.value||'').toLowerCase();
   const dom=document.getElementById('concept-domain')?.value||'';
@@ -7157,19 +7391,24 @@ function renderSimExam(){
   list.innerHTML = problems.map((p,i)=>`
     <div class="sim-q-card" id="sim-q-${i}">
       <div class="sim-q-num">Question ${i+1} of ${problems.length}</div>
-      <a href="${p.link}" target="_blank" rel="noopener" class="sim-q-link">
-        <div style="flex:1">
-          <div class="sq-title">${p.display}</div>
-          <div class="sq-sub">${p.domain} · Elo ${p.elo} · Opens on AoPS ↗</div>
-        </div>
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      <div id="sim-prob-text-${i}" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin:10px 0 12px;font-size:.93rem;line-height:1.7;color:var(--ink)">
+        <span style="color:var(--ink3);font-size:.82rem">⏳ Loading problem…</span>
+      </div>
+      <a href="${p.link}" target="_blank" rel="noopener" style="font-size:.75rem;color:var(--blue);text-decoration:none;display:inline-flex;align-items:center;gap:4px;margin-bottom:10px">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        View on AoPS / Solution ↗
       </a>
       <div class="sim-ans-row">
         <input class="sim-ans-inp" type="text" placeholder="${cfg.scoring==='aime'?'Integer 000–999':'A, B, C, D, or E'}" value="${answers[i]}" oninput="simUpdateAnswer(${i},this.value)" onkeydown="if(event.key==='Enter'){const next=document.getElementById('sim-q-${i+1}');if(next)next.scrollIntoView({behavior:'smooth',block:'center'});}">
         <button type="button" onclick="simClearAnswer(${i})" style="padding:10px 12px;border:1px solid var(--border2);border-radius:8px;background:none;cursor:pointer;color:var(--ink3);font-size:.8rem">Clear</button>
       </div>
-      <div style="font-size:.75rem;color:var(--ink3);margin-top:6px">Tip: Open the link, solve on paper, then type your answer above.</div>
     </div>`).join('');
+
+  // Load problem text using central helper
+  problems.forEach((p, i) => {
+    const box = document.getElementById(`sim-prob-text-${i}`);
+    if (box) renderProbTextInto(box, p);
+  });
 }
 
 function simUpdateAnswer(i, val){
@@ -7397,7 +7636,8 @@ function openModal(prob){
     );
     if(match) {
       if(!prob.answer && match.answer) prob = {...prob, answer: match.answer};
-      if(!prob.hint1 && match.hint1) prob = {...prob, hint1: match.hint1, hint2: match.hint2, hint3: match.hint3};
+      if(!prob.hint && match.hint) prob = {...prob, hint: match.hint};
+      if(!prob.hint && match.hint1) prob = {...prob, hint: match.hint1};
     }
   }
   _curProb=prob;
@@ -7425,26 +7665,9 @@ function openModal(prob){
     textBox.style.display = '';
     textBox.innerHTML = `<div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);margin-bottom:8px">${prob.display}</div>${prob.text}`;
     if(typeof renderLatex==='function') renderLatex(textBox);
-  } else if(prob.link && prob.link.includes('artofproblemsolving.com') && textBox) {
-    // AMC/AIME problem — fetch text from AoPS via API
-    textBox.style.display = 'none';
-    const loadEl = document.getElementById('mod-prob-loading');
-    if(loadEl) loadEl.style.display = '';
-    fetch(`/api/problem?url=${encodeURIComponent(prob.link)}`)
-      .then(r => r.json())
-      .then(data => {
-        if(loadEl) loadEl.style.display = 'none';
-        if(data.text && textBox) {
-          // Store on prob object so it won't re-fetch if modal reopened
-          _curProb = {..._curProb, text: data.text};
-          textBox.style.display = '';
-          textBox.innerHTML = `<div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);margin-bottom:8px">${prob.display}</div>${data.text}`;
-          if(typeof renderLatex==='function') renderLatex(textBox);
-        }
-      })
-      .catch(() => { if(loadEl) loadEl.style.display = 'none'; });
   } else if(textBox) {
-    textBox.style.display = 'none';
+    // AMC/AIME problem — use central helper
+    renderProbTextInto(textBox, prob);
   }
 
   if(sfAttr) {
@@ -9992,40 +10215,40 @@ function setRowStatus(id, result) {
 
 // Map module ID -> {domain, eloMin, eloMax}
 const MODULE_SPECS = {
-  // Level 1 Foundations — AMC 8 only
-  f1:{contests:['amc8'], domain:'algebra',        eloMin:500, eloMax:660},
-  f2:{contests:['amc8'], domain:'algebra',        eloMin:560, eloMax:720},
-  f3:{contests:['amc8'], domain:'algebra',        eloMin:600, eloMax:780},
-  f4:{contests:['amc8'], domain:'geometry',       eloMin:560, eloMax:760},
-  f5:{contests:['amc8'], domain:'number theory',  eloMin:580, eloMax:800},
-  f6:{contests:['amc8'], domain:'counting',       eloMin:580, eloMax:820},
-  f7:{contests:['amc8'], domain:'algebra',        eloMin:640, eloMax:840},
-  f8:{contests:['amc8'], domain:'algebra',        eloMin:660, eloMax:880},
-  // Level 2 Core — AMC 10A/10B
-  c1:{contests:['amc10','amc10a','amc10b'], domain:'algebra',        eloMin:880, eloMax:1060},
-  c2:{contests:['amc10','amc10a','amc10b'], domain:'number theory',  eloMin:960, eloMax:1140},
-  c3:{contests:['amc10','amc10a','amc10b'], domain:'counting',       eloMin:980, eloMax:1160},
-  c4:{contests:['amc10','amc10a','amc10b'], domain:'probability',    eloMin:960, eloMax:1160},
-  c5:{contests:['amc10','amc10a','amc10b'], domain:'geometry',       eloMin:1000,eloMax:1180},
-  c6:{contests:['amc10','amc10a','amc10b'], domain:'algebra',        eloMin:1020,eloMax:1200},
-  c7:{contests:['amc10','amc10a','amc10b'], domain:'geometry',       eloMin:1080,eloMax:1280},
-  c8:{contests:['amc10','amc10a','amc10b'], domain:'geometry',       eloMin:1100,eloMax:1340},
-  // Level 3 Advanced — AMC 12A/12B
-  a1:{contests:['amc12','amc12a','amc12b'], domain:'algebra',        eloMin:1100,eloMax:1320},
-  a2:{contests:['amc12','amc12a','amc12b'], domain:'counting',       eloMin:1200,eloMax:1420},
-  a3:{contests:['amc12','amc12a','amc12b'], domain:'algebra',        eloMin:1260,eloMax:1480},
-  a4:{contests:['amc12','amc12a','amc12b'], domain:'geometry',       eloMin:1270,eloMax:1500},
-  a5:{contests:['amc12','amc12a','amc12b'], domain:'number theory',  eloMin:1280,eloMax:1520},
-  a6:{contests:['amc12','amc12a','amc12b'], domain:'probability',    eloMin:1300,eloMax:1540},
-  // Level 4 Platinum — AIME I/II
-  p1:{contests:['aime','aime1','aime2'], domain:'algebra',           eloMin:1420,eloMax:2000},
-  p2:{contests:['aime','aime1','aime2'], domain:'number theory',     eloMin:1520,eloMax:2100},
-  p3:{contests:['aime','aime1','aime2'], domain:'counting',          eloMin:1620,eloMax:2200},
-  p4:{contests:['aime','aime1','aime2'], domain:'geometry',          eloMin:1480,eloMax:2300},
-  p5:{contests:['aime','aime1','aime2'], domain:'probability',       eloMin:1880,eloMax:2200},
-  // Level 5 Elite — AIME hardest
-  e1:{contests:['aime','aime1','aime2'], domain:'algebra',           eloMin:1980,eloMax:2500},
-  e2:{contests:['aime','aime1','aime2'], domain:'counting',          eloMin:1980,eloMax:2500},
+  // ── Level 1: Mid AMC 8 (elo 500–750) ──
+  f1:{contests:['amc8'], domain:'algebra',       eloMin:500, eloMax:660,  title:'Algebraic Manipulation',       topics:["linear equations","word problems","distributive property"]},
+  f2:{contests:['amc8'], domain:'algebra',       eloMin:520, eloMax:700,  title:'Ratios & Percentages',         topics:["ratios","proportions","unit rates","percent conversions"]},
+  f3:{contests:['amc8'], domain:'algebra',       eloMin:560, eloMax:750,  title:'Sequences & Series',           topics:["arithmetic sequences","geometric sequences","pattern recognition"]},
+  f4:{contests:['amc8'], domain:'geometry',      eloMin:500, eloMax:720,  title:'Geometry Foundations',         topics:["area","perimeter","Pythagorean theorem","coordinate geometry"]},
+  f5:{contests:['amc8'], domain:'number-theory', eloMin:520, eloMax:740,  title:'Number Theory Basics',         topics:["divisibility rules","prime factorization","GCD","LCM"]},
+  f6:{contests:['amc8'], domain:'counting',      eloMin:540, eloMax:760,  title:'Elementary Counting',          topics:["fundamental counting principle","permutations","combinations","probability basics"]},
+  f7:{contests:['amc8'], domain:'algebra',       eloMin:580, eloMax:800,  title:'Exponents & Polynomials',      topics:["exponent rules","order of operations","evaluation"]},
+  f8:{contests:['amc8'], domain:'algebra',       eloMin:600, eloMax:830,  title:'Introductory Inequalities',    topics:["simple inequalities","number line","consecutive integers"]},
+  // ── Level 2: Advanced AMC 8 / Mid AMC 10 (elo 750–1100) ──
+  c1:{contests:['amc8','amc10','amc10a','amc10b'], domain:'algebra',       eloMin:750, eloMax:1060, title:"Quadratics & Vieta's",          topics:["quadratic formula","factoring","Vieta's formulas","discriminant","SFFT"]},
+  c2:{contests:['amc8','amc10','amc10a','amc10b'], domain:'number-theory', eloMin:800, eloMax:1140, title:'Modular Arithmetic',            topics:["congruences","last digits","Fermat's little theorem","CRT basics"]},
+  c3:{contests:['amc8','amc10','amc10a','amc10b'], domain:'counting',      eloMin:820, eloMax:1160, title:'Intermediate Combinatorics',    topics:["stars and bars","complementary counting","casework","circular arrangements"]},
+  c4:{contests:['amc10','amc10a','amc10b'],         domain:'probability',   eloMin:860, eloMax:1160, title:'Probability',                   topics:["conditional probability","expected value","geometric probability","dependent events"]},
+  c5:{contests:['amc10','amc10a','amc10b'],         domain:'geometry',      eloMin:880, eloMax:1200, title:'Circle Geometry',               topics:["power of a point","inscribed angles","Ptolemy","tangent lines"]},
+  c6:{contests:['amc10','amc10a','amc10b'],         domain:'algebra',       eloMin:900, eloMax:1200, title:'Systems & Functional Equations',topics:["systems of equations","substitution","functional equations","logarithms"]},
+  c7:{contests:['amc10','amc10a','amc10b'],         domain:'geometry',      eloMin:950, eloMax:1280, title:'Coordinate & Analytic Geometry',topics:["coordinate geometry","Law of Cosines","Law of Sines","Heron's formula"]},
+  c8:{contests:['amc10','amc10a','amc10b'],         domain:'geometry',      eloMin:980, eloMax:1340, title:'Triangle Theorems',             topics:["similar triangles","Ceva's theorem","Stewart's theorem","circumradius","inradius"]},
+  // ── Level 3: Advanced AMC 10 / AMC 12 (elo 1100–1500) ──
+  a1:{contests:['amc12','amc12a','amc12b'], domain:'algebra',       eloMin:1100,eloMax:1380, title:'Advanced Algebraic Techniques', topics:["AM-GM","Cauchy-Schwarz","telescoping","partial fractions","Newton's identities"]},
+  a2:{contests:['amc12','amc12a','amc12b'], domain:'counting',      eloMin:1200,eloMax:1450, title:'Advanced Combinatorics',        topics:["generating functions","Burnside's lemma","Catalan numbers","Stirling numbers"]},
+  a3:{contests:['amc12','amc12a','amc12b'], domain:'algebra',       eloMin:1260,eloMax:1480, title:'Complex Numbers & Polynomials', topics:["complex numbers","De Moivre","roots of unity","root of unity filter"]},
+  a4:{contests:['amc12','amc12a','amc12b'], domain:'geometry',      eloMin:1200,eloMax:1500, title:'Advanced Geometry',             topics:["inversive geometry","projective geometry","isogonal conjugates","Euler line"]},
+  a5:{contests:['amc12','amc12a','amc12b'], domain:'number-theory', eloMin:1280,eloMax:1520, title:'Advanced Number Theory',        topics:["Euler's theorem","totient function","multiplicative functions","quadratic residues"]},
+  a6:{contests:['amc12','amc12a','amc12b'], domain:'probability',   eloMin:1300,eloMax:1540, title:'Advanced Probability',          topics:["Bayes' theorem","Markov chains","recursion","expected value linearity"]},
+  // ── Level 4: AIME (elo 1400–2000) ──
+  p1:{contests:['aime','aime1','aime2'], domain:'algebra',       eloMin:1400,eloMax:1900, title:'AIME Algebra',              topics:["functional equations","Cauchy-Schwarz Titu","SOS decomposition","floor function"]},
+  p2:{contests:['aime','aime1','aime2'], domain:'number-theory', eloMin:1450,eloMax:1950, title:'AIME Number Theory',        topics:["LTE lemma","p-adic valuation","primitive roots","Gaussian integers","Pell equation"]},
+  p3:{contests:['aime','aime1','aime2'], domain:'counting',      eloMin:1500,eloMax:2000, title:'AIME Combinatorics',        topics:["inclusion-exclusion","recurrences","generating functions","bijective counting"]},
+  p4:{contests:['aime','aime1','aime2'], domain:'geometry',      eloMin:1420,eloMax:1950, title:'AIME Geometry',             topics:["barycentric coordinates","radical axes","spiral similarity","trigonometric cevians"]},
+  p5:{contests:['aime','aime1','aime2'], domain:'probability',   eloMin:1600,eloMax:2000, title:'AIME Probability',          topics:["Gambler's ruin","Markov chains","recursive probability","probability generating functions"]},
+  // ── Level 5: Elite AIME (elo 1900+) ──
+  e1:{contests:['aime','aime1','aime2'], domain:'algebra',       eloMin:1900,eloMax:2800, title:'Olympiad Algebra',          topics:["Schur's inequality","Muirhead","Jensen","Vieta jumping","cyclotomic polynomials"]},
+  e2:{contests:['aime','aime1','aime2'], domain:'counting',      eloMin:1900,eloMax:2800, title:'Olympiad Combinatorics',    topics:["Hall's theorem","Dilworth","Turán","Ramsey theory","probabilistic method"]},
 };
 
 // Global set of problem IDs already placed in any module (prevents duplicates across modules)
@@ -10203,82 +10426,48 @@ document.addEventListener('keydown', e=>{
 // ════════════════════════════════════════════════════════
 // HINT SYSTEM
 // ════════════════════════════════════════════════════════
-let _hintLevel = 0;
-const _HINTS = {
-  // Generic hints based on domain + elo range
-  // These show progressively — each hint unlocks the next
-  getHints(prob) {
-    if (!prob) return ['Open the problem on AoPS to read it.', 'Try drawing a diagram or writing out variables.', 'Check the AoPS solution page for a full walkthrough.'];
-    const domain = (prob.domain || '').replace('-', ' ').toLowerCase();
-    const elo = prob.elo || 1000;
-    const isAime = prob.contest === 'aime';
-
-    // Hint 1 — what approach to try
-    const h1 = {
-      algebra: elo < 900 ? 'Try setting up a variable for the unknown and writing an equation.' :
-                elo < 1300 ? 'Look for a substitution or algebraic identity that simplifies the expression.' :
-                'Consider symmetric functions, generating functions, or a clever substitution.',
-      geometry: elo < 900 ? 'Draw a careful diagram and label all given lengths and angles.' :
-                 elo < 1300 ? 'Look for similar triangles, the Pythagorean theorem, or a useful auxiliary line.' :
-                 'Consider using coordinates, trigonometry, or a projective/inversion approach.',
-      counting: elo < 900 ? 'Try listing small cases to find a pattern before generalizing.' :
-                 elo < 1300 ? 'Consider whether to use combinations, permutations, or complementary counting.' :
-                 'Think about bijections, generating functions, or the Principle of Inclusion-Exclusion.',
-      'number theory': elo < 900 ? 'Try checking small values and look for a pattern modulo a small number.' :
-                       elo < 1300 ? 'Consider factoring, finding prime factorizations, or working mod a small prime.' :
-                       'Think about Euler\'s theorem, CRT, or lifting the exponent lemma.',
-      probability: elo < 900 ? 'List all equally likely outcomes and count favorable ones.' :
-                   elo < 1300 ? 'Consider conditioning on the first event or using complementary probability.' :
-                   'Think about expected value linearity or a recursive probability setup.',
-    }[domain] || 'Carefully re-read the problem and identify exactly what is being asked.';
-
-    // Hint 2 — key observation
-    const h2 = isAime ?
-      'For AIME problems, the answer is an integer 000–999. Use this to check your work.' :
-      'The answer choices on AMC problems can help — try eliminating clearly wrong options first.';
-
-    // Hint 3 — link to solution
-    const h3 = `The full solution with multiple approaches is available on AoPS. Click "Full Solution ↗" above.`;
-
-    return [h1, h2, h3];
-  }
-};
-
-function showHint(level) {
+function showHint() {
   if (!_curProb) return;
-  const hints = _HINTS.getHints(_curProb);
   const box = document.getElementById('hint-box');
-  const btn1 = document.getElementById('hint-btn-1');
-  const btn2 = document.getElementById('hint-btn-2');
-  const btn3 = document.getElementById('hint-btn-3');
   if (!box) return;
 
-  _hintLevel = Math.max(_hintLevel, level);
-
-  // Build progressive hints
-  let content = '';
-  for (let i = 0; i < _hintLevel && i < hints.length; i++) {
-    content += `<div style="margin-bottom:${i < _hintLevel-1 ? '10px' : '0'};${i < _hintLevel-1 ? 'opacity:.7' : ''}">
-      <strong style="font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--amber)">Hint ${i+1}</strong><br>
-      ${hints[i]}
-    </div>`;
+  // Use pre-built hint from problems.js if available, else generate a generic one
+  let hint = _curProb.hint || _curProb.hint1;
+  if (!hint) {
+    const domain = (_curProb.domain || '').replace('-', ' ').toLowerCase();
+    const elo = _curProb.elo || 1000;
+    hint = {
+      algebra: elo < 900 ? 'Try setting up a variable for the unknown and writing an equation.' :
+               elo < 1300 ? 'Look for a substitution or algebraic identity that simplifies the expression.' :
+               'Consider symmetric functions, generating functions, or a clever substitution.',
+      geometry: elo < 900 ? 'Draw a careful diagram and label all given lengths and angles.' :
+                elo < 1300 ? 'Look for similar triangles, the Pythagorean theorem, or a useful auxiliary line.' :
+                'Consider coordinates, trigonometry, or a projective/inversion approach.',
+      counting: elo < 900 ? 'Try listing small cases to find a pattern before generalizing.' :
+                elo < 1300 ? 'Consider combinations, permutations, or complementary counting.' :
+                'Think about bijections, generating functions, or inclusion-exclusion.',
+      'number theory': elo < 900 ? 'Check small values and look for a pattern modulo a small number.' :
+                       elo < 1300 ? 'Consider prime factorization or working mod a small prime.' :
+                       "Think about Euler's theorem, CRT, or lifting the exponent lemma.",
+      probability: elo < 900 ? 'List all equally likely outcomes and count favorable ones.' :
+                   elo < 1300 ? 'Try conditioning on the first event or use complementary probability.' :
+                   'Think about expected value linearity or a recursive probability setup.',
+    }[domain] || 'Carefully re-read the problem and identify exactly what is being asked.';
   }
-  box.innerHTML = content;
+
+  box.innerHTML = `<strong style="font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--amber)">Hint</strong><br>${hint}`;
   box.style.display = 'block';
 
-  // Unlock next hint button
-  if (btn2 && _hintLevel >= 1) btn2.style.opacity = '1';
-  if (btn3 && _hintLevel >= 2) btn3.style.opacity = '1';
+  // Disable button after showing
+  const btn = document.getElementById('hint-btn-1');
+  if (btn) { btn.style.opacity = '.5'; btn.disabled = true; }
 }
 
 function resetHints() {
-  _hintLevel = 0;
   const box = document.getElementById('hint-box');
   if (box) { box.style.display = 'none'; box.innerHTML = ''; }
-  const btn2 = document.getElementById('hint-btn-2');
-  const btn3 = document.getElementById('hint-btn-3');
-  if (btn2) btn2.style.opacity = '.45';
-  if (btn3) btn3.style.opacity = '.45';
+  const btn = document.getElementById('hint-btn-1');
+  if (btn) { btn.style.opacity = '1'; btn.disabled = false; }
 }
 
 // ════════════════════════════════════════════════════════
@@ -10466,7 +10655,7 @@ document.addEventListener('keydown', e => {
   // In modal: H for hint, Escape already handled
   const modalOpen = document.getElementById('overlay')?.classList.contains('open');
   if (modalOpen) {
-    if (e.key === 'h' || e.key === 'H') { e.preventDefault(); showHint(_hintLevel + 1); }
+    if (e.key === 'h' || e.key === 'H') { e.preventDefault(); showHint(); }
     if (e.key === 'Enter') { e.preventDefault(); checkAnswer(); }
   }
 });
@@ -10550,6 +10739,54 @@ document.addEventListener('DOMContentLoaded', () => {
     heroStats.appendChild(streakEl);
   }
 });
+
+
+// ════════════════════════════════════════════════════════
+// PROBLEM TEXT FETCHER — loads AMC problem text via Gemini
+// ════════════════════════════════════════════════════════
+const _probTextCache = {};
+
+function fetchProbText(prob, callback) {
+  if (!prob) return;
+  const key = prob.id || prob.display;
+  // Already have text
+  if (prob.text) { callback(prob.text); return; }
+  // Cache hit
+  if (_probTextCache[key]) { callback(_probTextCache[key]); return; }
+  // Fetch from API
+  const url = `/api/problem?display=${encodeURIComponent(prob.display)}&year=${prob.year||''}&num=${prob.num||''}&contest=${encodeURIComponent(prob.contest||'')}`;
+  fetch(url)
+    .then(r => r.json())
+    .then(data => {
+      if (data.text) {
+        _probTextCache[key] = data.text;
+        callback(data.text);
+      }
+    })
+    .catch(() => {});
+}
+
+function renderProbTextInto(el, prob) {
+  if (!el || !prob) return;
+  // Get text — either embedded (SolveFire/pre-built) or from MA_PROBLEMS cache
+  let txt = prob.text || prob.problem || '';
+  // Try to find in MA_PROBLEMS if not already on the object
+  if (!txt && window.MA_PROBLEMS) {
+    const match = window.MA_PROBLEMS.find(p => p.id === prob.id);
+    if (match?.text) { txt = match.text; prob.text = txt; }
+  }
+  if (txt) {
+    el.innerHTML = txt;
+    el.style.display = '';
+    if (window.renderMathInElement) {
+      try { renderMathInElement(el, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false}); } catch(e){}
+    }
+  } else {
+    // Text not loaded yet — fallback to showing problem name + AoPS link
+    el.innerHTML = `<span style="color:var(--ink3);font-size:.85rem">Run <code>node build-curriculum.js</code> once to pre-load all problem texts. <a href="${prob.link||'#'}" target="_blank" style="color:var(--blue)">View on AoPS ↗</a></span>`;
+    el.style.display = '';
+  }
+}
 
 // ════════════════════════════════════════════════════════
 // SOLVEFIRE INTEGRATION
