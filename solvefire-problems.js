@@ -1480,8 +1480,4 @@ window.SF_PROBLEMS = [
   });
   window.SF_CONTESTS = map;
   window.SF_PROBLEMS_LOADED = true;
-<<<<<<< Updated upstream
 })();
-=======
-})();
->>>>>>> Stashed changes
