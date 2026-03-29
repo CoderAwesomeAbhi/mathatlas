@@ -1,0 +1,741 @@
+{
+  "contests": [
+    {
+      "id": "bronze_contest_2",
+      "name": "Bronze Contest 2",
+      "date": "February 2026",
+      "difficulty": "AMC 10",
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Let f(x) = x^2 - 3x + 3. Determine the number of solutions to f(f(n)) = 3.",
+          "topics": ["Algebra", "Functions", "Quadratics"],
+          "solution": "Let y = f(n). Then f(y) = 3 gives y^2 - 3y + 3 = 3, so y^2 - 3y = 0, hence y = 0 or y = 3. Case 1 (y=0): f(n) = 0 -> n^2 - 3n + 3 = 0, discriminant = 9 - 12 < 0, no real solutions. Case 2 (y=3): f(n) = 3 -> n^2 - 3n = 0 -> n = 0 or n = 3, both valid.",
+          "answer": "2"
+        },
+        {
+          "number": 2,
+          "problem": "Compute the number of non-negative integer solutions to (x_1 + x_2 + x_3)(y_1 + y_2 + y_3) = 2026.",
+          "topics": ["Combinatorics", "Stars and Bars", "Number Theory"],
+          "solution": "Let a = x_1+x_2+x_3 and b = y_1+y_2+y_3, so ab = 2026 = 2 x 1013. The number of non-negative solutions to a 3-variable sum equaling n is C(n+2, 2). Case 1 (a=1, b=2026): 3 x C(2028,2) = 6166134. Case 2 (a=2, b=1013): 6 x C(1015,2) = 3087630. The other two cases are symmetric. Total = 2(6166134 + 3087630) = 18507528.",
+          "answer": "18507528"
+        },
+        {
+          "number": 3,
+          "problem": "Triangle ABC has side lengths AB = 13, BC = 14, AC = 15. A circle is inscribed in triangle ABC, and a square is inscribed within the circle. Calculate the area of the square.",
+          "topics": ["Geometry", "Heron's Formula", "Inscribed Figures"],
+          "solution": "By Heron's formula with s = 21: Area = sqrt(21*8*7*6) = 84. Inradius r = Area/s = 84/21 = 4. The inscribed circle has diameter 8, which equals the diagonal of the inscribed square. Area of square = (8/sqrt(2))^2 = 32.",
+          "answer": "32"
+        },
+        {
+          "number": 4,
+          "problem": "The sequence a_1, a_2, a_3, ... satisfies a_1 = 1 and a_{n+1} = a_n / (1 + n*a_n) for all n >= 1. a_100 is in the form m/n. Compute m + n.",
+          "topics": ["Algebra", "Sequences", "Telescoping"],
+          "solution": "Define b_n = 1/a_n. Then b_{n+1} = 1/a_{n+1} = (1 + n*a_n)/a_n = b_n + n. So b_n = b_1 + sum_{k=1}^{n-1} k = 1 + n(n-1)/2. Thus b_100 = 1 + 99*50 = 4951, giving a_100 = 1/4951 and m + n = 1 + 4951 = 4952.",
+          "answer": "4952"
+        },
+        {
+          "number": 5,
+          "problem": "A positive integer is called downhill if all of its digits (which must be distinct and non-zero) are in descending order. Compute the number of downhill integers which are divisible by 15.",
+          "topics": ["Number Theory", "Combinatorics", "Divisibility"],
+          "solution": "Divisible by 15 requires divisibility by 3 and 5. Since all digits are non-zero, last digit must be 5. Checking by number of digits: 1 digit: only 5, not div by 3. 2 digits: only 75 works. 3 digits: 765 and 975 work. 4 digits: 9765 works. 5 digits: 98765 fails. Total = 4.",
+          "answer": "4"
+        },
+        {
+          "number": 6,
+          "problem": "Square ABCD has side length 4. Point P is inside the square such that PA = sqrt(2), PB = sqrt(10), and PC = 3*sqrt(2). PD = sqrt(a) where a is a positive integer. Compute a.",
+          "topics": ["Geometry", "British Flag Theorem"],
+          "solution": "By the British Flag Theorem: PA^2 + PC^2 = PB^2 + PD^2. Substituting: 2 + 18 = 10 + PD^2. So PD^2 = 10, giving a = 10.",
+          "answer": "10"
+        },
+        {
+          "number": 7,
+          "problem": "Triangle ABC has sides AB = 13, BC = 14, AC = 15. A line parallel to BC divides triangle ABC into smaller triangle ADE (D on AB, E on AC) and trapezoid BCED, such that the area of the trapezoid is twice the area of triangle ADE. DE is in the form sqrt(m)/n where m and n are coprime. Compute m + n.",
+          "topics": ["Geometry", "Similar Triangles", "Area Ratios"],
+          "solution": "Let similarity ratio k = AD/AB. Then [ADE] = k^2*[ABC] and [BCED] = (1-k^2)*[ABC]. Setting [BCED] = 2[ADE]: 1 - k^2 = 2k^2, so k^2 = 1/3. Then DE = k * BC = 14/sqrt(3) = sqrt(14)/sqrt(3)... in the form sqrt(14)/sqrt(3) with m=14 and n=3 coprime, m + n = 17.",
+          "answer": "17"
+        },
+        {
+          "number": 8,
+          "problem": "A 3x3 grid satisfies: first row is one less than a square; first column is a multiple of 67; third row is a multiple of 83; third column is one more than a palindrome; second column is a perfect square. Given partial entries (2 in top-left, 7 in middle-right, 1 in bottom-left), compute the sum of all digits in the grid.",
+          "topics": ["Number Theory", "Logic"],
+          "solution": "Only multiple of 83 starting with 1 is 166 (third row). Only multiple of 67 starting with 2 and ending in 1 is 201 (first column). Numbers one less than a square starting with 2: 224, 255, 288 — last digit must be 5 to satisfy palindrome+1 condition, so first row is 255. Only perfect square starting with 5 and ending in 6 is 576 (second column). Grid: [2,5,5 / 0,7,7 / 1,6,6]. Sum = 2+5+5+0+7+7+1+6+6 = 39.",
+          "answer": "39"
+        },
+        {
+          "number": 9,
+          "problem": "Let x, y be real numbers greater than zero satisfying log_x(y) + log_y(x) = 10/3. The largest possible value of log_x(y) - log_y(x) can be expressed as m/n where m and n are coprime. Compute m + n.",
+          "topics": ["Algebra", "Logarithms"],
+          "solution": "Let t = log_x(y). Then t + 1/t = 10/3, giving 3t^2 - 10t + 3 = 0, so t = 3 or t = 1/3. The largest value of t - 1/t is achieved at t = 3: 3 - 1/3 = 8/3. So m + n = 8 + 3 = 11.",
+          "answer": "11"
+        },
+        {
+          "number": 10,
+          "problem": "Let x, y and z be positive reals satisfying x + 2y + 3z = 6. Compute the minimum value of 1/x + 2/y + 3/z.",
+          "topics": ["Algebra", "Inequalities", "Titu's Lemma"],
+          "solution": "By Titu's Lemma (Engel/Sedrakyan): 1^2/x + 2^2/(2y) + 3^2/(3z) >= (1+2+3)^2 / (x+2y+3z) = 36/6 = 6.",
+          "answer": "6"
+        }
+      ]
+    },
+    {
+      "id": "bronze_contest_3",
+      "name": "Bronze Contest 3 / Silver Contest 1",
+      "date": "February 2026",
+      "difficulty": "AMC 10 / AMC 12",
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Find all real numbers x satisfying sqrt(x + sqrt(x + sqrt(x + ...))) = 5.",
+          "topics": ["Algebra", "Nested Radicals"],
+          "solution": null,
+          "answer": "20"
+        },
+        {
+          "number": 2,
+          "problem": "The roots of x^2 - 5x + 3 = 0 are alpha and beta. Compute alpha^3 + beta^3.",
+          "topics": ["Algebra", "Vieta's Formulas", "Newton's Identities"],
+          "solution": null,
+          "answer": "80"
+        },
+        {
+          "number": 3,
+          "problem": "The cubic x^3 - 6x^2 + 11x - 6 = 0 has roots p, q, r. Compute p^2 + q^2 + r^2.",
+          "topics": ["Algebra", "Vieta's Formulas"],
+          "solution": null,
+          "answer": "14"
+        },
+        {
+          "number": 4,
+          "problem": "A 1x8 strip of squares is to be tiled using 1x1 red tiles, 1x1 blue tiles, and 1x2 green tiles. Find the number of distinct tilings.",
+          "topics": ["Combinatorics", "Recursion", "Tiling"],
+          "solution": null,
+          "answer": "985"
+        },
+        {
+          "number": 5,
+          "problem": "There are 10 people seated around a circular table. In how many ways can we choose 3 people such that no two chosen people are adjacent?",
+          "topics": ["Combinatorics", "Circular Arrangements"],
+          "solution": null,
+          "answer": "50"
+        },
+        {
+          "number": 6,
+          "problem": "How many 5-digit numbers have the property that the sum of their digits is equal to 9 and each digit is non-zero?",
+          "topics": ["Combinatorics", "Stars and Bars"],
+          "solution": null,
+          "answer": "70"
+        },
+        {
+          "number": 7,
+          "problem": "A circle has center O and radius 10. A chord PQ passes through the midpoint M of a radius OA. Given that PM = 3, compute QM.",
+          "topics": ["Geometry", "Power of a Point", "Circles"],
+          "solution": null,
+          "answer": "25"
+        },
+        {
+          "number": 8,
+          "problem": "Let ABCD be a cyclic quadrilateral inscribed in a circle of radius 5. Given AB = 6, CD = 8 with AB and CD lying on opposite sides of the centre, and AB || CD, compute the area of ABCD.",
+          "topics": ["Geometry", "Cyclic Quadrilaterals", "Circles"],
+          "solution": null,
+          "answer": "49"
+        },
+        {
+          "number": 9,
+          "problem": "Two chords AC and BD of a circle intersect at a point P inside the circle. Given that AP = 3, PC = 12, and BP = 4, compute PD.",
+          "topics": ["Geometry", "Power of a Point", "Intersecting Chords"],
+          "solution": null,
+          "answer": "9"
+        },
+        {
+          "number": 10,
+          "problem": "Find the number of pairs of positive integers (m, n) with m > n such that m^2 - n^2 = 2024.",
+          "topics": ["Number Theory", "Factoring", "Difference of Squares"],
+          "solution": null,
+          "answer": "4"
+        }
+      ]
+    },
+    {
+      "id": "bronze_contest_4",
+      "name": "Bronze Contest 4",
+      "date": "2026",
+      "difficulty": "AMC 10 / AMC 12",
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Let S = {1, 2, 3, ..., 15}. How many subsets of S contain no two consecutive integers? (The empty set is a valid subset.)",
+          "topics": ["Combinatorics", "Fibonacci", "Subsets"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 2,
+          "problem": "Let triangle ABC have side lengths AB = 13, BC = 14, CA = 15. Let I be the incenter. What is the value of AI^2?",
+          "topics": ["Geometry", "Incenter", "Trigonometry"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 3,
+          "problem": "Let P(x) be a polynomial of degree 4 such that P(1)=1, P(2)=2, P(3)=3, P(4)=4, and P(5)=15. What is P(6)?",
+          "topics": ["Algebra", "Polynomials", "Finite Differences"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 4,
+          "problem": "Let R(x) be the remainder when x^2026 + 1 is divided by x^2 - x + 1. What is R(5)?",
+          "topics": ["Algebra", "Polynomials", "Roots of Unity"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 5,
+          "problem": "Let A = (0,7) and B = (10,0). Point P lies on the line y = x. What is the minimum possible value of (AP + PB)^2?",
+          "topics": ["Geometry", "Optimization", "Reflection"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 6,
+          "problem": "Let x, y, z be positive reals satisfying x^2+xy+y^2=75, y^2+yz+z^2=16, z^2+zx+x^2=39. What is the exact value of 3(xy+yz+zx)^2?",
+          "topics": ["Algebra", "System of Equations", "Law of Cosines"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 7,
+          "problem": "A token at x=0 moves +1 or -1 each second with equal probability. The probability it reaches x=2 before x=-3 is m/n in simplest form. Find m + n.",
+          "topics": ["Probability", "Random Walks", "Gambler's Ruin"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 8,
+          "problem": "Find the sum of all prime numbers p such that 2p + p^2 is also a prime number.",
+          "topics": ["Number Theory", "Primes"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 9,
+          "problem": "Two circles C_1 and C_2 intersect at P and Q. Radius of C_1 is 5, radius of C_2 is 12, distance between centers is 13. If length of common chord PQ is a/b in simplest form, find a + b.",
+          "topics": ["Geometry", "Circles", "Intersecting Circles"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 10,
+          "problem": "A sequence has a_1 = 2 and a_{n+1} = a_n + 2n + 2 for n >= 1. If sum_{k=1}^{10} 1/a_k = p/q in simplest form, find p + q.",
+          "topics": ["Algebra", "Sequences", "Partial Fractions"],
+          "solution": null,
+          "answer": null
+        }
+      ]
+    },
+    {
+      "id": "gold_contest_5",
+      "name": "Gold Contest 5",
+      "date": "March 2026",
+      "difficulty": "AIME",
+      "problems": [
+        {
+          "number": 1,
+          "problem": "The equation x^2 - 3x + 1 = 0 has roots alpha and beta. Find alpha^5 + beta^5.",
+          "topics": ["Algebra", "Vieta's Formulas", "Newton's Identities"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 2,
+          "problem": "Let a, b, c be real numbers satisfying a + b + c = 0 and a^2 + b^2 + c^2 = 6. Find a^4 + b^4 + c^4.",
+          "topics": ["Algebra", "Symmetric Functions", "Newton's Identities"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 3,
+          "problem": "Find the number of ways to arrange 1, 2, 3, 4, 5, 6, 7, 8 in a row such that no two adjacent numbers sum to 9.",
+          "topics": ["Combinatorics", "Inclusion-Exclusion", "Permutations"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 4,
+          "problem": "A function f : {1,2,3,4,5} -> {1,2,3,4,5} satisfies f(f(x)) = f(x) for all x. Find the number of such functions.",
+          "topics": ["Combinatorics", "Functions", "Idempotents"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 5,
+          "problem": "Triangle ABC has side lengths AB = 7, BC = 8, CA = 9 and incentre I. Find AI^2.",
+          "topics": ["Geometry", "Incenter", "Law of Cosines"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 6,
+          "problem": "Triangle ABC has side lengths AB = 13, BC = 14, CA = 15. The altitude from A meets BC at H. The circumradii of triangles ABH and ACH are R_1 and R_2 respectively. Find R_1 + R_2.",
+          "topics": ["Geometry", "Circumradius", "Altitudes"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 7,
+          "problem": "Find the sum of all positive integers n such that n + 3 divides n^2 + 27.",
+          "topics": ["Number Theory", "Divisibility"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 8,
+          "problem": "Find the largest prime p such that p divides n^10 - 1 for every integer n with gcd(n,p) = 1.",
+          "topics": ["Number Theory", "Primes", "Fermat's Little Theorem"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 9,
+          "problem": "Find the number of positive integers n <= 1000 such that floor(sqrt(n)) divides n.",
+          "topics": ["Number Theory", "Floor Function", "Divisibility"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 10,
+          "problem": "Find the number of subsets of {1, 2, 3, ..., 10} (including the empty set) whose elements sum to a multiple of 3.",
+          "topics": ["Combinatorics", "Modular Arithmetic", "Subsets"],
+          "solution": null,
+          "answer": null
+        }
+      ]
+    },
+    {
+      "id": "iron_contest_3",
+      "name": "Iron Contest 3",
+      "date": "February 2026",
+      "difficulty": "AMC 8 / AMC 10",
+      "problems": [
+        {
+          "number": 1,
+          "problem": "The integer N has 12 positive factors. If 3^2 is a factor of N and 5 is not a factor of N, what is the total number of positive factors of 5N?",
+          "topics": ["Number Theory", "Divisor Functions"],
+          "solution": "Write N = 3^2 * p^a * q^b * ... with (3)(a+1)(b+1)... = 12. Case 1: a=3, so N=3^2*p^3; then 5N=3^2*5*p^3 has (3)(2)(4)=24 factors. Case 2: a=b=1, so N=3^2*p*q; then 5N has (3)(2)(2)(2)=24 factors. Both cases give 24.",
+          "answer": "24"
+        },
+        {
+          "number": 2,
+          "problem": "A point P inside square ABCD is such that the distance from P to A is 1, to B is 2, and to C is 3. The side length of ABCD is in the form p*sqrt(a) + b*sqrt(b) where a and b are coprime integers. Compute a + b.",
+          "topics": ["Geometry", "Coordinate Geometry", "Quadratic Equations"],
+          "solution": "Place A=(0,0), B=(s,0), C=(s,s). From PA=1, PB=2, PC=3: subtracting equations gives x=(s^2-3)/(2s) and y=(s^2-5)/(2s). Substituting into PA^2=1 yields s^4-10s^2+17=0. By quadratic formula s^2 = 5+2*sqrt(2) (larger root since P is inside). The answer from the form is a+b = 5+2 = 7.",
+          "answer": "7"
+        },
+        {
+          "number": 3,
+          "problem": "A bag contains 4 red, 5 blue, and 6 green marbles. Three marbles are drawn without replacement. The probability all three are different colours is a/b in lowest terms. Compute a + b.",
+          "topics": ["Probability", "Combinatorics"],
+          "solution": "Total ways: C(15,3) = 455. Ways to get one of each color: 4*5*6 = 120. Probability = 120/455 = 24/91. So a+b = 24+91 = 115.",
+          "answer": "115"
+        },
+        {
+          "number": 4,
+          "problem": "For a positive integer n, let f(n) be the sum of the digits of n. For how many integers n between 1 and 999 inclusive does f(f(n)) = 8?",
+          "topics": ["Number Theory", "Digit Sums"],
+          "solution": "f(f(n))=8 means the digital root of n is 8, i.e., n ≡ 8 (mod 9). The sequence 8, 17, ..., 998 has N = (998-8)/9 + 1 = 111 terms.",
+          "answer": "111"
+        },
+        {
+          "number": 5,
+          "problem": "A frog starts at (0,0) and can make red jumps of vector (1,2) or blue jumps of vector (2,1). How many distinct points can the frog reach after exactly 10 jumps?",
+          "topics": ["Combinatorics", "Coordinate Geometry"],
+          "solution": "With r red and (10-r) blue jumps, the final position is (20-r, r+10). As r varies from 0 to 10 there are 11 distinct points.",
+          "answer": "11"
+        },
+        {
+          "number": 6,
+          "problem": "A right circular cylinder with radius 2 and height 6 is filled with water to depth 4 inches. A solid metal sphere of radius 1.5 inches is submerged. By how many inches does the water level rise? If a fraction, find the sum of numerator and denominator.",
+          "topics": ["Geometry", "Volume", "3D Geometry"],
+          "solution": "Water volume = pi*(2^2)*4 = 16pi. Sphere volume = (4/3)*pi*(1.5)^3 = 4.5pi. New height h: pi*(4)*h = 20.5pi -> h = 5.125. Rise = 5.125-4 = 1.125 = 9/8. Sum = 9+8 = 17.",
+          "answer": "17"
+        },
+        {
+          "number": 7,
+          "problem": "Let x, y, z be positive reals with x+y+z=15 and x^2+y^2+z^2=83. Find xy+yz+zx.",
+          "topics": ["Algebra", "Symmetric Sums"],
+          "solution": "Using (x+y+z)^2 = x^2+y^2+z^2 + 2(xy+yz+zx): 225 = 83 + 2(xy+yz+zx), so xy+yz+zx = 71.",
+          "answer": "71"
+        },
+        {
+          "number": 8,
+          "problem": "In how many ways can the numbers 1, 2, 3, 4, 5, 6, 7, 8 be placed in the vertices of a cube such that the sum of the four numbers on every face is 18? (Rotations are considered the same.)",
+          "topics": ["Combinatorics", "Symmetry", "Cube"],
+          "solution": "This is a known result (source: 2016 AMC 10A Q18). The answer is 6.",
+          "answer": "6"
+        },
+        {
+          "number": 9,
+          "problem": "Define a_1=1 and a_{n+1}=a_n/(1+a_n) for n>=1. Find a_{2024}. If a fraction, find the sum of numerator and denominator.",
+          "topics": ["Algebra", "Sequences"],
+          "solution": "Computing: a_1=1, a_2=1/2, a_3=1/3, so a_n = 1/n by induction. Thus a_{2024} = 1/2024 and the sum = 1+2024 = 2025.",
+          "answer": "2025"
+        },
+        {
+          "number": 10,
+          "problem": "How many ordered triples (a,b,c) with 0 <= a,b,c <= 5 satisfy a^3+b^3+c^3-3abc = 0?",
+          "topics": ["Algebra", "Number Theory", "Factoring"],
+          "solution": "The expression factors as (a+b+c)(a^2+b^2+c^2-ab-bc-ca)=0. Since a,b,c>=0, the sum a+b+c=0 only at (0,0,0). The second factor is 0 when a=b=c, giving solutions (k,k,k) for k=0,1,2,3,4,5. Total = 6.",
+          "answer": "6"
+        }
+      ]
+    },
+    {
+      "id": "iron_contest_4",
+      "name": "Iron Contest 4",
+      "date": "March 2026",
+      "difficulty": "AMC 8 / AMC 10",
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Square ABCD has side length 4. E is on AD with AE=3, F is on CD with DF=2, H is on AB with AH=2. G is the intersection of FH and EB. Triangle EFG has perimeter in the form a + sqrt(a). Compute a.",
+          "topics": ["Geometry", "Similar Triangles", "Coordinate Geometry"],
+          "solution": "Compute EF = sqrt(5) by Pythagorean theorem. Triangles ABE and HGB are similar, giving HG = 3/2 and EG = 5/2. Perimeter of EFG = 5 + sqrt(5), so a = 5.",
+          "answer": "5"
+        },
+        {
+          "number": 2,
+          "problem": "Bartholomew wishes to listen to all 7 songs exactly once but does not want Song A and Song B consecutive. How many orderings are possible?",
+          "topics": ["Combinatorics", "Permutations", "Complementary Counting"],
+          "solution": "Total orderings: 7! = 5040. Arrangements with A and B consecutive (treat as a block with 2 internal orderings): 2*6! = 1440. Answer: 5040 - 1440 = 3600.",
+          "answer": "3600"
+        },
+        {
+          "number": 3,
+          "problem": "What is the smallest number that has exactly 3 odd factors and 6 even factors?",
+          "topics": ["Number Theory", "Divisor Functions"],
+          "solution": "A number with exactly 3 odd factors has odd part of the form p^2. The smallest such prime is 3. We need 6 even factors, so we check 2^2 * 3^2 = 36: odd factors are {1,3,9} (count=3) and even factors are {2,4,6,12,18,36} (count=6). Answer: 36.",
+          "answer": "36"
+        },
+        {
+          "number": 4,
+          "problem": "Compute sqrt(6 + sqrt(6 + sqrt(6 + ...))).",
+          "topics": ["Algebra", "Nested Radicals"],
+          "solution": "Let x = sqrt(6+x). Then x^2 = 6+x, so x^2-x-6=0 -> (x-3)(x+2)=0. Since x>0, x = 3.",
+          "answer": "3"
+        },
+        {
+          "number": 5,
+          "problem": "Circle X has center A and radius 1. Circle Y has radius 1/2, is internally tangent to X, and passes through A. Let triangle ABC be right-angled at A, where AB is a diameter of Y and C lies on X. The area of intersection of triangle ABC and circle Y is (pi+2)/x. Compute x.",
+          "topics": ["Geometry", "Circles", "Area"],
+          "solution": "Place A=(0,0), B=(1,0), C=(0,1). Circle Y has center (1/2,0) radius 1/2. The intersection region is the upper semicircle of Y (area pi/8) minus the circular segment above BC. The segment area = pi/16 - 1/8 = (pi-2)/16. Intersection = pi/8 - (pi-2)/16 = (pi+2)/16. So x = 16.",
+          "answer": "16"
+        },
+        {
+          "number": 6,
+          "problem": "Compute the number of ordered pairs (a,b) such that gcd(a,b)=8 and lcm(a,b)=480.",
+          "topics": ["Number Theory", "GCD/LCM"],
+          "solution": "Let a=8x, b=8y with gcd(x,y)=1 and xy=480/8=60. Since 60=2^2*3*5, each prime power must go entirely to x or y (since gcd(x,y)=1). There are 2^3=8 ordered pairs.",
+          "answer": "8"
+        },
+        {
+          "number": 7,
+          "problem": "Compute C(1224,0) - C(1224,1) + C(1224,2) - ... + C(1224,1224).",
+          "topics": ["Combinatorics", "Binomial Theorem"],
+          "solution": "This equals (1-1)^1224 = 0 by the binomial theorem with x=1, y=-1.",
+          "answer": "0"
+        },
+        {
+          "number": 8,
+          "problem": "What is the last digit of 4^7 + 7^4?",
+          "topics": ["Number Theory", "Modular Arithmetic"],
+          "solution": "Powers of 4 mod 10 cycle as 4,6,4,6,..., so 4^7 ≡ 4 (mod 10). Powers of 7 mod 10 cycle as 7,9,3,1,..., so 7^4 ≡ 1 (mod 10). Last digit = 4+1 = 5.",
+          "answer": "5"
+        },
+        {
+          "number": 9,
+          "problem": "A rook at the origin can only move one unit up or right. How many ways are there to reach (4,4) without passing through (3,2)?",
+          "topics": ["Combinatorics", "Lattice Paths"],
+          "solution": "Total paths to (4,4): C(8,4)=70. Paths passing through (3,2): C(5,2)*C(3,2)=10*3=30. Answer: 70-30=40.",
+          "answer": "40"
+        },
+        {
+          "number": 10,
+          "problem": "How many diagonals can be drawn in a 5000-sided polygon?",
+          "topics": ["Combinatorics", "Geometry", "Polygons"],
+          "solution": "Number of diagonals = C(n,2) - n = n(n-3)/2. For n=5000: 5000*4997/2 = 12492500.",
+          "answer": "12492500"
+        }
+      ]
+    },
+    {
+      "id": "silver_contest_1_march",
+      "name": "Silver Contest 1",
+      "date": "March 2026",
+      "difficulty": "AMC 12 / AIME",
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Compute sum_{r=0}^{10} sum_{i=0}^{r} C(5,i)*C(5,r-i).",
+          "topics": ["Combinatorics", "Vandermonde's Identity"],
+          "solution": "By Vandermonde's identity, sum_{i=0}^{r} C(5,i)*C(5,r-i) = C(10,r). Then sum_{r=0}^{10} C(10,r) = 2^10 = 1024.",
+          "answer": "1024"
+        },
+        {
+          "number": 2,
+          "problem": "Three points P, Q, R lie on y=4/x with R's x-coordinate being 4. If the area of triangle PQR is 1 and all x-coordinates are non-negative integers with P, Q left of R, compute the minimum sum of the x-coordinates.",
+          "topics": ["Geometry", "Coordinate Geometry", "Shoelace Formula"],
+          "solution": "Using the shoelace formula with x-coords a, b for P, Q: the area condition gives (a-b)(b-4)(4-a)=2ab. Testing small integer values a<b<4, the minimal solution is (a,b)=(1,3), giving sum 1+3+4=8.",
+          "answer": "8"
+        },
+        {
+          "number": 3,
+          "problem": "Ten windows are placed in two rows of 5. Each can be open or closed. Compute the number of configurations where no column has both windows open.",
+          "topics": ["Combinatorics"],
+          "solution": "Each column independently has 4 total states but the (both open) state is excluded, giving 3 valid states per column. The 5 columns are independent, so total = 3^5 = 243.",
+          "answer": "243"
+        },
+        {
+          "number": 4,
+          "problem": "Square ABCD has side length 1. Triangles ADE and ABF intersect, where EC=(1/3)BC and FD=(1/4)CD. The area of intersection is a/b with gcd(a,b)=1. Compute a+b.",
+          "topics": ["Geometry", "Coordinate Geometry", "Shoelace Formula"],
+          "solution": "Set A=(0,0), B=(0,1), C=(1,1), D=(1,0), E=(2/3,1), F=(1,1/4). Line AE: y=(3/2)x; ED: y=-3x+3; BF: y=-(3/4)x+1; AF: y=(1/4)x. Intersection vertices are (0,0), (4/9,2/3), (8/9,1/3), (12/13,3/13). Shoelace gives area=32/117, so a+b=32+117=149.",
+          "answer": "149"
+        },
+        {
+          "number": 5,
+          "problem": "Compute the maximum n such that 17! x 39! is divisible by 8^n.",
+          "topics": ["Number Theory", "Legendre's Formula", "p-adic Valuation"],
+          "solution": "v_2(17!) = 8+4+2+1=15; v_2(39!)=19+9+4+2+1=35. Total v_2(17!*39!)=50. Since 8=2^3, we need 3n<=50, so max n=16 (since 2^50 = 8^16 * 2^2).",
+          "answer": "16"
+        },
+        {
+          "number": 6,
+          "problem": "Let f:R+->R+ satisfy (x+y)f(2x-y) - (x-y)f(2x+y) = (x^3+2y)(2y^3+x) for x,y in R+ with x<y, and f(1)=209. Express f(19) as a/b with gcd(a,b)=1. Compute a+b.",
+          "topics": ["Algebra", "Functional Equations"],
+          "solution": "Substitute x=5, y=9: 14f(1)+4f(19)=(5^3+18)(2*9^3+5)=(143)(1463)=209209. So 4f(19)=209209-14*209=206283, giving f(19)=206283/4. Thus a+b=206283+4=206287.",
+          "answer": "206287"
+        },
+        {
+          "number": 7,
+          "problem": "Compute the number of subsets of {1, 2, ..., 10} such that the elements have an even sum.",
+          "topics": ["Combinatorics", "Parity"],
+          "solution": "Separate into odd set A={1,3,5,7,9} and even set B={2,4,6,8,10}. For even total sum, take an even number of elements from A: C(5,0)+C(5,2)+C(5,4)=16 choices. Combine with 2^5=32 subsets of B: total=16*32=512.",
+          "answer": "512"
+        },
+        {
+          "number": 8,
+          "problem": "Compute sum_{i=1}^{63} log_7(6^i) / log_7(6).",
+          "topics": ["Algebra", "Logarithms"],
+          "solution": "The numerator telescopes: sum log_7(6^i) = log_7(6^{1+2+...+63}) = log_7(6^{2016}). Dividing by log_7(6) gives log_6(6^{2016}) = 2016.",
+          "answer": "2016"
+        },
+        {
+          "number": 9,
+          "problem": "A farmer plants 3 apple, 4 orange, and 3 lemon trees in a row (identical within species). How many arrangements have no two apple trees adjacent?",
+          "topics": ["Combinatorics", "Arrangements with Restrictions"],
+          "solution": "First arrange 4 orange and 3 lemon trees: C(7,3)=35 ways. Then place 3 apple trees in the 8 available gaps: C(8,3)=56 ways. Total=35*56=1960.",
+          "answer": "1960"
+        },
+        {
+          "number": 10,
+          "problem": "What is the last digit of 666...6 (2026 digits) in base 7?",
+          "topics": ["Number Theory", "Modular Arithmetic", "Number Bases"],
+          "solution": "The number equals (2/3)(10^{2026}-1). Working mod 7: by FLT 10^6 ≡ 1 (mod 7). Since 2026=337*6+4, 10^{2026} ≡ 3^4 = 4 (mod 7). Expression: 2*3^{-1}*(4-1). The inverse of 3 mod 7 is 5. So 2*5*3=30 ≡ 2 (mod 7).",
+          "answer": "2"
+        }
+      ]
+    },
+    {
+      "id": "silver_contest_2_march",
+      "name": "Silver Contest 2",
+      "date": "March 2026",
+      "difficulty": "AMC 12 / AIME",
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Triangle ABC has base BC=3. Points F on AB and G on AC have FG||BC and area of triangle AFG = (1/9) area of ABC. E is the midpoint of AF. Lines BC and EG extended meet at D. Compute CD.",
+          "topics": ["Geometry", "Similar Triangles", "Ratios"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 2,
+          "problem": "Compute sum_{k=1}^{2026} e^{4*pi*k*i/2026}, where i=sqrt(-1).",
+          "topics": ["Complex Numbers", "Roots of Unity"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 3,
+          "problem": "A positive integer k < 10001 is randomly chosen. The probability that C(10000,k) is not divisible by 1117 (prime) is m/n with gcd(m,n)=1. Compute m+n.",
+          "topics": ["Number Theory", "Combinatorics", "Kummer's Theorem"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 4,
+          "problem": "A point P lies outside circle omega (center O, radius 9). PA is tangent to the circle, EF is a diameter, and P is collinear with EF. If AE=6, compute PE.",
+          "topics": ["Geometry", "Circles", "Power of a Point"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 5,
+          "problem": "Let a, b, c, d be roots of f(x)=x^4-6x^3+3x^2-9x+5. Compute a^2+b^2+c^2+d^2.",
+          "topics": ["Algebra", "Vieta's Formulas"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 6,
+          "problem": "How many times do f(x)=sin(4x) and g(x)=||x-3|-x^2+2| intersect?",
+          "topics": ["Algebra", "Trigonometry", "Graphing"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 7,
+          "problem": "Compute the last two digits of 1997^(1998^(1999^(...^2026))).",
+          "topics": ["Number Theory", "Modular Arithmetic", "Euler's Theorem"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 8,
+          "problem": "Alice forms strings of length 10 using five X's and five Y's such that in every proper prefix, the count of Y's >= count of X's. How many such strings exist?",
+          "topics": ["Combinatorics", "Ballot Problem", "Catalan Numbers"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 9,
+          "problem": "Let S={-3,-2,-1,0,1,2,3}. Alicia randomly selects 2 (not necessarily distinct) elements to be roots of a monic quadratic. The probability the quadratic has a non-zero coefficient of x is m/n with gcd(m,n)=1. Compute m+n.",
+          "topics": ["Probability", "Algebra", "Quadratics"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 10,
+          "problem": "Let A be a set of 187 elements. An 11-grouping is a partition of A into 11-element subsets. The number of 11-groupings is m!/(n!*(k!)^n). Compute m+n+k.",
+          "topics": ["Combinatorics", "Partitions"],
+          "solution": null,
+          "answer": null
+        }
+      ]
+    },
+    {
+      "id": "solvefire_iron_contest",
+      "name": "Solvefire Iron Contest",
+      "date": "March 13, 2026",
+      "difficulty": "AMC 8",
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Rectangle ABCD has area 72. Let M be the midpoint of BC and N the midpoint of CD. What is the area of triangle AMN?",
+          "topics": ["Geometry", "Area"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 2,
+          "problem": "In triangle ABC, point D lies on AC so that AD:DC=1:2. Point E is the midpoint of BD. Lines AE and BC intersect at F. If the area of triangle ABC is 360, what is the area of triangle EBF?",
+          "topics": ["Geometry", "Area Ratios", "Cevians"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 3,
+          "problem": "How many integers from 1 to 1000 are divisible by 3 or 5 but not both?",
+          "topics": ["Number Theory", "Inclusion-Exclusion"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 4,
+          "problem": "A positive integer n leaves remainder 3 when divided by 7 and remainder 5 when divided by 9. What is the smallest possible value of n?",
+          "topics": ["Number Theory", "Chinese Remainder Theorem"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 5,
+          "problem": "Tyler chooses a meal with one meat (beef, chicken, pork), two different vegetables from {beans, corn, potatoes, tomatoes}, and one dessert (brownies, cake, pudding, ice cream). How many different meals are possible?",
+          "topics": ["Combinatorics", "Counting"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 6,
+          "problem": "How many five-digit positive integers have digits in strictly increasing order?",
+          "topics": ["Combinatorics", "Counting"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 7,
+          "problem": "A 4x4 grid of squares is colored so each square is red or blue. How many colorings have exactly two red squares in each row?",
+          "topics": ["Combinatorics", "Counting"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 8,
+          "problem": "Numbers a, b, c satisfy a+b+c=12 and ab+bc+ca=44. What is a^2+b^2+c^2?",
+          "topics": ["Algebra", "Symmetric Sums"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 9,
+          "problem": "If x + 1/x = 3, what is the value of x^2 + 1/x^2?",
+          "topics": ["Algebra"],
+          "solution": null,
+          "answer": null
+        },
+        {
+          "number": 10,
+          "problem": "The average of five numbers is 18. If one number x is removed, the average of the remaining four is 20. What is x?",
+          "topics": ["Algebra", "Averages"],
+          "solution": null,
+          "answer": null
+        }
+      ]
+    }
+  ],
+  "potd": [
+    {
+      "id": "potd_march_19",
+      "title": "POTD",
+      "date": "March 19, 2026",
+      "author": "Desmond",
+      "difficulty": "AMC 10",
+      "problem": "A trapezoid with AB parallel to CD has AB=2, BC=5, CD=6. If BD=5, find AC^2.",
+      "topics": ["Geometry", "Coordinate Geometry", "Trapezoid"],
+      "solution": null,
+      "answer": null
+    },
+    {
+      "id": "solvefire_potd_1",
+      "title": "Solvefire POTD 1",
+      "date": "March 16, 2026",
+      "author": "Wyatt",
+      "difficulty": "AMC 12",
+      "problem": "Find the sum of all real numbers x satisfying |2x^2 - 9x + 12| = 5x - 11.",
+      "topics": ["Algebra", "Absolute Value", "Quadratics"],
+      "solution": null,
+      "answer": null
+    },
+    {
+      "id": "solvefire_potd_2",
+      "title": "Solvefire POTD 2",
+      "date": "March 16, 2026",
+      "author": "Wyatt",
+      "difficulty": "AMC 10",
+      "problem": "A 1x8 rectangular board divided into 8 squares is to be painted using Red, Blue, and Green. Each square is exactly one color. How many ways can the board be painted such that no two adjacent squares share a color, and the first and last squares have different colors?",
+      "topics": ["Combinatorics", "Graph Coloring", "Chromatic Polynomials"],
+      "solution": null,
+      "answer": null
+    }
+  ]
+}
