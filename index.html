@@ -5152,6 +5152,7 @@ body.dark-mode .q-choice{background:var(--surface2)!important}
       <div class="ftw-problem-area">
         <div class="ftw-prob-meta" id="ftw-prob-meta"></div>
         <a class="ftw-prob-link" id="ftw-prob-link" target="_blank">View full problem on AoPS ↗</a>
+        <div class="ftw-prob-text" id="ftw-prob-text" style="font-size:0.95rem;line-height:1.7;color:var(--ink);margin:16px 0;padding:16px;background:var(--surface2);border-radius:10px;border-left:3px solid var(--blue)"></div>
         <div class="ftw-answer-area" id="ftw-answer-area">
           <div id="ftw-choices" style="display:none">
             <div class="ftw-choice-grid">
@@ -7627,17 +7628,21 @@ function renderLatex(el) {
 
 function openModal(prob){
   // Enrich with data from MA_PROBLEMS if available
-  if(window.MA_PROBLEMS && (!prob.answer || !prob.hint1)) {
+  if(window.MA_PROBLEMS) {
     const cf = prob.contestFull || prob.contest || '';
     const match = window.MA_PROBLEMS.find(p =>
-      p.year === prob.year && p.num === prob.num &&
-      (p.contestFull === cf || p.contestFull === prob.contestFull ||
-       (p.contest === prob.contest && Math.abs((p.elo||1000)-(prob.elo||1000)) < 200))
+      p.id === prob.id ||
+      (p.year === prob.year && p.num === prob.num &&
+       (p.contestFull === cf || p.contestFull === prob.contestFull ||
+        (p.contest === prob.contest && Math.abs((p.elo||1000)-(prob.elo||1000)) < 200)))
     );
     if(match) {
       if(!prob.answer && match.answer) prob = {...prob, answer: match.answer};
-      if(!prob.hint && match.hint) prob = {...prob, hint: match.hint};
-      if(!prob.hint && match.hint1) prob = {...prob, hint: match.hint1};
+      if(!prob.hint && match.hint)     prob = {...prob, hint: match.hint};
+      if(!prob.hint && match.hint1)    prob = {...prob, hint: match.hint1};
+      if(!prob.text  && match.text)    prob = {...prob, text: match.text};
+      if(!(prob.skills&&prob.skills.length) && match.skills&&match.skills.length)
+                                       prob = {...prob, skills: match.skills};
     }
   }
   _curProb=prob;
@@ -10135,7 +10140,7 @@ function ftwStartMatch(){
   ftwShowScreen('ftw-battle');ftwStartRound();
 }
 
-function ftwStartRound(){FTW.answered=false;if(FTW.oppAnswerTimeout)clearTimeout(FTW.oppAnswerTimeout);if(FTW.timerInterval)clearInterval(FTW.timerInterval);const cfg=FTW.modeConfig[FTW.mode];FTW.currentProb=FTW.matchProblems[FTW.round];FTW.timerMax=cfg.time;FTW.timerLeft=cfg.time;const rlEl=document.getElementById('ftw-round-lbl');const ysEl=document.getElementById('ftw-your-score');const osEl=document.getElementById('ftw-opp-score');if(rlEl)rlEl.textContent=`Round ${FTW.round+1} of ${FTW.totalRounds}`;if(ysEl)ysEl.textContent=FTW.yourScore;if(osEl)osEl.textContent=FTW.oppScore;const pmEl=document.getElementById('ftw-prob-meta');const plEl=document.getElementById('ftw-prob-link');if(pmEl)pmEl.textContent=FTW.currentProb.display+' — '+FTW.currentProb.domain;if(plEl)plEl.href=FTW.currentProb.link;const choices=document.getElementById('ftw-choices'),intInp=document.getElementById('ftw-integer-input'),intField=document.getElementById('ftw-int-inp');if(cfg.type==='letter'){if(choices)choices.style.display='';if(intInp)intInp.style.display='none';document.querySelectorAll('.ftw-choice').forEach(b=>{b.className='ftw-choice';b.disabled=false;});}else{if(choices)choices.style.display='none';if(intInp)intInp.style.display='';if(intField){intField.value='';intField.disabled=false;}const sb=document.querySelector('.ftw-submit-btn');if(sb)sb.disabled=false;}const yst=document.getElementById('ftw-your-status');const ost=document.getElementById('ftw-opp-status');if(yst){yst.textContent='⏳ Thinking...';yst.style.background='';}if(ost){ost.textContent='⏳ Thinking...';ost.style.background='';}const rr=document.getElementById('ftw-round-result');if(rr){rr.style.display='none';rr.className='ftw-round-result';}ftwRenderDots();ftwStartTimer();if(!FTW.isReal)ftwScheduleBotAnswer();}
+function ftwStartRound(){FTW.answered=false;if(FTW.oppAnswerTimeout)clearTimeout(FTW.oppAnswerTimeout);if(FTW.timerInterval)clearInterval(FTW.timerInterval);const cfg=FTW.modeConfig[FTW.mode];FTW.currentProb=FTW.matchProblems[FTW.round];FTW.timerMax=cfg.time;FTW.timerLeft=cfg.time;const rlEl=document.getElementById('ftw-round-lbl');const ysEl=document.getElementById('ftw-your-score');const osEl=document.getElementById('ftw-opp-score');if(rlEl)rlEl.textContent=`Round ${FTW.round+1} of ${FTW.totalRounds}`;if(ysEl)ysEl.textContent=FTW.yourScore;if(osEl)osEl.textContent=FTW.oppScore;const pmEl=document.getElementById('ftw-prob-meta');const plEl=document.getElementById('ftw-prob-link');const ptEl=document.getElementById('ftw-prob-text');if(pmEl)pmEl.textContent=FTW.currentProb.display+' — '+FTW.currentProb.domain;if(plEl)plEl.href=FTW.currentProb.link||'#';if(ptEl){let txt=FTW.currentProb.text||FTW.currentProb.problem||'';if(!txt&&window.MA_PROBLEMS){const m=window.MA_PROBLEMS.find(p=>p.id===FTW.currentProb.id);if(m?.text){txt=m.text;FTW.currentProb.text=txt;}}if(txt){ptEl.innerHTML=txt;ptEl.style.display='';if(typeof renderMathInElement==='function'){try{renderMathInElement(ptEl,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});}catch(e){}}}else{ptEl.style.display='none';}}const choices=document.getElementById('ftw-choices'),intInp=document.getElementById('ftw-integer-input'),intField=document.getElementById('ftw-int-inp');if(cfg.type==='letter'){if(choices)choices.style.display='';if(intInp)intInp.style.display='none';document.querySelectorAll('.ftw-choice').forEach(b=>{b.className='ftw-choice';b.disabled=false;});}else{if(choices)choices.style.display='none';if(intInp)intInp.style.display='';if(intField){intField.value='';intField.disabled=false;}const sb=document.querySelector('.ftw-submit-btn');if(sb)sb.disabled=false;}const yst=document.getElementById('ftw-your-status');const ost=document.getElementById('ftw-opp-status');if(yst){yst.textContent='⏳ Thinking...';yst.style.background='';}if(ost){ost.textContent='⏳ Thinking...';ost.style.background='';}const rr=document.getElementById('ftw-round-result');if(rr){rr.style.display='none';rr.className='ftw-round-result';}ftwRenderDots();ftwStartTimer();if(!FTW.isReal)ftwScheduleBotAnswer();}
 
 function ftwStartTimer(){const arc=document.getElementById('ftw-timer-arc'),txt=document.getElementById('ftw-timer-text'),C=213.6;function tick(){FTW.timerLeft--;const pct=FTW.timerLeft/FTW.timerMax;if(arc){arc.style.strokeDashoffset=C*(1-pct);arc.style.stroke=FTW.timerLeft<FTW.timerMax*.25?'var(--red)':'var(--blue)';}const m=Math.floor(FTW.timerLeft/60),s=FTW.timerLeft%60;if(txt)txt.textContent=m+':'+String(s).padStart(2,'0');if(FTW.timerLeft<=0){clearInterval(FTW.timerInterval);if(!FTW.answered)ftwTimeOut();}}FTW.timerInterval=setInterval(tick,1000);}
 function ftwTimeOut(){FTW.answered=true;if(FTW.oppAnswerTimeout)clearTimeout(FTW.oppAnswerTimeout);const yst=document.getElementById('ftw-your-status');if(yst)yst.textContent='⏰ Timed out';ftwResolveRound('timeout',null);}
@@ -10783,7 +10788,7 @@ function renderProbTextInto(el, prob) {
     }
   } else {
     // Text not loaded yet — fallback to showing problem name + AoPS link
-    el.innerHTML = `<span style="color:var(--ink3);font-size:.85rem">Run <code>node build-curriculum.js</code> once to pre-load all problem texts. <a href="${prob.link||'#'}" target="_blank" style="color:var(--blue)">View on AoPS ↗</a></span>`;
+    el.innerHTML = `<span style="color:var(--ink3);font-size:.85rem">View the full problem statement and solution on AoPS: <a href="${prob.link||'#'}" target="_blank" style="color:var(--blue)">${prob.display||'View on AoPS'} ↗</a></span>`;
     el.style.display = '';
   }
 }
